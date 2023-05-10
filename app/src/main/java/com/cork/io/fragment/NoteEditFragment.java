@@ -1,4 +1,4 @@
-package com.cork.io;
+package com.cork.io.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.cork.io.R;
+
+/**
+ * Fragment for editing note
+ *
+ * @author knguyen
+ */
 public class NoteEditFragment extends DialogFragment {
     @Nullable
     @Override

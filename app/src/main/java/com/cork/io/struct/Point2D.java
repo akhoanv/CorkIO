@@ -1,5 +1,10 @@
 package com.cork.io.struct;
 
+/**
+ * Represent 2D point
+ *
+ * @author knguyen
+ */
 public class Point2D {
     private float x;
     private float y;

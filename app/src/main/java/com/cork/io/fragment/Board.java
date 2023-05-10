@@ -1,15 +1,20 @@
-package com.cork.io;
+package com.cork.io.fragment;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.cork.io.R;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
+/**
+ * Pannable/Zoomable board for main app
+ *
+ * @author knguyen
+ */
 public class Board extends RelativeLayout {
     private Point2D position = new Point2D(0, 0);
     private float scale = 1f;
@@ -27,12 +32,22 @@ public class Board extends RelativeLayout {
         inflater.inflate(R.layout.board_view, this, true);
     }
 
+    /**
+     * Move all child elements in one direction
+     *
+     * @param position vector amount to move child elements
+     */
     private void moveChild(final Point2D position) {
         for (int i=1; i < getChildCount(); i++) {
             ((Note) getChildAt(i)).move(position);
         }
     }
 
+    /**
+     * Scale all child elements
+     *
+     * @param scaling scale factor
+     */
     private void scaleChild(final float scaling) {
         for (int i=1; i < getChildCount(); i++) {
             ((Note) getChildAt(i)).scale(scaling);
@@ -87,6 +102,12 @@ public class Board extends RelativeLayout {
         }
     };
 
+    /**
+     * Calculate distance between two fingers while zooming
+     *
+     * @param event motion event
+     * @return distance between two fingers
+     */
     private float getPinchDistance(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);

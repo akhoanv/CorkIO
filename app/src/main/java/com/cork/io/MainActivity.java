@@ -1,6 +1,5 @@
 package com.cork.io;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
@@ -10,6 +9,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+
+import com.cork.io.fragment.Board;
+import com.cork.io.fragment.Note;
 
 public class MainActivity extends FragmentActivity {
     private Board mainBoard;
