@@ -1,5 +1,6 @@
 package com.cork.io;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
@@ -73,14 +78,28 @@ public class Note extends RelativeLayout {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     bringToFront();
+                    action = TouchAction.CLICK;
                     holdHandler.postDelayed(holdRunnable, 300);
                     mousePosition.setXY(newX, newY);
                     break;
                 case MotionEvent.ACTION_UP:
-                    action = TouchAction.NONE;
+                    if (action == TouchAction.CLICK) {
+                        NoteEditFragment fragment = new NoteEditFragment();
+                        FragmentTransaction ft = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
+                        Fragment prev = ((FragmentActivity) getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
+                        if (prev != null) {
+                            ft.remove(prev);
+                        }
+                        ft.addToBackStack(null);
+                        fragment.show(ft, "dialog");
+                    } else if (action == TouchAction.DRAG) {
+                        action = TouchAction.NONE;
+                    }
+
                     holdHandler.removeCallbacks(holdRunnable);
 
                     findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (action == TouchAction.DRAG) {

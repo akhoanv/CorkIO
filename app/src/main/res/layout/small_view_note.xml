@@ -16,7 +16,7 @@
             android:id="@+id/small_view_icon"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.85"/>
+            android:layout_weight="0.75"/>
 
         <TextView
             android:id="@+id/small_view_title"
@@ -24,7 +24,13 @@
             android:layout_height="0dp"
             android:textAlignment="center"
             android:layout_weight="0.25"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:fontFamily="@font/gochi_hand"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"/>
 
     </LinearLayout>
 
