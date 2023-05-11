@@ -3,15 +3,22 @@ package com.cork.io;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.cork.io.fragment.Board;
 import com.cork.io.fragment.Note;
+
+import java.util.Random;
 
 public class MainActivity extends FragmentActivity {
     private Board mainBoard;
@@ -54,10 +61,19 @@ public class MainActivity extends FragmentActivity {
 
         // Initialization
         mainBoard = new Board(this);
-        ((LinearLayout) findViewById(R.id.app_view)).addView(mainBoard);
+        ((RelativeLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
-        addNote("Note with long title and longer and longer", R.drawable.icon);
-        addNote("Note2", R.drawable.icon);
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+
+        ImageButton addButton = new ImageButton(this);
+        addButton.setBackgroundColor(Color.TRANSPARENT);
+        addButton.setImageResource(R.drawable.add);
+        addButton.setX(displayMetrics.widthPixels - 250);
+        addButton.setY(displayMetrics.heightPixels - 150);
+        ((RelativeLayout) findViewById(R.id.app_view)).addView(addButton);
+        addButton.setOnClickListener(view -> {
+            addNote(new Random().nextInt(61) + 20 + "", R.drawable.icon);
+        });
     }
 
     public void addNote(final String title, final int imageResource) {
