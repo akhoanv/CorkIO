@@ -10,11 +10,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.cork.io.fragment.Board;
-import com.cork.io.fragment.Note;
+import com.cork.io.dao.Note;
+import com.cork.io.fragment.BoardFragment;
+import com.cork.io.fragment.NoteFragment;
+import com.cork.io.objectbox.ObjectBox;
+
+import java.util.List;
+
+import io.objectbox.Box;
 
 public class MainActivity extends FragmentActivity {
-    private Board mainBoard;
+    private BoardFragment mainBoard;
     private int currentApiVersion;
 
     @Override
@@ -53,25 +59,35 @@ public class MainActivity extends FragmentActivity {
         });
 
         // Initialization
-        mainBoard = new Board(this);
+        mainBoard = new BoardFragment(this);
         ((LinearLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
-        addNote("Note with long title and longer and longer", R.drawable.icon);
-        addNote("Note2", R.drawable.icon);
+        List<Note> notes = retrieveNotes();
+        notes.forEach(this::renderNote);
     }
 
-    public void addNote(final String title, final int imageResource) {
-        Note l = new Note(this);
+    public void addNoteInternal(String title, String content, int imageResource) {
+        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
+        noteBox.put(new Note(0, title, content, imageResource));
+    }
 
-        if (title != null) {
-            l.setTitle(title);
+    public List<Note> retrieveNotes() {
+        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
+        return noteBox.getAll();
+    }
+
+    public void renderNote(Note note) {
+        NoteFragment noteFragment = new NoteFragment(this);
+
+        if (note.title != null) {
+            noteFragment.setTitle(note.title);
         }
 
-        if (imageResource != 0) {
-            l.setIcon(imageResource);
+        if (note.iconId != 0) {
+            noteFragment.setIcon(note.iconId);
         }
 
-        mainBoard.addView(l);
+        mainBoard.addView(noteFragment);
     }
 
     @SuppressLint("NewApi")

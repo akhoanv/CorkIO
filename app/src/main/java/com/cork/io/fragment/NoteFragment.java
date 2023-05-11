@@ -18,11 +18,11 @@ import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
 /**
- * Note object on {@link Board}
+ * Note object on {@link BoardFragment}
  *
  * @author knguyen
  */
-public class Note extends RelativeLayout {
+public class NoteFragment extends RelativeLayout {
     private TouchAction action;
     private TextView titleView;
     private ImageView iconView;
@@ -38,7 +38,7 @@ public class Note extends RelativeLayout {
         }
     };
 
-    public Note(Context context) {
+    public NoteFragment(Context context) {
         super(context);
         setOnTouchListener(touchListener);
 

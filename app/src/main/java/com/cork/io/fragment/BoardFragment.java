@@ -15,7 +15,7 @@ import com.cork.io.struct.TouchAction;
  *
  * @author knguyen
  */
-public class Board extends RelativeLayout {
+public class BoardFragment extends RelativeLayout {
     private Point2D position = new Point2D(0, 0);
     private float scale = 1f;
     private TouchAction action;
@@ -24,7 +24,7 @@ public class Board extends RelativeLayout {
     private Point2D mousePosition = new Point2D(0, 0);
     private float originalDist = 0f;
 
-    public Board(Context context) {
+    public BoardFragment(Context context) {
         super(context);
         setOnTouchListener(touchListener);
 
@@ -39,7 +39,7 @@ public class Board extends RelativeLayout {
      */
     private void moveChild(final Point2D position) {
         for (int i=1; i < getChildCount(); i++) {
-            ((Note) getChildAt(i)).move(position);
+            ((NoteFragment) getChildAt(i)).move(position);
         }
     }
 
@@ -50,7 +50,7 @@ public class Board extends RelativeLayout {
      */
     private void scaleChild(final float scaling) {
         for (int i=1; i < getChildCount(); i++) {
-            ((Note) getChildAt(i)).scale(scaling);
+            ((NoteFragment) getChildAt(i)).scale(scaling);
         }
     }
 
