@@ -3,12 +3,15 @@ package com.cork.io;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.cork.io.dao.Note;
 import com.cork.io.fragment.BoardFragment;
@@ -18,6 +21,8 @@ import com.cork.io.objectbox.ObjectBox;
 import java.util.List;
 
 import io.objectbox.Box;
+
+import java.util.Random;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
@@ -60,10 +65,12 @@ public class MainActivity extends FragmentActivity {
 
         // Initialization
         mainBoard = new BoardFragment(this);
-        ((LinearLayout) findViewById(R.id.app_view)).addView(mainBoard);
+        ((RelativeLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
         List<Note> notes = retrieveNotes();
         notes.forEach(this::renderNote);
+
+        renderAddButton();
     }
 
     public void addNoteInternal(String title, String content, int imageResource) {
@@ -88,6 +95,24 @@ public class MainActivity extends FragmentActivity {
         }
 
         mainBoard.addView(noteFragment);
+    }
+
+    public void renderAddButton() {
+        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+
+        ImageButton addButton = new ImageButton(this);
+        addButton.setBackgroundColor(Color.TRANSPARENT);
+        addButton.setImageResource(R.drawable.add);
+        addButton.setX(displayMetrics.widthPixels - 250);
+        addButton.setY(displayMetrics.heightPixels - 150);
+        ((RelativeLayout) findViewById(R.id.app_view)).addView(addButton);
+        addButton.setOnClickListener(this::addButtonOnClick);
+    }
+
+    public void addButtonOnClick(View view) {
+        String title = "Title " + (new Random().nextInt(61) + 20);
+        String content = "Content " + (new Random().nextInt(61) + 20);
+        addNoteInternal( title, content, R.drawable.icon);
     }
 
     @SuppressLint("NewApi")
