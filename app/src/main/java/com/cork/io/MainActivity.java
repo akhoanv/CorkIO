@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ import java.util.List;
 import io.objectbox.Box;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
@@ -67,20 +69,25 @@ public class MainActivity extends FragmentActivity {
         mainBoard = new BoardFragment(this);
         ((RelativeLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
-        List<Note> notes = retrieveNotes();
-        notes.forEach(this::renderNote);
-
+        deleteAllNotes();
         renderAddButton();
     }
 
-    public void addNoteInternal(String title, String content, int imageResource) {
+    public Note addNoteInternal(String title, String content, int imageResource) {
         Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
-        noteBox.put(new Note(0, title, content, imageResource));
+        Note newNote = new Note(0, title, content, imageResource);
+        noteBox.put(newNote);
+        return newNote;
     }
 
     public List<Note> retrieveNotes() {
         Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
         return noteBox.getAll();
+    }
+
+    public void deleteAllNotes() {
+        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
+        noteBox.removeAll();
     }
 
     public void renderNote(Note note) {
@@ -110,9 +117,21 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void addButtonOnClick(View view) {
-        String title = "Title " + (new Random().nextInt(61) + 20);
-        String content = "Content " + (new Random().nextInt(61) + 20);
-        addNoteInternal( title, content, R.drawable.icon);
+        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
+            Log.d(this.getLocalClassName(), "Hello");
+            String title = "Title " + (new Random().nextInt(61) + 20);
+            String content = "Content " + (new Random().nextInt(61) + 20);
+            return addNoteInternal(title, content, R.drawable.icon);
+        });
+
+        dbAddFuture.handle((newNote, throwable) -> {
+            Log.d(this.getLocalClassName(), "Hi");
+            if (throwable != null) {
+                Log.d(this.getLocalClassName(), "Failed to add new note.");
+            }
+
+            return newNote;
+        }).thenAccept(newNote -> runOnUiThread(() -> renderNote(newNote)));
     }
 
     @SuppressLint("NewApi")
