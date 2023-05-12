@@ -1,7 +1,8 @@
-package com.cork.io.fragment;
+package com.cork.io.worldobject;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
+import com.cork.io.dao.Board;
+import com.cork.io.dao.Note;
+import com.cork.io.fragment.NoteEditFragment;
+import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
@@ -26,6 +31,7 @@ public class NoteFragment extends RelativeLayout {
     private TouchAction action;
     private TextView titleView;
     private ImageView iconView;
+    private Note note;
 
     // Reactive variable
     private Point2D mousePosition = new Point2D(0 ,0);
@@ -51,22 +57,19 @@ public class NoteFragment extends RelativeLayout {
         findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
     }
 
-    /**
-     * Set note title
-     *
-     * @param title title to be set
-     */
-    public void setTitle(final String title) {
-        titleView.setText(title);
-    }
+    public void setNote(final Note note) {
+        this.note = note;
 
-    /**
-     * Set note icon
-     *
-     * @param imageResource image resource to be set
-     */
-    public void setIcon(final int imageResource) {
-        iconView.setImageResource(imageResource);
+        if (note.title != null) {
+            titleView.setText(note.title);
+        }
+
+        if (note.iconId != 0) {
+            iconView.setImageResource(note.iconId);
+        }
+
+        setX(note.positionX);
+        setY(note.positionY);
     }
 
     /**
@@ -102,7 +105,7 @@ public class NoteFragment extends RelativeLayout {
                 case MotionEvent.ACTION_DOWN:
                     bringToFront();
                     action = TouchAction.CLICK;
-                    holdHandler.postDelayed(holdRunnable, 300);
+                    holdHandler.postDelayed(holdRunnable, 200);
                     mousePosition.setXY(newX, newY);
                     break;
                 case MotionEvent.ACTION_UP:
@@ -117,7 +120,11 @@ public class NoteFragment extends RelativeLayout {
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {
                         action = TouchAction.NONE;
+                        note.positionX = getX() - note.board.getTarget().panPositionX;
+                        note.positionY = getY() - note.board.getTarget().panPositionY;
                     }
+
+                    note.update();
 
                     holdHandler.removeCallbacks(holdRunnable);
 

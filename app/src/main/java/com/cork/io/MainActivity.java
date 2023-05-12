@@ -1,25 +1,21 @@
 package com.cork.io;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 
+import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
-import com.cork.io.fragment.BoardFragment;
-import com.cork.io.fragment.NoteFragment;
+import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
-
-import java.util.List;
 
 import io.objectbox.Box;
 
@@ -65,55 +61,23 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        // Initialization
+        //deleteAllNotes();
+
+        // Initialization UI
         mainBoard = new BoardFragment(this);
-        ((RelativeLayout) findViewById(R.id.app_view)).addView(mainBoard);
+        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
-        deleteAllNotes();
-        renderAddButton();
-    }
-
-    public Note addNoteInternal(String title, String content, int imageResource) {
-        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
-        Note newNote = new Note(0, title, content, imageResource);
-        noteBox.put(newNote);
-        return newNote;
-    }
-
-    public List<Note> retrieveNotes() {
-        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
-        return noteBox.getAll();
+        LinearLayout addButton = findViewById(R.id.addButton);
+        addButton.setOnClickListener(this::addButtonOnClick);
+        addButton.bringToFront();
     }
 
     public void deleteAllNotes() {
+        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
+        boardBox.removeAll();
+
         Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
         noteBox.removeAll();
-    }
-
-    public void renderNote(Note note) {
-        NoteFragment noteFragment = new NoteFragment(this);
-
-        if (note.title != null) {
-            noteFragment.setTitle(note.title);
-        }
-
-        if (note.iconId != 0) {
-            noteFragment.setIcon(note.iconId);
-        }
-
-        mainBoard.addView(noteFragment);
-    }
-
-    public void renderAddButton() {
-        DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
-
-        ImageButton addButton = new ImageButton(this);
-        addButton.setBackgroundColor(Color.TRANSPARENT);
-        addButton.setImageResource(R.drawable.add);
-        addButton.setX(displayMetrics.widthPixels - 250);
-        addButton.setY(displayMetrics.heightPixels - 150);
-        ((RelativeLayout) findViewById(R.id.app_view)).addView(addButton);
-        addButton.setOnClickListener(this::addButtonOnClick);
     }
 
     public void addButtonOnClick(View view) {
@@ -121,7 +85,7 @@ public class MainActivity extends FragmentActivity {
             Log.d(this.getLocalClassName(), "Hello");
             String title = "Title " + (new Random().nextInt(61) + 20);
             String content = "Content " + (new Random().nextInt(61) + 20);
-            return addNoteInternal(title, content, R.drawable.icon);
+            return mainBoard.addToDatabase(title, content, R.drawable.icon);
         });
 
         dbAddFuture.handle((newNote, throwable) -> {
@@ -131,7 +95,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             return newNote;
-        }).thenAccept(newNote -> runOnUiThread(() -> renderNote(newNote)));
+        }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote)));
     }
 
     @SuppressLint("NewApi")

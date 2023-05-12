@@ -77,18 +77,12 @@
           "type": 7
         }
       ],
-      "relations": [
-        {
-          "id": "1:1073504741574900322",
-          "name": "notes",
-          "targetId": "1:6708627763836334107"
-        }
-      ]
+      "relations": []
     }
   ],
   "lastEntityId": "2:3284756564701398499",
   "lastIndexId": "1:2686356966555361313",
-  "lastRelationId": "1:1073504741574900322",
+  "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

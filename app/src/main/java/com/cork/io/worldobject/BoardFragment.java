@@ -1,14 +1,20 @@
-package com.cork.io.fragment;
+package com.cork.io.worldobject;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.cork.io.R;
+import com.cork.io.dao.Board;
+import com.cork.io.dao.Note;
+import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+
+import io.objectbox.Box;
 
 /**
  * Pannable/Zoomable board for main app
@@ -16,8 +22,9 @@ import com.cork.io.struct.TouchAction;
  * @author knguyen
  */
 public class BoardFragment extends RelativeLayout {
-    private Point2D position = new Point2D(0, 0);
+    private Point2D onScreenPosition = new Point2D(0, 0);
     private float scale = 1f;
+    private Board board;
     private TouchAction action;
 
     // Reactive variable
@@ -30,6 +37,37 @@ public class BoardFragment extends RelativeLayout {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.board_view, this, true);
+
+        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
+        if (boardBox.count() == 0) {
+            board = new Board();
+            board.update();
+        } else {
+            board = boardBox.getAll().get(0);
+            // Render all child
+            for (Note n : board.notes) {
+                renderNote(n);
+            }
+
+            onScreenPosition.setXY(board.panPositionX, board.panPositionY);
+            scale = board.scaleFactor;
+
+            moveChildOnScreen(onScreenPosition);
+        }
+    }
+
+    public Note addToDatabase(String title, String content, int imageResource) {
+        Note note = new Note(0, board, title, content, imageResource, 50, 50);
+        note.update();
+        board.notes.add(note);
+        board.update();
+        return note;
+    }
+
+    public void renderNote(Note note) {
+        NoteFragment noteFragment = new NoteFragment(getContext());
+        noteFragment.setNote(note);
+        addView(noteFragment);
     }
 
     /**
@@ -37,7 +75,7 @@ public class BoardFragment extends RelativeLayout {
      *
      * @param position vector amount to move child elements
      */
-    private void moveChild(final Point2D position) {
+    private void moveChildOnScreen(final Point2D position) {
         for (int i=1; i < getChildCount(); i++) {
             ((NoteFragment) getChildAt(i)).move(position);
         }
@@ -75,7 +113,16 @@ public class BoardFragment extends RelativeLayout {
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_2_UP:
+                    if (action == TouchAction.ZOOM) {
+                        board.scaleFactor = scale;
+                    } else if (action == TouchAction.DRAG) {
+                        board.panPositionX = onScreenPosition.getX();
+                        board.panPositionY = onScreenPosition.getY();
+                    }
+
                     action = TouchAction.NONE;
+
+                    board.update();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (action == TouchAction.ZOOM) {
@@ -85,13 +132,16 @@ public class BoardFragment extends RelativeLayout {
 
                         // Update initial scale and dist for next move
                         scale = (dscale * scale) / 100;
+                        board.scaleFactor = scale;
                         originalDist = getPinchDistance(motionEvent);
                     } else if (action == TouchAction.DRAG) {
                         float dx = newX - mousePosition.getX();
                         float dy = newY - mousePosition.getY();
 
-                        moveChild(new Point2D(dx, dy));
-                        position = new Point2D(position.getX() + dx, position.getY() + dy);
+                        moveChildOnScreen(new Point2D(dx, dy));
+                        onScreenPosition.setXY(onScreenPosition.getX() + dx, onScreenPosition.getY() + dy);
+                        board.panPositionX = onScreenPosition.getX();
+                        board.panPositionY = onScreenPosition.getY();
 
                         // Update initial mouse position for next move
                         mousePosition.setXY(newX, newY);
