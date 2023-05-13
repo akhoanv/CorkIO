@@ -70,6 +70,8 @@ public class NoteFragment extends RelativeLayout {
 
         setX(note.positionX);
         setY(note.positionY);
+
+        scale(note.board.getTarget().scaleFactor * 100, false);
     }
 
     /**
@@ -87,12 +89,14 @@ public class NoteFragment extends RelativeLayout {
      *
      * @param dscale percentage
      */
-    public void scale(final float dscale) {
+    public void scale(final float dscale, final boolean changePosition) {
         setScaleX((getScaleX() * dscale) / 100);
         setScaleY((getScaleY() * dscale) / 100);
 
-        setX((getX() * dscale) / 100);
-        setY((getY() * dscale) / 100);
+        if (changePosition) {
+            setX((getX() * dscale) / 100);
+            setY((getY() * dscale) / 100);
+        }
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {

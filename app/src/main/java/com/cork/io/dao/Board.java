@@ -23,10 +23,6 @@ public class Board {
         scaleFactor = 1f;
     }
 
-    public Point2D scaledPosition() {
-        return new Point2D(panPositionX * scaleFactor, panPositionY * scaleFactor);
-    }
-
     public void update() {
         ObjectBox.get().boxFor(Board.class).put(this);
     }

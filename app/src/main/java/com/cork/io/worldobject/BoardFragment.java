@@ -52,6 +52,7 @@ public class BoardFragment extends RelativeLayout {
             onScreenPosition.setXY(board.panPositionX, board.panPositionY);
             scale = board.scaleFactor;
 
+            // Move screen position
             moveChildOnScreen(onScreenPosition);
         }
     }
@@ -88,7 +89,7 @@ public class BoardFragment extends RelativeLayout {
      */
     private void scaleChild(final float scaling) {
         for (int i=1; i < getChildCount(); i++) {
-            ((NoteFragment) getChildAt(i)).scale(scaling);
+            ((NoteFragment) getChildAt(i)).scale(scaling, true);
         }
     }
 
