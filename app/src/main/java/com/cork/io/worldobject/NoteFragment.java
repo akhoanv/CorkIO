@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +22,9 @@ import com.cork.io.fragment.NoteEditFragment;
 import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Note object on {@link BoardFragment}
@@ -99,6 +103,21 @@ public class NoteFragment extends RelativeLayout {
         }
     }
 
+    public void remove() {
+        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
+            note.remove();
+            return null;
+        });
+
+        dbAddFuture.handle((newNote, throwable) -> {
+            if (throwable != null) {
+                Log.d(NoteFragment.class.getName(), "Failed to remove note.");
+            }
+
+            return newNote;
+        }).thenAccept(newNote -> ((ViewGroup)getParent()).removeView(this));
+    }
+
     private OnTouchListener touchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -114,12 +133,33 @@ public class NoteFragment extends RelativeLayout {
                     break;
                 case MotionEvent.ACTION_UP:
                     if (action == TouchAction.CLICK) {
-                        NoteEditFragment fragment = new NoteEditFragment();
+                        // Close any dialog fragment
                         FragmentTransaction ft = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
                         Fragment prev = ((FragmentActivity) getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
                         if (prev != null) {
                             ft.remove(prev);
                         }
+
+                        // Show edit fragment
+                        NoteEditFragment fragment = new NoteEditFragment(note);
+                        fragment.setCallback((doDelete) -> {
+                            if (doDelete) {
+                                remove();
+
+                                return;
+                            }
+
+                            // Update current note object and data on screen
+                            note = ObjectBox.get().boxFor(Note.class).get(note.id);
+
+                            if (note.title != null) {
+                                titleView.setText(note.title);
+                            }
+
+                            if (note.iconId != 0) {
+                                iconView.setImageResource(note.iconId);
+                            }
+                        });
                         ft.addToBackStack(null);
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {

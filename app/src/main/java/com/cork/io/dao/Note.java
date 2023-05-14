@@ -40,4 +40,8 @@ public class Note {
     public void update() {
         ObjectBox.get().boxFor(Note.class).put(this);
     }
+
+    public void remove() {
+        ObjectBox.get().boxFor(Note.class).remove(id);
+    }
 }

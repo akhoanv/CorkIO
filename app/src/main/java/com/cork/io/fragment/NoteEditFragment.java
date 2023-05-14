@@ -6,12 +6,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.cork.io.R;
+import com.cork.io.dao.Note;
+import com.cork.io.utils.NoteCallback;
 
 /**
  * Fragment for editing note
@@ -19,11 +23,60 @@ import com.cork.io.R;
  * @author knguyen
  */
 public class NoteEditFragment extends DialogFragment {
+    private View view;
+    private Note note;
+    private NoteCallback callback;
+    private boolean doDelete = false;
+
+    // Elements
+    private EditText titleElement;
+    private EditText contentElement;
+    private ImageView iconElement;
+    private ImageView unpinBtn;
+
+    public NoteEditFragment(Note note) {
+        this.note = note;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        return inflater.inflate(R.layout.fragment_note_dialog, container, false);
+        view = inflater.inflate(R.layout.fragment_note_dialog, container, false);
+
+        // Find elements
+        titleElement = view.findViewById(R.id.note_edit_title);
+        contentElement = view.findViewById(R.id.note_edit_content);
+        iconElement = view.findViewById(R.id.note_edit_icon);
+        unpinBtn = view.findViewById(R.id.note_edit_unpin);
+
+        // Assign appropriate data
+        titleElement.setText(note.title);
+        contentElement.setText(note.content);
+        iconElement.setImageResource(note.iconId);
+
+        // Set onChangeListener to update the database
+        titleElement.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                note.title = titleElement.getText().toString();
+                note.update();
+            }
+        });
+
+        contentElement.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                note.content = contentElement.getText().toString();
+                note.update();
+            }
+        });
+
+        // Unpin button
+        unpinBtn.setOnClickListener(view -> {
+            doDelete = true;
+            this.dismiss();
+        });
+
+        return view;
     }
 
     @Override
@@ -37,5 +90,27 @@ public class NoteEditFragment extends DialogFragment {
 
         if (setFullScreen)
             setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+    }
+
+    public void setCallback(NoteCallback callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    public void onDestroy() {
+        // Update content
+        note.title = titleElement.getText().toString();
+        note.content = contentElement.getText().toString();
+        note.update();
+
+        // Run callback to update data on board
+        callback.run(doDelete);
+
+        // Set these listener to null, avoid mem leak
+        titleElement.setOnFocusChangeListener(null);
+        contentElement.setOnFocusChangeListener(null);
+        unpinBtn.setOnClickListener(null);
+
+        super.onDestroy();
     }
 }

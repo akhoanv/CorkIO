@@ -57,14 +57,20 @@ public class BoardFragment extends RelativeLayout {
         }
     }
 
+    /**
+     * Attempting to add a new {@link Note} entry into the database
+     */
     public Note addToDatabase(String title, String content, int imageResource) {
-        Note note = new Note(0, board, title, content, imageResource, 50, 50);
+        Note note = new Note(0, board, title, content, imageResource, 100, 100);
         note.update();
         board.notes.add(note);
         board.update();
         return note;
     }
 
+    /**
+     * Render note on screen, once the note was successfully added
+     */
     public void renderNote(Note note) {
         NoteFragment noteFragment = new NoteFragment(getContext());
         noteFragment.setNote(note);

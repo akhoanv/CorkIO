@@ -82,14 +82,12 @@ public class MainActivity extends FragmentActivity {
 
     public void addButtonOnClick(View view) {
         CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
-            Log.d(this.getLocalClassName(), "Hello");
             String title = "Title " + (new Random().nextInt(61) + 20);
             String content = "Content " + (new Random().nextInt(61) + 20);
             return mainBoard.addToDatabase(title, content, R.drawable.icon);
         });
 
         dbAddFuture.handle((newNote, throwable) -> {
-            Log.d(this.getLocalClassName(), "Hi");
             if (throwable != null) {
                 Log.d(this.getLocalClassName(), "Failed to add new note.");
             }
