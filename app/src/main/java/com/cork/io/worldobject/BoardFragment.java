@@ -1,7 +1,6 @@
 package com.cork.io.worldobject;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +9,10 @@ import android.widget.RelativeLayout;
 import com.cork.io.R;
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
+import com.cork.io.data.BoardManager;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxBoardManager;
+import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
@@ -22,6 +25,8 @@ import io.objectbox.Box;
  * @author knguyen
  */
 public class BoardFragment extends RelativeLayout {
+    private NoteManager noteManager;
+    private BoardManager boardManager;
     private Point2D onScreenPosition = new Point2D(0, 0);
     private float scale = 1f;
     private Board board;
@@ -33,6 +38,8 @@ public class BoardFragment extends RelativeLayout {
 
     public BoardFragment(Context context) {
         super(context);
+        noteManager = ObjectBoxNoteManager.get();
+        boardManager = ObjectBoxBoardManager.get();
         setOnTouchListener(touchListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -41,7 +48,7 @@ public class BoardFragment extends RelativeLayout {
         Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
         if (boardBox.count() == 0) {
             board = new Board();
-            board.update();
+            boardManager.addBoard(board);
         } else {
             board = boardBox.getAll().get(0);
             // Render all child
@@ -62,9 +69,9 @@ public class BoardFragment extends RelativeLayout {
      */
     public Note addToDatabase(String title, String content, int imageResource) {
         Note note = new Note(0, board, title, content, imageResource, 100, 100);
-        note.update();
+        noteManager.addNote(note);
         board.notes.add(note);
-        board.update();
+        boardManager.updateBoard(board);
         return note;
     }
 
@@ -129,7 +136,7 @@ public class BoardFragment extends RelativeLayout {
 
                     action = TouchAction.NONE;
 
-                    board.update();
+                    boardManager.updateBoard(board);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (action == TouchAction.ZOOM) {

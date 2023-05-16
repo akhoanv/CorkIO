@@ -22,8 +22,4 @@ public class Board {
         panPositionY = 0;
         scaleFactor = 1f;
     }
-
-    public void update() {
-        ObjectBox.get().boxFor(Board.class).put(this);
-    }
 }

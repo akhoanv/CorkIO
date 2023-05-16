@@ -16,15 +16,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
-import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.fragment.NoteEditFragment;
-import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
-
-import java.util.Random;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Note object on {@link BoardFragment}
@@ -32,6 +29,7 @@ import java.util.concurrent.CompletableFuture;
  * @author knguyen
  */
 public class NoteFragment extends RelativeLayout {
+    private NoteManager noteManager;
     private TouchAction action;
     private TextView titleView;
     private ImageView iconView;
@@ -50,6 +48,7 @@ public class NoteFragment extends RelativeLayout {
 
     public NoteFragment(Context context) {
         super(context);
+        noteManager = ObjectBoxNoteManager.get();
         setOnTouchListener(touchListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -104,18 +103,12 @@ public class NoteFragment extends RelativeLayout {
     }
 
     public void remove() {
-        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
-            note.remove();
-            return null;
-        });
-
-        dbAddFuture.handle((newNote, throwable) -> {
-            if (throwable != null) {
-                Log.d(NoteFragment.class.getName(), "Failed to remove note.");
-            }
-
-            return newNote;
-        }).thenAccept(newNote -> ((ViewGroup)getParent()).removeView(this));
+        boolean isRemoved = noteManager.removeNote(note.id);
+        if (isRemoved) {
+            ((ViewGroup)getParent()).removeView(this);
+        } else {
+            Log.d(NoteFragment.class.getName(), "Failed to remove note.");
+        }
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {
@@ -145,12 +138,11 @@ public class NoteFragment extends RelativeLayout {
                         fragment.setCallback((doDelete) -> {
                             if (doDelete) {
                                 remove();
-
                                 return;
                             }
 
                             // Update current note object and data on screen
-                            note = ObjectBox.get().boxFor(Note.class).get(note.id);
+                            note = noteManager.findNoteById(note.id);
 
                             if (note.title != null) {
                                 titleView.setText(note.title);
@@ -168,11 +160,11 @@ public class NoteFragment extends RelativeLayout {
                         note.positionY = getY() - note.board.getTarget().panPositionY;
                     }
 
-                    note.update();
-
-                    holdHandler.removeCallbacks(holdRunnable);
-
-                    findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+                    boolean isUpdated = noteManager.updateNote(note);
+                    if (isUpdated) {
+                        holdHandler.removeCallbacks(holdRunnable);
+                        findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+                    }
 
                     break;
                 case MotionEvent.ACTION_MOVE:

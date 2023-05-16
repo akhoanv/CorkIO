@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
 
@@ -24,11 +26,15 @@ import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
+    private NoteManager noteManager;
     private int currentApiVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inject variables
+        noteManager = ObjectBoxNoteManager.get();
 
         // Set fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -76,8 +82,7 @@ public class MainActivity extends FragmentActivity {
         Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
         boardBox.removeAll();
 
-        Box<Note> noteBox = ObjectBox.get().boxFor(Note.class);
-        noteBox.removeAll();
+        noteManager.removeAllNotes();
     }
 
     public void addButtonOnClick(View view) {

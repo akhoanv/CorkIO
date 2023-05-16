@@ -15,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.cork.io.R;
 import com.cork.io.dao.Note;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.utils.NoteCallback;
 
 /**
@@ -23,6 +25,7 @@ import com.cork.io.utils.NoteCallback;
  * @author knguyen
  */
 public class NoteEditFragment extends DialogFragment {
+    private NoteManager noteManager;
     private View view;
     private Note note;
     private NoteCallback callback;
@@ -41,6 +44,7 @@ public class NoteEditFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        noteManager = ObjectBoxNoteManager.get();
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.fragment_note_dialog, container, false);
 
@@ -59,14 +63,14 @@ public class NoteEditFragment extends DialogFragment {
         titleElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 note.title = titleElement.getText().toString();
-                note.update();
+                noteManager.updateNote(note);
             }
         });
 
         contentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 note.content = contentElement.getText().toString();
-                note.update();
+                noteManager.updateNote(note);
             }
         });
 
@@ -101,7 +105,7 @@ public class NoteEditFragment extends DialogFragment {
         // Update content
         note.title = titleElement.getText().toString();
         note.content = contentElement.getText().toString();
-        note.update();
+        noteManager.updateNote(note);
 
         // Run callback to update data on board
         callback.run(doDelete);
