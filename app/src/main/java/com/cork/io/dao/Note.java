@@ -1,5 +1,8 @@
 package com.cork.io.dao;
 
+import android.util.Log;
+
+import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 
@@ -16,24 +19,22 @@ public class Note {
     @Id
     public long id;
 
-    public ToOne<Board> board;
-
+    public long boardId;
     public String title;
     public String content;
     public int iconId;
     public float positionX; // absolute X from 0
     public float positionY; // absolute Y from 0
 
-    public Note() {}
+    public Note(){}
 
-    public Note(long id, Board board, String title, String content, int iconId, float positionX, float positionY) {
-        this.id = id;
-        this.board.setTarget(board);
+    public Note(long boardId, String title, String content, int iconId) {
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.iconId = iconId;
 
-        this.positionX = board.panPositionX;
-        this.positionY = board.panPositionY;
+        this.positionX = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionX;
+        this.positionY = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionY;
     }
 }

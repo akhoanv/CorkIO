@@ -1,8 +1,5 @@
 package com.cork.io.dao;
 
-import com.cork.io.objectbox.ObjectBox;
-import com.cork.io.struct.Point2D;
-
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 import io.objectbox.relation.ToMany;

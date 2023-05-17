@@ -13,7 +13,7 @@ public interface BoardManager {
      * @param board new board.
      * @return the ID of the added board.
      */
-    long addBoard(Board board);
+    Board addBoard(Board board);
 
     /**
      * Add new boards in batch to the database.

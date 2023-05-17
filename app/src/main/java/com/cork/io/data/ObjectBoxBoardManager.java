@@ -16,8 +16,9 @@ public class ObjectBoxBoardManager implements BoardManager {
         return manager;
     }
     @Override
-    public long addBoard(Board board) {
-        return ObjectBox.get().boxFor(Board.class).put(board);
+    public Board addBoard(Board board) {
+        long id = ObjectBox.get().boxFor(Board.class).put(board);
+        return findBoardById(id);
     }
 
     @Override

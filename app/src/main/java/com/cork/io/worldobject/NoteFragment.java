@@ -16,10 +16,14 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
+import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
+import com.cork.io.data.BoardManager;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.fragment.NoteEditFragment;
+import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
@@ -29,7 +33,11 @@ import com.cork.io.struct.TouchAction;
  * @author knguyen
  */
 public class NoteFragment extends RelativeLayout {
+    // Database manager
     private NoteManager noteManager;
+    private BoardManager boardManager;
+
+    // Stats variable
     private TouchAction action;
     private TextView titleView;
     private ImageView iconView;
@@ -49,6 +57,7 @@ public class NoteFragment extends RelativeLayout {
     public NoteFragment(Context context) {
         super(context);
         noteManager = ObjectBoxNoteManager.get();
+        boardManager = ObjectBoxBoardManager.get();
         setOnTouchListener(touchListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,7 +69,7 @@ public class NoteFragment extends RelativeLayout {
         findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
     }
 
-    public void setNote(final Note note) {
+    public void setNote(final Note note, final boolean isNew) {
         this.note = note;
 
         if (note.title != null) {
@@ -71,10 +80,10 @@ public class NoteFragment extends RelativeLayout {
             iconView.setImageResource(note.iconId);
         }
 
-        setX(note.positionX);
-        setY(note.positionY);
+        setX(isNew ? 0 : note.positionX);
+        setY(isNew ? 0 : note.positionY);
 
-        scale(note.board.getTarget().scaleFactor * 100, false);
+        scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
     }
 
     /**
@@ -156,8 +165,8 @@ public class NoteFragment extends RelativeLayout {
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {
                         action = TouchAction.NONE;
-                        note.positionX = getX() - note.board.getTarget().panPositionX;
-                        note.positionY = getY() - note.board.getTarget().panPositionY;
+                        note.positionX = getX() - boardManager.findBoardById(note.boardId).panPositionX;
+                        note.positionY = getY() - boardManager.findBoardById(note.boardId).panPositionY;
                     }
 
                     boolean isUpdated = noteManager.updateNote(note);
@@ -178,4 +187,6 @@ public class NoteFragment extends RelativeLayout {
             return true;
         }
     };
+
+
 }

@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity {
         //deleteAllNotes();
 
         // Initialization UI
-        mainBoard = new BoardFragment(this);
+        mainBoard = new BoardFragment(this, 0);
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard);
 
         LinearLayout addButton = findViewById(R.id.addButton);
@@ -98,7 +98,7 @@ public class MainActivity extends FragmentActivity {
             }
 
             return newNote;
-        }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote)));
+        }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote, true)));
     }
 
     @SuppressLint("NewApi")

@@ -1,6 +1,7 @@
 package com.cork.io.worldobject;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +26,11 @@ import io.objectbox.Box;
  * @author knguyen
  */
 public class BoardFragment extends RelativeLayout {
+    // Database manager
     private NoteManager noteManager;
     private BoardManager boardManager;
+
+    // Stats variable
     private Point2D onScreenPosition = new Point2D(0, 0);
     private float scale = 1f;
     private Board board;
@@ -36,7 +40,7 @@ public class BoardFragment extends RelativeLayout {
     private Point2D mousePosition = new Point2D(0, 0);
     private float originalDist = 0f;
 
-    public BoardFragment(Context context) {
+    public BoardFragment(Context context, int boardIndex) {
         super(context);
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
@@ -45,15 +49,13 @@ public class BoardFragment extends RelativeLayout {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.board_view, this, true);
 
-        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
-        if (boardBox.count() == 0) {
-            board = new Board();
-            boardManager.addBoard(board);
+        if (boardManager.getAllBoards().size() == 0) {
+            board = boardManager.addBoard(new Board());
         } else {
-            board = boardBox.getAll().get(0);
+            board = boardManager.getAllBoards().get(boardIndex);
             // Render all child
             for (Note n : board.notes) {
-                renderNote(n);
+                renderNote(n, false);
             }
 
             onScreenPosition.setXY(board.panPositionX, board.panPositionY);
@@ -68,7 +70,7 @@ public class BoardFragment extends RelativeLayout {
      * Attempting to add a new {@link Note} entry into the database
      */
     public Note addToDatabase(String title, String content, int imageResource) {
-        Note note = new Note(0, board, title, content, imageResource, 100, 100);
+        Note note = new Note(board.id, title, content, imageResource);
         noteManager.addNote(note);
         board.notes.add(note);
         boardManager.updateBoard(board);
@@ -78,9 +80,9 @@ public class BoardFragment extends RelativeLayout {
     /**
      * Render note on screen, once the note was successfully added
      */
-    public void renderNote(Note note) {
+    public void renderNote(Note note, boolean isNew) {
         NoteFragment noteFragment = new NoteFragment(getContext());
-        noteFragment.setNote(note);
+        noteFragment.setNote(note, isNew);
         addView(noteFragment);
     }
 
