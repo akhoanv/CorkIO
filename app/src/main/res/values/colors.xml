@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue">#1565C0</color>
-    <color name="yellow">#FBC02D</color>
-    <color name="red">#F44336</color>
-    <color name="paper">#F2EECB</color>
+    <color name="orange">#FFA338</color>
+    <color name="cyan">#7ECCFF</color>
+    <color name="paper_white">#E5F4Fa</color>
+    <color name="light_pink">#FFA6C4</color>
+    <color name="dark_pink">#FDA5A3</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="brown">#4E342E</color>
+    <color name="board_black">#2A2A2A</color>
 </resources>

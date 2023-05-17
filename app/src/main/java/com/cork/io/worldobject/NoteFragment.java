@@ -1,10 +1,12 @@
-package com.cork.io.fragment;
+package com.cork.io.worldobject;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,18 +16,32 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
+import com.cork.io.dao.Board;
+import com.cork.io.dao.Note;
+import com.cork.io.data.BoardManager;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxBoardManager;
+import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.NoteEditFragment;
+import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
 /**
- * Note object on {@link Board}
+ * Note object on {@link BoardFragment}
  *
  * @author knguyen
  */
-public class Note extends RelativeLayout {
+public class NoteFragment extends RelativeLayout {
+    // Database manager
+    private NoteManager noteManager;
+    private BoardManager boardManager;
+
+    // Stats variable
     private TouchAction action;
     private TextView titleView;
     private ImageView iconView;
+    private Note note;
 
     // Reactive variable
     private Point2D mousePosition = new Point2D(0 ,0);
@@ -38,8 +54,10 @@ public class Note extends RelativeLayout {
         }
     };
 
-    public Note(Context context) {
+    public NoteFragment(Context context) {
         super(context);
+        noteManager = ObjectBoxNoteManager.get();
+        boardManager = ObjectBoxBoardManager.get();
         setOnTouchListener(touchListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,22 +69,21 @@ public class Note extends RelativeLayout {
         findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
     }
 
-    /**
-     * Set note title
-     *
-     * @param title title to be set
-     */
-    public void setTitle(final String title) {
-        titleView.setText(title);
-    }
+    public void setNote(final Note note, final boolean isNew) {
+        this.note = note;
 
-    /**
-     * Set note icon
-     *
-     * @param imageResource image resource to be set
-     */
-    public void setIcon(final int imageResource) {
-        iconView.setImageResource(imageResource);
+        if (note.title != null) {
+            titleView.setText(note.title);
+        }
+
+        if (note.iconId != 0) {
+            iconView.setImageResource(note.iconId);
+        }
+
+        setX(isNew ? 0 : note.positionX);
+        setY(isNew ? 0 : note.positionY);
+
+        scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
     }
 
     /**
@@ -84,12 +101,23 @@ public class Note extends RelativeLayout {
      *
      * @param dscale percentage
      */
-    public void scale(final float dscale) {
+    public void scale(final float dscale, final boolean changePosition) {
         setScaleX((getScaleX() * dscale) / 100);
         setScaleY((getScaleY() * dscale) / 100);
 
-        setX((getX() * dscale) / 100);
-        setY((getY() * dscale) / 100);
+        if (changePosition) {
+            setX((getX() * dscale) / 100);
+            setY((getY() * dscale) / 100);
+        }
+    }
+
+    public void remove() {
+        boolean isRemoved = noteManager.removeNote(note.id);
+        if (isRemoved) {
+            ((ViewGroup)getParent()).removeView(this);
+        } else {
+            Log.d(NoteFragment.class.getName(), "Failed to remove note.");
+        }
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {
@@ -102,26 +130,50 @@ public class Note extends RelativeLayout {
                 case MotionEvent.ACTION_DOWN:
                     bringToFront();
                     action = TouchAction.CLICK;
-                    holdHandler.postDelayed(holdRunnable, 300);
+                    holdHandler.postDelayed(holdRunnable, 200);
                     mousePosition.setXY(newX, newY);
                     break;
                 case MotionEvent.ACTION_UP:
                     if (action == TouchAction.CLICK) {
-                        NoteEditFragment fragment = new NoteEditFragment();
+                        // Close any dialog fragment
                         FragmentTransaction ft = ((FragmentActivity) getContext()).getSupportFragmentManager().beginTransaction();
                         Fragment prev = ((FragmentActivity) getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
                         if (prev != null) {
                             ft.remove(prev);
                         }
+
+                        // Show edit fragment
+                        NoteEditFragment fragment = new NoteEditFragment(note);
+                        fragment.setCallback((doDelete) -> {
+                            if (doDelete) {
+                                remove();
+                                return;
+                            }
+
+                            // Update current note object and data on screen
+                            note = noteManager.findNoteById(note.id);
+
+                            if (note.title != null) {
+                                titleView.setText(note.title);
+                            }
+
+                            if (note.iconId != 0) {
+                                iconView.setImageResource(note.iconId);
+                            }
+                        });
                         ft.addToBackStack(null);
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {
                         action = TouchAction.NONE;
+                        note.positionX = getX() - boardManager.findBoardById(note.boardId).panPositionX;
+                        note.positionY = getY() - boardManager.findBoardById(note.boardId).panPositionY;
                     }
 
-                    holdHandler.removeCallbacks(holdRunnable);
-
-                    findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+                    boolean isUpdated = noteManager.updateNote(note);
+                    if (isUpdated) {
+                        holdHandler.removeCallbacks(holdRunnable);
+                        findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+                    }
 
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -135,4 +187,6 @@ public class Note extends RelativeLayout {
             return true;
         }
     };
+
+
 }

@@ -1,25 +1,40 @@
 package com.cork.io;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import com.cork.io.fragment.Board;
-import com.cork.io.fragment.Note;
+import com.cork.io.dao.Board;
+import com.cork.io.dao.Note;
+import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.worldobject.BoardFragment;
+import com.cork.io.objectbox.ObjectBox;
+
+import io.objectbox.Box;
+
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends FragmentActivity {
-    private Board mainBoard;
+    private BoardFragment mainBoard;
+    private NoteManager noteManager;
     private int currentApiVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inject variables
+        noteManager = ObjectBoxNoteManager.get();
 
         // Set fullscreen mode
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -52,26 +67,38 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        // Initialization
-        mainBoard = new Board(this);
-        ((LinearLayout) findViewById(R.id.app_view)).addView(mainBoard);
+        //deleteAllNotes();
 
-        addNote("Note with long title and longer and longer", R.drawable.icon);
-        addNote("Note2", R.drawable.icon);
+        // Initialization UI
+        mainBoard = new BoardFragment(this, 0);
+        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard);
+
+        LinearLayout addButton = findViewById(R.id.addButton);
+        addButton.setOnClickListener(this::addButtonOnClick);
+        addButton.bringToFront();
     }
 
-    public void addNote(final String title, final int imageResource) {
-        Note l = new Note(this);
+    public void deleteAllNotes() {
+        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
+        boardBox.removeAll();
 
-        if (title != null) {
-            l.setTitle(title);
-        }
+        noteManager.removeAllNotes();
+    }
 
-        if (imageResource != 0) {
-            l.setIcon(imageResource);
-        }
+    public void addButtonOnClick(View view) {
+        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
+            String title = "Title " + (new Random().nextInt(61) + 20);
+            String content = "Content " + (new Random().nextInt(61) + 20);
+            return mainBoard.addToDatabase(title, content, R.drawable.icon);
+        });
 
-        mainBoard.addView(l);
+        dbAddFuture.handle((newNote, throwable) -> {
+            if (throwable != null) {
+                Log.d(this.getLocalClassName(), "Failed to add new note.");
+            }
+
+            return newNote;
+        }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote, true)));
     }
 
     @SuppressLint("NewApi")
