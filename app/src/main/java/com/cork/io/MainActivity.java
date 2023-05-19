@@ -67,7 +67,13 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        //deleteAllNotes();
+        deleteAllNotes();
+        /*Note n1 = noteManager.findNoteById(1);
+        n1.connection.add((long) 2);
+        noteManager.updateNote(n1);
+        Note n2 = noteManager.findNoteById(2);
+        n2.connection.add((long) 1);
+        noteManager.updateNote(n2);*/
 
         // Initialization UI
         mainBoard = new BoardFragment(this, 0);

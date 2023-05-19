@@ -1,15 +1,14 @@
 package com.cork.io.dao;
 
-import android.util.Log;
-
 import com.cork.io.data.ObjectBoxBoardManager;
-import com.cork.io.objectbox.ObjectBox;
-import com.cork.io.struct.Point2D;
 
-import io.objectbox.Box;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToOne;
+import io.objectbox.converter.PropertyConverter;
 
 /**
  * Note DAO. This is the smallest database object.
@@ -26,6 +25,9 @@ public class Note {
     public float positionX; // absolute X from 0
     public float positionY; // absolute Y from 0
 
+    @Convert(converter = SetConverter.class, dbType = String.class)
+    public Set<Long> connection;
+
     public Note(){}
 
     public Note(long boardId, String title, String content, int iconId) {
@@ -36,5 +38,35 @@ public class Note {
 
         this.positionX = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionX;
         this.positionY = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionY;
+        this.connection = new LinkedHashSet<>();
+    }
+
+    public static class SetConverter implements PropertyConverter<Set<Long>, String> {
+
+        @Override
+        public Set<Long> convertToEntityProperty(String databaseValue) {
+            if (databaseValue == null) {
+                return new LinkedHashSet<>();
+            }
+
+            Set<Long> result = new LinkedHashSet<>();
+            for (String s : databaseValue.split(";")) {
+                if (!s.isEmpty()) {
+                    result.add(Long.valueOf(s));
+                }
+            }
+
+            return result;
+        }
+
+        @Override
+        public String convertToDatabaseValue(Set<Long> entityProperty) {
+            String data = "";
+            for (Long l : entityProperty) {
+                data += l + ";";
+            }
+
+            return data;
+        }
     }
 }
