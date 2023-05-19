@@ -4,6 +4,7 @@ import com.cork.io.dao.Board;
 import com.cork.io.objectbox.ObjectBox;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ObjectBoxBoardManager implements BoardManager {
     private static ObjectBoxBoardManager manager;
@@ -57,5 +58,45 @@ public class ObjectBoxBoardManager implements BoardManager {
     @Override
     public List<Board> getAllBoards() {
         return ObjectBox.get().boxFor(Board.class).getAll();
+    }
+
+    @Override
+    public CompletableFuture<Board> addBoardAsync(Board board) {
+        return CompletableFuture.supplyAsync(() -> addBoard(board));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> addBoardsAsync(List<Board> boards) {
+        return CompletableFuture.supplyAsync(() -> addBoards(boards));
+    }
+
+    @Override
+    public CompletableFuture<Board> findBoardByIdAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> findBoardById(id));
+    }
+
+    @Override
+    public CompletableFuture<List<Board>> findBoardsByIdAsync(List<Long> ids) {
+        return CompletableFuture.supplyAsync(() -> findBoardsById(ids));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> removeBoardAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> removeBoard(id));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> removeAllBoardsAsync() {
+        return CompletableFuture.supplyAsync(() -> removeAllBoards());
+    }
+
+    @Override
+    public CompletableFuture<Boolean> updateBoardAsync(Board board) {
+        return CompletableFuture.supplyAsync(() -> updateBoard(board));
+    }
+
+    @Override
+    public CompletableFuture<List<Board>> getAllBoardsAsync() {
+        return CompletableFuture.supplyAsync(() -> getAllBoards());
     }
 }

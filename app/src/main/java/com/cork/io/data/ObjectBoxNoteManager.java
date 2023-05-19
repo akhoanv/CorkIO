@@ -62,4 +62,44 @@ public class ObjectBoxNoteManager implements NoteManager {
     public List<Note> getAllNotes() {
         return ObjectBox.get().boxFor(Note.class).getAll();
     }
+
+    @Override
+    public CompletableFuture<Long> addNoteAsync(Note note) {
+        return CompletableFuture.supplyAsync(() -> addNote(note));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> addNotesAsync(List<Note> notes) {
+        return CompletableFuture.supplyAsync(() -> addNotes(notes));
+    }
+
+    @Override
+    public CompletableFuture<Note> findNoteByIdAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> findNoteById(id));
+    }
+
+    @Override
+    public CompletableFuture<List<Note>> findNotesByIdAsync(List<Long> ids) {
+        return CompletableFuture.supplyAsync(() -> findNotesById(ids));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> removeNoteAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> removeNote(id));
+    }
+
+    @Override
+    public CompletableFuture<Boolean> removeAllNotesAsync() {
+        return CompletableFuture.supplyAsync(() -> removeAllNotes());
+    }
+
+    @Override
+    public CompletableFuture<Boolean> updateNoteAsync(Note note) {
+        return CompletableFuture.supplyAsync(() -> updateNote(note));
+    }
+
+    @Override
+    public CompletableFuture<List<Note>> getAllNotesAsync() {
+        return CompletableFuture.supplyAsync(() -> getAllNotes());
+    }
 }
