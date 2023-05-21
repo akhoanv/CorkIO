@@ -30,14 +30,14 @@ public class Note {
 
     public Note(){}
 
-    public Note(long boardId, String title, String content, int iconId) {
+    public Note(long boardId, String title, String content, int iconId, float positionX, float positionY) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.iconId = iconId;
 
-        this.positionX = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionX;
-        this.positionY = ObjectBoxBoardManager.get().findBoardById(boardId).panPositionY;
+        this.positionX = positionX;
+        this.positionY = positionY;
         this.connection = new LinkedHashSet<>();
     }
 
