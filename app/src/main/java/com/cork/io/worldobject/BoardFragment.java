@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.cork.io.MainActivity;
 import com.cork.io.R;
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
@@ -41,6 +42,7 @@ public class BoardFragment extends RelativeLayout {
     private BoardManager boardManager;
 
     // Stats variable
+    private Context context;
     private Point2D onScreenPosition = new Point2D(0, 0);
     private float scale = 1f;
     private Board board;
@@ -53,6 +55,7 @@ public class BoardFragment extends RelativeLayout {
 
     public BoardFragment(Context context, int boardIndex) {
         super(context);
+        this.context = context;
 
         setWillNotDraw(false);
 
@@ -69,6 +72,10 @@ public class BoardFragment extends RelativeLayout {
 
         if (boardManager.getAllBoards().size() == 0) {
             board = boardManager.addBoard(new Board());
+
+            // Change UI display stat
+            ((MainActivity) context).setCoordDisplay(0, 0);
+            ((MainActivity) context).updateZoom(10);
         } else {
             board = boardManager.getAllBoards().get(boardIndex);
             // Render all child
@@ -81,6 +88,10 @@ public class BoardFragment extends RelativeLayout {
 
             // Move screen position
             moveChildOnScreen(onScreenPosition);
+
+            // Change UI display stat
+            ((MainActivity) context).setCoordDisplay((int) -onScreenPosition.getX(), (int) onScreenPosition.getY());
+            ((MainActivity) context).updateZoom((int) (scale * 10));
         }
     }
 
@@ -88,8 +99,10 @@ public class BoardFragment extends RelativeLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // Already visited node, prevent drawing duplication
         List<Long> drawnNote = new ArrayList<>();
 
+        // Compare node to node, draw line if requirements are met
         for (int i=0; i < getChildCount(); i++) {
             NoteFragment noteObject = ((NoteFragment) getChildAt(i));
             noteObject.fetchNote();
@@ -97,6 +110,7 @@ public class BoardFragment extends RelativeLayout {
             for (int i2=0; i2 < getChildCount(); i2++) {
                 NoteFragment linkObject = ((NoteFragment) getChildAt(i2));
 
+                // Only draw if connection hasn't been drawn and connection exists
                 if (drawnNote.contains(linkObject.getNote().id) || !n.connection.contains(linkObject.getNote().id)) {
                     continue;
                 }
@@ -135,9 +149,8 @@ public class BoardFragment extends RelativeLayout {
      * Render note on screen, once the note was successfully added
      */
     public void renderNote(Note note, boolean isNew) {
-        NoteFragment noteFragment = new NoteFragment(getContext());
+        NoteFragment noteFragment = new NoteFragment(getContext(), note, isNew);
         addView(noteFragment);
-        noteFragment.setNote(note, isNew);
     }
 
     /**
@@ -209,7 +222,11 @@ public class BoardFragment extends RelativeLayout {
                         // Update initial scale and dist for next move
                         originalDist = getPinchDistance(motionEvent);
 
+                        // Update draw
                         invalidate();
+
+                        // Update screen display
+                        ((MainActivity) context).updateZoom((int) (scale * 10));
                     } else if (action == TouchAction.DRAG) {
                         float dx = newX - mousePosition.getX();
                         float dy = newY - mousePosition.getY();
@@ -222,7 +239,11 @@ public class BoardFragment extends RelativeLayout {
                         // Update initial mouse position for next move
                         mousePosition.setXY(newX, newY);
 
+                        // Update draw
                         invalidate();
+
+                        // Update screen display
+                        ((MainActivity) context).setCoordDisplay((int) -onScreenPosition.getX(), (int) onScreenPosition.getY());
                     }
                     break;
             }

@@ -2,73 +2,108 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/app_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:id="@+id/app_view"
+    android:background="@color/board_black"
     android:orientation="horizontal"
-    android:background="@color/white">
+    tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/right_horz"
+        android:id="@+id/horz_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.96"
         android:orientation="horizontal"
-        />
+        app:layout_constraintGuide_percent="0.96" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/bot_vert"
+        android:id="@+id/vert_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.82"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/left_horz"
+        android:id="@+id/vert_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.03"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02" />
+
+    <ImageButton
+        android:id="@+id/addButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/add_button_background"
+        android:elevation="40dp"
         android:orientation="horizontal"
-        />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/top_vert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintGuide_percent="0.13"
-        android:orientation="vertical" />
+        android:weightSum="1.0"
+        android:src="@drawable/add"
+        app:layout_constraintEnd_toEndOf="@id/vert_1"
+        app:layout_constraintStart_toStartOf="@id/vert_1"
+        app:layout_constraintBottom_toBottomOf="@id/horz_2"
+        app:layout_constraintTop_toTopOf="@id/horz_2"/>
 
     <LinearLayout
-        android:id="@+id/addButton"
-        android:layout_width="130dp"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/add_button_background"
-        app:layout_constraintBottom_toBottomOf="@id/right_horz"
-        app:layout_constraintEnd_toEndOf="@id/bot_vert"
-        app:layout_constraintStart_toStartOf="@id/bot_vert"
-        app:layout_constraintTop_toTopOf="@id/right_horz"
-        android:weightSum="1.0"
-        android:elevation="40dp">
+        android:id="@+id/boardInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vert_4"
+        app:layout_constraintBottom_toBottomOf="@id/horz_2"
+        app:layout_constraintTop_toTopOf="@id/horz_2"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:src="@drawable/add"
-            android:layout_weight="0.3"
-            android:layout_marginLeft="8dp"/>
+        <LinearLayout
+            android:id="@+id/boardInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp"
+            android:gravity="bottom">
 
-        <TextView
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="Add Note"
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/position"/>
+
+            <TextView
+                android:id="@+id/xy_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100:100"
+                android:textColor="@color/paper_white"
+                android:textStyle="bold"
+                android:layout_marginLeft="3dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:textSize="18dp"
-            android:textColor="@color/board_black"
-            android:elevation="40dp"
-            android:layout_weight="0.7"
-            android:layout_marginRight="8dp"/>
-    </LinearLayout>
+            android:background="@drawable/zoom_background"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp">
 
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/zoom_out"
+                    android:layout_marginLeft="5dp"/>
+
+                <SeekBar
+                    android:id="@+id/zoom_level"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:progressBackgroundTint="@color/board_black"
+                    android:progressTint="@color/board_black"
+                    android:thumbTint="@color/board_black" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/zoom_in"
+                    android:layout_marginRight="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

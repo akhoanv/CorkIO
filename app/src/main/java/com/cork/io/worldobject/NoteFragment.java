@@ -54,8 +54,9 @@ public class NoteFragment extends RelativeLayout {
         }
     };
 
-    public NoteFragment(Context context) {
+    public NoteFragment(Context context, final Note note, final boolean isNew) {
         super(context);
+
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
         setOnTouchListener(touchListener);
@@ -67,9 +68,7 @@ public class NoteFragment extends RelativeLayout {
         titleView = findViewById(R.id.small_view_title);
 
         findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
-    }
 
-    public void setNote(final Note note, final boolean isNew) {
         this.note = note;
 
         if (note.title != null) {
@@ -86,6 +85,9 @@ public class NoteFragment extends RelativeLayout {
         scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
     }
 
+    /**
+     * Force {@link Note} object associated with this object ot fetch updated data from database
+     */
     public void fetchNote() {
         this.note = noteManager.findNoteById(note.id);
     }
@@ -115,15 +117,31 @@ public class NoteFragment extends RelativeLayout {
         }
     }
 
+    /**
+     * Remove self from UI and database
+     */
     public void remove() {
         boolean isRemoved = noteManager.removeNote(note.id);
         if (isRemoved) {
+            // Remove all connection from other nodes
+            for (Long relId : note.connection) {
+                Note n = noteManager.findNoteById(relId);
+                n.connection.remove(note.id);
+                noteManager.updateNote(n);
+            }
+
+            // Remove UI
             ((ViewGroup)getParent()).removeView(this);
         } else {
             Log.d(NoteFragment.class.getName(), "Failed to remove note.");
         }
     }
 
+    /**
+     * Get note object associates with this object
+     *
+     * @return {@link Note} object
+     */
     public Note getNote() {
         return note;
     }
@@ -199,6 +217,4 @@ public class NoteFragment extends RelativeLayout {
             return true;
         }
     };
-
-
 }

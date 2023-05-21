@@ -7,12 +7,16 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
@@ -30,6 +34,10 @@ public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
     private NoteManager noteManager;
     private int currentApiVersion;
+
+    private SeekBar zoomBar;
+    private TextView coordDisplay;
+    private ImageButton addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,22 +77,47 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        deleteAllNotes();
-        /*Note n1 = noteManager.findNoteById(1);
-        n1.connection.add((long) 2);
-        noteManager.updateNote(n1);
-        Note n2 = noteManager.findNoteById(2);
-        n2.connection.add((long) 1);
-        noteManager.updateNote(n2);*/
+        //deleteAllNotes();
+
+        // Find elements
+        zoomBar = findViewById(R.id.zoom_level);
+        coordDisplay = findViewById(R.id.xy_position);
+        addButton = findViewById(R.id.addButton);
 
         // Initialization UI
         mainBoard = new BoardFragment(this, 0);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
-        LinearLayout addButton = findViewById(R.id.addButton);
+        // Set properties
+        LinearLayout boardInfo = findViewById(R.id.boardInfo);
+        boardInfo.bringToFront();
+
+        zoomBar.setMax(15);
+        zoomBar.setMin(7);
+        zoomBar.setOnTouchListener((view, motionEvent) -> true); // Temporary disable drag
+
         addButton.setOnClickListener(this::addButtonOnClick);
         addButton.bringToFront();
+    }
+
+    /**
+     * Update Zoom level on UI. Should take values from 7 to 15
+     *
+     * @param level level to update
+     */
+    public void updateZoom (int level) {
+        zoomBar.setProgress(level);
+    }
+
+    /**
+     * Update coordinate display on UI
+     *
+     * @param x x position
+     * @param y y position
+     */
+    public void setCoordDisplay(int x, int y) {
+        coordDisplay.setText(x + ":" + y);
     }
 
     public void deleteAllNotes() {
