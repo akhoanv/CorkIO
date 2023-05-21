@@ -59,12 +59,16 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
             long idToBeRemoved = noteList.get(position);
             note.connection.remove(idToBeRemoved);
 
+            Note relNote = noteManager.findNoteById(idToBeRemoved);
+            relNote.connection.remove(note.id);
+
             // UI update
             noteList.remove(idToBeRemoved);
             remove(idToBeRemoved);
 
             // Update database
             noteManager.updateNote(note);
+            noteManager.updateNote(relNote);
         });
 
         return view;
