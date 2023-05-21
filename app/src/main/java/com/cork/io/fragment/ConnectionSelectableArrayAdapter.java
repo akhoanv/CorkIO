@@ -62,6 +62,10 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
             note.connection.add(noteList.get(position));
             noteManager.updateNote(note);
 
+            Note linkNote = noteManager.findNoteById(noteList.get(position));
+            linkNote.connection.add(note.id);
+            noteManager.updateNote(linkNote);
+
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(note));
             ft.commit();

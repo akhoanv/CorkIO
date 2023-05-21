@@ -86,6 +86,10 @@ public class NoteFragment extends RelativeLayout {
         scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
     }
 
+    public void fetchNote() {
+        this.note = noteManager.findNoteById(note.id);
+    }
+
     /**
      * Move this object, incremental from its current position
      *
@@ -118,6 +122,10 @@ public class NoteFragment extends RelativeLayout {
         } else {
             Log.d(NoteFragment.class.getName(), "Failed to remove note.");
         }
+    }
+
+    public Note getNote() {
+        return note;
     }
 
     private OnTouchListener touchListener = new OnTouchListener() {
@@ -160,6 +168,8 @@ public class NoteFragment extends RelativeLayout {
                             if (note.iconId != 0) {
                                 iconView.setImageResource(note.iconId);
                             }
+
+                            ((ViewGroup) getParent()).invalidate();
                         });
                         ft.addToBackStack(null);
                         fragment.show(ft, "dialog");
@@ -179,6 +189,8 @@ public class NoteFragment extends RelativeLayout {
                 case MotionEvent.ACTION_MOVE:
                     if (action == TouchAction.DRAG) {
                         move(new Point2D(newX - mousePosition.getX(), newY - mousePosition.getY()));
+
+                        ((ViewGroup) getParent()).invalidate();
                     } else {
                         holdHandler.removeCallbacks(holdRunnable);
                     }

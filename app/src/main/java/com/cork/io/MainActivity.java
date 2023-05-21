@@ -8,9 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
@@ -77,7 +79,8 @@ public class MainActivity extends FragmentActivity {
 
         // Initialization UI
         mainBoard = new BoardFragment(this, 0);
-        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
         LinearLayout addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(this::addButtonOnClick);

@@ -1,10 +1,17 @@
 package com.cork.io.worldobject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.cork.io.R;
@@ -17,6 +24,9 @@ import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.objectbox.Box;
 
@@ -35,6 +45,7 @@ public class BoardFragment extends RelativeLayout {
     private float scale = 1f;
     private Board board;
     private TouchAction action;
+    private Paint paint;
 
     // Reactive variable
     private Point2D mousePosition = new Point2D(0, 0);
@@ -42,12 +53,19 @@ public class BoardFragment extends RelativeLayout {
 
     public BoardFragment(Context context, int boardIndex) {
         super(context);
+
+        setWillNotDraw(false);
+
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
+
+        setBackgroundColor(context.getColor(R.color.board_black));
         setOnTouchListener(touchListener);
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.board_view, this, true);
+        paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setStrokeWidth(10);
 
         if (boardManager.getAllBoards().size() == 0) {
             board = boardManager.addBoard(new Board());
@@ -63,6 +81,42 @@ public class BoardFragment extends RelativeLayout {
 
             // Move screen position
             moveChildOnScreen(onScreenPosition);
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        List<Long> drawnNote = new ArrayList<>();
+
+        for (int i=0; i < getChildCount(); i++) {
+            NoteFragment noteObject = ((NoteFragment) getChildAt(i));
+            noteObject.fetchNote();
+            Note n = noteObject.getNote();
+            for (int i2=0; i2 < getChildCount(); i2++) {
+                NoteFragment linkObject = ((NoteFragment) getChildAt(i2));
+
+                if (drawnNote.contains(linkObject.getNote().id) || !n.connection.contains(linkObject.getNote().id)) {
+                    continue;
+                }
+
+                Rect startNoteBound = new Rect();
+                noteObject.getHitRect(startNoteBound);
+
+                Rect endNoteBound = new Rect();
+                linkObject.getHitRect(endNoteBound);
+
+                float startX = startNoteBound.left + (210 * scale);
+                float startY = startNoteBound.top + (40 * scale);
+
+                float endX = endNoteBound.left + (210 * scale);
+                float endY = endNoteBound.top + (40 * scale);
+
+                canvas.drawLine(startX, startY, endX, endY, paint);
+            }
+
+            drawnNote.add(n.id);
         }
     }
 
@@ -82,8 +136,8 @@ public class BoardFragment extends RelativeLayout {
      */
     public void renderNote(Note note, boolean isNew) {
         NoteFragment noteFragment = new NoteFragment(getContext());
-        noteFragment.setNote(note, isNew);
         addView(noteFragment);
+        noteFragment.setNote(note, isNew);
     }
 
     /**
@@ -92,7 +146,7 @@ public class BoardFragment extends RelativeLayout {
      * @param position vector amount to move child elements
      */
     private void moveChildOnScreen(final Point2D position) {
-        for (int i=1; i < getChildCount(); i++) {
+        for (int i=0; i < getChildCount(); i++) {
             ((NoteFragment) getChildAt(i)).move(position);
         }
     }
@@ -103,7 +157,7 @@ public class BoardFragment extends RelativeLayout {
      * @param scaling scale factor
      */
     private void scaleChild(final float scaling) {
-        for (int i=1; i < getChildCount(); i++) {
+        for (int i=0; i < getChildCount(); i++) {
             ((NoteFragment) getChildAt(i)).scale(scaling, true);
         }
     }
@@ -144,12 +198,18 @@ public class BoardFragment extends RelativeLayout {
                     if (action == TouchAction.ZOOM) {
                         // Calculate % changes from last pinch
                         float dscale = ((getPinchDistance(motionEvent) * 100) / originalDist);
-                        scaleChild(dscale);
+                        float scale = (dscale * BoardFragment.this.scale) / 100;
+
+                        if (scale <= 1.5 && scale >= 0.7) {
+                            scaleChild(dscale);
+                            BoardFragment.this.scale = scale;
+                            board.scaleFactor = scale;
+                        }
 
                         // Update initial scale and dist for next move
-                        scale = (dscale * scale) / 100;
-                        board.scaleFactor = scale;
                         originalDist = getPinchDistance(motionEvent);
+
+                        invalidate();
                     } else if (action == TouchAction.DRAG) {
                         float dx = newX - mousePosition.getX();
                         float dy = newY - mousePosition.getY();
@@ -161,6 +221,8 @@ public class BoardFragment extends RelativeLayout {
 
                         // Update initial mouse position for next move
                         mousePosition.setXY(newX, newY);
+
+                        invalidate();
                     }
                     break;
             }
