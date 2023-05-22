@@ -79,8 +79,8 @@ public class BoardFragment extends RelativeLayout {
         } else {
             board = boardManager.getAllBoards().get(boardIndex);
             // Render all child
-            for (Note n : board.notes) {
-                renderNote(n, false);
+            for (Long id : board.notes) {
+                renderNote(noteManager.findNoteById(id), false);
             }
 
             onScreenPosition.setXY(board.panPositionX, board.panPositionY);
@@ -140,7 +140,7 @@ public class BoardFragment extends RelativeLayout {
     public Note addToDatabase(String title, String content, int imageResource) {
         Note note = new Note(board.id, title, content, imageResource, board.panPositionX, board.panPositionY);
         noteManager.addNote(note);
-        board.notes.add(note);
+        board.notes.add(note.id);
         boardManager.updateBoard(board);
         return note;
     }

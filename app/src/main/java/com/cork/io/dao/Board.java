@@ -1,8 +1,12 @@
 package com.cork.io.dao;
 
+import com.cork.io.dao.converter.IdArrayConverter;
+
+import java.util.Set;
+
+import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.relation.ToMany;
 
 @Entity
 public class Board {
@@ -12,7 +16,9 @@ public class Board {
     public float panPositionX;
     public float panPositionY;
     public float scaleFactor;
-    public ToMany<Note> notes;
+
+    @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    public Set<Long> notes;
 
     public Board() {
         panPositionX = 0;
