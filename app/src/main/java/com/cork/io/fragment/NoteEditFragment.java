@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
 import com.cork.io.dao.Note;
@@ -32,10 +33,9 @@ public class NoteEditFragment extends DialogFragment {
     private boolean doDelete = false;
 
     // Elements
-    private EditText titleElement;
-    private EditText contentElement;
-    private ImageView iconElement;
     private ImageView unpinBtn;
+    private LinearLayout summaryTabBtn;
+    private LinearLayout connectionTabBtn;
 
     public NoteEditFragment(Note note) {
         this.note = note;
@@ -49,36 +49,31 @@ public class NoteEditFragment extends DialogFragment {
         view = inflater.inflate(R.layout.fragment_note_dialog, container, false);
 
         // Find elements
-        titleElement = view.findViewById(R.id.note_edit_title);
-        contentElement = view.findViewById(R.id.note_edit_content);
-        iconElement = view.findViewById(R.id.note_edit_icon);
         unpinBtn = view.findViewById(R.id.note_edit_unpin);
-
-        // Assign appropriate data
-        titleElement.setText(note.title);
-        contentElement.setText(note.content);
-        iconElement.setImageResource(note.iconId);
-
-        // Set onChangeListener to update the database
-        titleElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                note.title = titleElement.getText().toString();
-                noteManager.updateNote(note);
-            }
-        });
-
-        contentElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                note.content = contentElement.getText().toString();
-                noteManager.updateNote(note);
-            }
-        });
+        summaryTabBtn = view.findViewById(R.id.note_edit_summary_btn);
+        connectionTabBtn = view.findViewById(R.id.note_edit_connection_btn);
 
         // Unpin button
         unpinBtn.setOnClickListener(view -> {
             doDelete = true;
             this.dismiss();
         });
+
+        summaryTabBtn.setOnClickListener(view -> {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.note_edit_content_container, new NoteEditSummaryFragment(note));
+            ft.commit();
+        });
+
+        connectionTabBtn.setOnClickListener(view -> {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(note));
+            ft.commit();
+        });
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.replace(R.id.note_edit_content_container, new NoteEditSummaryFragment(note));
+        ft.commit();
 
         return view;
     }
@@ -102,18 +97,13 @@ public class NoteEditFragment extends DialogFragment {
 
     @Override
     public void onDestroy() {
-        // Update content
-        note.title = titleElement.getText().toString();
-        note.content = contentElement.getText().toString();
-        noteManager.updateNote(note);
-
         // Run callback to update data on board
         callback.run(doDelete);
 
         // Set these listener to null, avoid mem leak
-        titleElement.setOnFocusChangeListener(null);
-        contentElement.setOnFocusChangeListener(null);
         unpinBtn.setOnClickListener(null);
+        summaryTabBtn.setOnClickListener(null);
+        connectionTabBtn.setOnClickListener(null);
 
         super.onDestroy();
     }

@@ -1,11 +1,7 @@
 package com.cork.io.data;
 
-import android.util.Log;
-
 import com.cork.io.dao.Note;
 import com.cork.io.objectbox.ObjectBox;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
