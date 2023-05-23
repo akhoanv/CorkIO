@@ -1,6 +1,8 @@
 package com.cork.io.dao;
 
+import com.cork.io.dao.converter.ColorConverter;
 import com.cork.io.dao.converter.IdArrayConverter;
+import com.cork.io.struct.ElementColor;
 import com.cork.io.utils.ConnectionSet;
 
 import java.util.ArrayList;
@@ -18,14 +20,19 @@ public class Connection {
     public long boardId;
     public String name;
 
+
+    @Convert(converter = ColorConverter.class, dbType = String.class)
+    public ElementColor color;
+
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public ConnectionSet<Long> notes; // Max size 2
 
     public Connection(){}
 
-    public Connection(String name, long boardId, long firstNoteId, long secondNoteId) {
+    public Connection(String name, ElementColor color, long boardId, long firstNoteId, long secondNoteId) {
         this.name = name;
         this.boardId = boardId;
+        this.color = color;
 
         this.notes = new ConnectionSet<>();
         this.notes.add(firstNoteId);

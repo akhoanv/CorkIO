@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteEditConnectionFragment extends Fragment {
+    // Database manager
     private NoteManager noteManager;
+
     private View view;
     private Note note;
 

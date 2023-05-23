@@ -26,7 +26,9 @@ import com.cork.io.utils.NoteCallback;
  * @author knguyen
  */
 public class NoteEditFragment extends DialogFragment {
+    // Database manager
     private NoteManager noteManager;
+
     private View view;
     private Note note;
     private NoteCallback callback;

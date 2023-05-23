@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Set;
 
 public class NoteEditConnectionSelectNoteFragment extends Fragment {
+    // Database manager
     private NoteManager noteManager;
+
     private View view;
     private Note note;
 

@@ -12,7 +12,7 @@ public interface BoardManager {
     /**
      * Add new board to the database.
      * @param board new board.
-     * @return the ID of the added board.
+     * @return same board object, but with allocated ID
      */
     Board addBoard(Board board);
 

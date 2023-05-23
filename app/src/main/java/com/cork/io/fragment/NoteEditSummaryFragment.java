@@ -18,7 +18,9 @@ import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 
 public class NoteEditSummaryFragment extends Fragment {
+    // Database manager
     private NoteManager noteManager;
+
     private View view;
     private Note note;
 

@@ -20,7 +20,7 @@
                 android:id="@+id/note_edit_summary_btn"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/note_edit_tab_background_red"
+                android:background="@drawable/note_edit_tab_background_cyan"
                 android:gravity="center">
 
                 <TextView

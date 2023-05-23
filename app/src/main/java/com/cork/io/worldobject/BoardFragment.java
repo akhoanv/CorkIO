@@ -19,8 +19,10 @@ import com.cork.io.R;
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
 import com.cork.io.data.BoardManager;
+import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxBoardManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
@@ -40,6 +42,7 @@ public class BoardFragment extends RelativeLayout {
     // Database manager
     private NoteManager noteManager;
     private BoardManager boardManager;
+    private ConnectionManager connectionManager;
 
     // Stats variable
     private Context context;
@@ -47,7 +50,6 @@ public class BoardFragment extends RelativeLayout {
     private float scale = 1f;
     private Board board;
     private TouchAction action;
-    private Paint paint;
 
     // Reactive variable
     private Point2D mousePosition = new Point2D(0, 0);
@@ -61,14 +63,10 @@ public class BoardFragment extends RelativeLayout {
 
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
+        connectionManager = ObjectBoxConnectionManager.get();
 
         setBackgroundColor(context.getColor(R.color.board_black));
         setOnTouchListener(touchListener);
-
-        paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setStrokeWidth(10);
 
         if (boardManager.getAllBoards().size() == 0) {
             board = boardManager.addBoard(new Board());
@@ -114,6 +112,9 @@ public class BoardFragment extends RelativeLayout {
                 if (drawnNote.contains(linkedObject.getNote().id) || !n.getLinkedNotes().contains(linkedObject.getNote().id)) {
                     continue;
                 }
+
+                Paint paint = connectionManager.findConnectionById(
+                        n.getConnectionIdFromLinkedNote(linkedObject.getNote().id)).color.getPaint(context);
 
                 Rect startNoteBound = new Rect();
                 noteObject.getHitRect(startNoteBound);

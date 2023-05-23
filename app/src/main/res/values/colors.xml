@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blue">#1565C0</color>
-    <color name="orange">#FFA338</color>
-    <color name="cyan">#7ECCFF</color>
-    <color name="paper_white">#E5F4Fa</color>
+    <color name="yellow">#FFA338</color>
     <color name="light_pink">#FFA6C4</color>
-    <color name="dark_pink">#FDA5A3</color>
+    <color name="red">#B71C1C</color>
+    <color name="orange">#E64A19</color>
+    <color name="green">#2E7D32</color>
+
+    <color name="cyan">#7ECCFF</color>
+
+    <color name="paper_white">#E5F4Fa</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="board_black">#2A2A2A</color>

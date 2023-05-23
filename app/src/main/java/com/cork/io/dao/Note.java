@@ -53,4 +53,14 @@ public class Note {
 
         return result;
     }
+
+    public long getConnectionIdFromLinkedNote(long linkedNoteId) {
+        for (Long connId : connection) {
+            if (ObjectBoxConnectionManager.get().findConnectionById(connId).getLinkedNoteId(id) == linkedNoteId) {
+                return connId;
+            }
+        }
+
+        return -1;
+    }
 }

@@ -23,9 +23,12 @@ import com.cork.io.data.ObjectBoxNoteManager;
 import java.util.List;
 
 public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
-    private List<Long> connectionList;
+    // Database manager
     private NoteManager noteManager;
     private ConnectionManager connectionManager;
+
+    // Adapter properties
+    private List<Long> connectionList;
     private Note note;
 
     public ConnectionDisplayArrayAdapter(@NonNull Context context, int resource, @NonNull List<Long> objects, Note note) {
