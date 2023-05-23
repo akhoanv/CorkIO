@@ -30,19 +30,30 @@
             android:id="@+id/note_edit_connection_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Title"
+            android:text="Name"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/board_black"/>
 
-        <TextView
-            android:id="@+id/note_edit_connection_id"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ID: "
-            android:textSize="11sp"
-            android:textColor="@color/board_black"/>
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/arrow_right"/>
+
+            <TextView
+                android:id="@+id/note_edit_connection_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="#0 Title"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:textColor="@color/board_black"/>
+        </LinearLayout>
     </LinearLayout>
 
     <ImageView

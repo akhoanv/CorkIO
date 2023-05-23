@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,15 +14,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
+import com.cork.io.dao.Connection;
 import com.cork.io.dao.Note;
+import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.NoteEditConnectionFragment;
 
 import java.util.List;
 
 public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
-    private List<Long> noteList;
     private NoteManager noteManager;
+    private ConnectionManager connectionManager;
+
+    private List<Long> noteList;
     private Note note;
     private FragmentManager fragmentManager;
 
@@ -30,8 +36,10 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
                                             Note note, FragmentManager fragmentManager) {
         super(context, resource, objects);
 
-        this.noteList = objects;
         this.noteManager = ObjectBoxNoteManager.get();
+        this.connectionManager = ObjectBoxConnectionManager.get();
+
+        this.noteList = objects;
         this.note = note;
         this.fragmentManager = fragmentManager;
     }
@@ -59,12 +67,15 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
 
         // Set onClickAction
         view.setOnClickListener(view1 -> {
-            note.connection.add(noteList.get(position));
+            Connection newConn = new Connection("Test", note.boardId, note.id, noteList.get(position));
+            newConn = connectionManager.addConnection(newConn);
+
+            note.connection.add(newConn.id);
             noteManager.updateNote(note);
 
-            Note linkNote = noteManager.findNoteById(noteList.get(position));
-            linkNote.connection.add(note.id);
-            noteManager.updateNote(linkNote);
+            Note linkedNote = noteManager.findNoteById(noteList.get(position));
+            linkedNote.connection.add(newConn.id);
+            noteManager.updateNote(linkedNote);
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(note));

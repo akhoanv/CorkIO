@@ -1,6 +1,7 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +13,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cork.io.R;
+import com.cork.io.dao.Connection;
 import com.cork.io.dao.Note;
+import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 
 import java.util.List;
 
 public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
-    private List<Long> noteList;
+    private List<Long> connectionList;
     private NoteManager noteManager;
+    private ConnectionManager connectionManager;
     private Note note;
 
     public ConnectionDisplayArrayAdapter(@NonNull Context context, int resource, @NonNull List<Long> objects, Note note) {
         super(context, resource, objects);
 
-        this.noteList = objects;
+        this.connectionList = objects;
         this.noteManager = ObjectBoxNoteManager.get();
+        this.connectionManager = ObjectBoxConnectionManager.get();
         this.note = note;
     }
 
@@ -48,27 +54,28 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         TextView idView = view.findViewById(R.id.note_edit_connection_id);
         ImageView unlinkButton = view.findViewById(R.id.note_edit_connection_unlink);
 
+        // Find Connection
+        Connection conn = connectionManager.findConnectionById(connectionList.get(position));
+        Note linkedNote = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
+
         // Set appropriate data
-        iconView.setImageResource(noteManager.findNoteById(noteList.get(position)).iconId);
-        titleView.setText(noteManager.findNoteById(noteList.get(position)).title);
-        idView.setText("ID: " + noteList.get(position));
+        iconView.setImageResource(linkedNote.iconId);
+        titleView.setText(conn.name);
+        idView.setText("#" + linkedNote.id + " " + linkedNote.title);
 
         // Set remove button
         unlinkButton.setOnClickListener(view1 -> {
             // Remove this data point
-            long idToBeRemoved = noteList.get(position);
-            note.connection.remove(idToBeRemoved);
-
-            Note relNote = noteManager.findNoteById(idToBeRemoved);
-            relNote.connection.remove(note.id);
+            note.connection.remove(conn.id);
+            linkedNote.connection.remove(conn.id);
 
             // UI update
-            noteList.remove(idToBeRemoved);
-            remove(idToBeRemoved);
+            connectionList.remove(conn.id);
+            remove(conn.id);
 
             // Update database
             noteManager.updateNote(note);
-            noteManager.updateNote(relNote);
+            noteManager.updateNote(linkedNote);
         });
 
         return view;

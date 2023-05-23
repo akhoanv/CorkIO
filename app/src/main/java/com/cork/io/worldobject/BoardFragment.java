@@ -108,10 +108,10 @@ public class BoardFragment extends RelativeLayout {
             noteObject.fetchNote();
             Note n = noteObject.getNote();
             for (int i2=0; i2 < getChildCount(); i2++) {
-                NoteFragment linkObject = ((NoteFragment) getChildAt(i2));
+                NoteFragment linkedObject = ((NoteFragment) getChildAt(i2));
 
                 // Only draw if connection hasn't been drawn and connection exists
-                if (drawnNote.contains(linkObject.getNote().id) || !n.connection.contains(linkObject.getNote().id)) {
+                if (drawnNote.contains(linkedObject.getNote().id) || !n.getLinkedNotes().contains(linkedObject.getNote().id)) {
                     continue;
                 }
 
@@ -119,7 +119,7 @@ public class BoardFragment extends RelativeLayout {
                 noteObject.getHitRect(startNoteBound);
 
                 Rect endNoteBound = new Rect();
-                linkObject.getHitRect(endNoteBound);
+                linkedObject.getHitRect(endNoteBound);
 
                 float startX = startNoteBound.left + (210 * scale);
                 float startY = startNoteBound.top + (40 * scale);

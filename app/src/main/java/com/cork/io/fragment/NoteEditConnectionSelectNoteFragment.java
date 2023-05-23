@@ -14,6 +14,7 @@ import com.cork.io.R;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.adapter.ConnectionSelectableArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
 
         // Add connections to list
         List<Note> noteList = noteManager.getAllNotes();
-        Set<Long> currentLink = note.connection;
+        Set<Long> currentLink = note.getLinkedNotes();
         List<Long> availableList = new ArrayList<>();
         for (Note n : noteList) {
             if (!currentLink.contains(n.id) && n.id != note.id) {

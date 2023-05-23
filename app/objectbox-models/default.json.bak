@@ -54,7 +54,7 @@
     },
     {
       "id": "2:3284756564701398499",
-      "lastPropertyId": "4:1981065436060520912",
+      "lastPropertyId": "5:1538570977416494015",
       "name": "Board",
       "properties": [
         {
@@ -77,15 +77,14 @@
           "id": "4:1981065436060520912",
           "name": "scaleFactor",
           "type": 7
+        },
+        {
+          "id": "5:1538570977416494015",
+          "name": "notes",
+          "type": 9
         }
       ],
-      "relations": [
-        {
-          "id": "1:1073504741574900322",
-          "name": "notes",
-          "targetId": "1:6708627763836334107"
-        }
-      ]
+      "relations": []
     }
   ],
   "lastEntityId": "3:26943237610762567",
@@ -107,6 +106,8 @@
     7598474484147999095,
     8398208420039950250
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    1073504741574900322
+  ],
   "version": 1
 }

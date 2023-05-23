@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        //deleteAllNotes();
+        deleteAllNotes();
 
         // Find elements
         zoomBar = findViewById(R.id.zoom_level);
