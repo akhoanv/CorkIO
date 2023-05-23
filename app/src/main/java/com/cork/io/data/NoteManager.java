@@ -12,7 +12,7 @@ public interface NoteManager {
     /**
      * Add new note to the database.
      * @param note new note.
-     * @return the ID of the added note.
+     * @return same note object, but with allocated ID
      */
     long addNote(Note note);
 

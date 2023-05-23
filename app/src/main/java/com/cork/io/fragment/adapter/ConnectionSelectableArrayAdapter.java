@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,14 +15,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
 import com.cork.io.dao.Note;
+import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.NoteEditConnectionAddFragment;
 
 import java.util.List;
 
 public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
-    private List<Long> noteList;
+    // Database manager
     private NoteManager noteManager;
+    private ConnectionManager connectionManager;
+
+    // Adapter properties
+    private List<Long> noteList;
     private Note note;
     private FragmentManager fragmentManager;
 
@@ -30,8 +37,10 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
                                             Note note, FragmentManager fragmentManager) {
         super(context, resource, objects);
 
-        this.noteList = objects;
         this.noteManager = ObjectBoxNoteManager.get();
+        this.connectionManager = ObjectBoxConnectionManager.get();
+
+        this.noteList = objects;
         this.note = note;
         this.fragmentManager = fragmentManager;
     }
@@ -59,15 +68,10 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
 
         // Set onClickAction
         view.setOnClickListener(view1 -> {
-            note.connection.add(noteList.get(position));
-            noteManager.updateNote(note);
-
-            Note linkNote = noteManager.findNoteById(noteList.get(position));
-            linkNote.connection.add(note.id);
-            noteManager.updateNote(linkNote);
+            Note linkedNote = noteManager.findNoteById(noteList.get(position));
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(note));
+            ft.replace(R.id.note_edit_content_container, new NoteEditConnectionAddFragment(note, linkedNote));
             ft.commit();
         });
 

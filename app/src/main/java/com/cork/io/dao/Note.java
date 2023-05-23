@@ -1,8 +1,11 @@
 package com.cork.io.dao;
 
 import com.cork.io.dao.converter.IdArrayConverter;
+import com.cork.io.data.ObjectBoxConnectionManager;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import io.objectbox.annotation.Convert;
@@ -38,5 +41,26 @@ public class Note {
         this.positionX = positionX;
         this.positionY = positionY;
         this.connection = new LinkedHashSet<>();
+    }
+
+    public Set<Long> getLinkedNotes() {
+        Set<Long> result = new LinkedHashSet<>();
+        for (Long connId : connection) {
+            Connection conn = ObjectBoxConnectionManager.get().findConnectionById(connId);
+
+            result.add(conn.getLinkedNoteId(this.id));
+        }
+
+        return result;
+    }
+
+    public long getConnectionIdFromLinkedNote(long linkedNoteId) {
+        for (Long connId : connection) {
+            if (ObjectBoxConnectionManager.get().findConnectionById(connId).getLinkedNoteId(id) == linkedNoteId) {
+                return connId;
+            }
+        }
+
+        return -1;
     }
 }

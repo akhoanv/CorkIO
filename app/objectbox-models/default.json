@@ -85,9 +85,43 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:4582111094951869455",
+      "lastPropertyId": "5:3566710366085348008",
+      "name": "Connection",
+      "properties": [
+        {
+          "id": "1:8970770889231564999",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2569160018098105066",
+          "name": "boardId",
+          "type": 6
+        },
+        {
+          "id": "3:9159413425637415572",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:687540208714550064",
+          "name": "notes",
+          "type": 9
+        },
+        {
+          "id": "5:3566710366085348008",
+          "name": "color",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:26943237610762567",
+  "lastEntityId": "4:4582111094951869455",
   "lastIndexId": "1:2686356966555361313",
   "lastRelationId": "1:1073504741574900322",
   "lastSequenceId": "0:0",

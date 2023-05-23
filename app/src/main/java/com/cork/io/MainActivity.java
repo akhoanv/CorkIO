@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
@@ -77,7 +78,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        //deleteAllNotes();
+        deleteAllNotes();
 
         // Find elements
         zoomBar = findViewById(R.id.zoom_level);
@@ -123,6 +124,8 @@ public class MainActivity extends FragmentActivity {
     public void deleteAllNotes() {
         Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
         boardBox.removeAll();
+
+        ObjectBoxConnectionManager.get().removeAllConnection();
 
         noteManager.removeAllNotes();
     }

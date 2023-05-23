@@ -16,12 +16,15 @@ import com.cork.io.R;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.adapter.ConnectionDisplayArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteEditConnectionFragment extends Fragment {
+    // Database manager
     private NoteManager noteManager;
+
     private View view;
     private Note note;
 
