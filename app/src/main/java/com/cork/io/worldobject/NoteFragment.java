@@ -154,7 +154,14 @@ public class NoteFragment extends RelativeLayout {
 
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    // Bring to front of other notes, UI and database
                     bringToFront();
+                    Board board = boardManager.findBoardById(note.boardId);
+                    board.notes.remove(note.id);
+                    board.notes.add(note.id);
+                    boardManager.updateBoard(board);
+
+                    // Set action for later stages
                     action = TouchAction.CLICK;
                     holdHandler.postDelayed(holdRunnable, 200);
                     mousePosition.setXY(newX, newY);
