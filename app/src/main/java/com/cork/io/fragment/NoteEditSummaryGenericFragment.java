@@ -26,7 +26,7 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class NoteEditSummaryFragment extends Fragment {
+public class NoteEditSummaryGenericFragment extends Fragment implements INoteEditSummaryFragment{
     // Database manager
     private NoteManager noteManager;
 
@@ -38,7 +38,7 @@ public class NoteEditSummaryFragment extends Fragment {
     private TextView idElement;
     private ImageView iconElement;
 
-    public NoteEditSummaryFragment(Note note) {
+    public NoteEditSummaryGenericFragment(Note note) {
         this.note = note;
     }
 
@@ -56,7 +56,7 @@ public class NoteEditSummaryFragment extends Fragment {
 
         // Assign appropriate data
         titleElement.setText(note.title);
-        idElement.setText("ID: " + note.id);
+        idElement.setText("Note #" + note.id);
         contentElement.setText(note.content);
 
         if (note.customIconPath.isEmpty()) {

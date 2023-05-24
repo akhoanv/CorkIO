@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/note_edit_content_container"
-    android:layout_width="300dp"
+    android:layout_width="290dp"
     android:layout_height="500dp"
     android:orientation="vertical"
     android:background="@drawable/note_edit_inner_background">
@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon"
+                android:src="@drawable/generic_note"
                 android:foreground="@drawable/note_icon_background"/>
         </LinearLayout>
 
@@ -30,8 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="25dp">
+            android:layout_gravity="center_vertical">
 
             <EditText
                 android:id="@+id/note_edit_title"
@@ -51,10 +50,16 @@
                 android:id="@+id/note_edit_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/board_black"
-                android:text="ID: "
+                android:textColor="@color/paper_white"
+                android:text="Note #"
                 android:textSize="12sp"
-                android:layout_marginTop="1dp"/>
+                android:textStyle="bold"
+                android:layout_marginTop="2dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:background="@drawable/note_id_background"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -73,7 +78,7 @@
             android:gravity="top"
             android:hint="Add your note here"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="5dp"
             android:paddingBottom="20dp"
             android:textColor="@color/board_black"
             android:background="#00000000"

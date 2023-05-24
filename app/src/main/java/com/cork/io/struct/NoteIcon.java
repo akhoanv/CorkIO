@@ -3,7 +3,8 @@ package com.cork.io.struct;
 import com.cork.io.R;
 
 public enum NoteIcon {
-    GENERIC(R.drawable.icon);
+    GENERIC(R.drawable.generic_note),
+    CONTACT(R.drawable.contact_note);
 
     private int iconId;
 

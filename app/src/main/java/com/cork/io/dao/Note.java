@@ -34,6 +34,12 @@ public class Note {
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public Set<Long> connection;
 
+    // Contact note
+    public String firstName;
+    public String lastName;
+    public String phoneNumber;
+    public String emailAddress;
+
     public Note(){}
 
     public Note(long boardId, NoteType type, float positionX, float positionY) {

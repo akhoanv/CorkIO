@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
@@ -62,9 +63,14 @@ public class NoteEditFragment extends DialogFragment {
         });
 
         summaryTabBtn.setOnClickListener(view -> {
-            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.note_edit_content_container, new NoteEditSummaryFragment(note));
-            ft.commit();
+            try {
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                ft.replace(R.id.note_edit_content_container, (Fragment) note.type.getFragment()
+                        .getConstructor(Note.class).newInstance(new Object[] {note}));
+                ft.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         connectionTabBtn.setOnClickListener(view -> {
@@ -73,9 +79,14 @@ public class NoteEditFragment extends DialogFragment {
             ft.commit();
         });
 
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.replace(R.id.note_edit_content_container, new NoteEditSummaryFragment(note));
-        ft.commit();
+        try {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.note_edit_content_container, (Fragment) note.type.getFragment()
+                    .getConstructor(Note.class).newInstance(new Object[] {note}));
+            ft.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return view;
     }
