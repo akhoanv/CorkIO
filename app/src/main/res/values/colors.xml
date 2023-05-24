@@ -12,5 +12,6 @@
     <color name="paper_white">#E5F4Fa</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="text_gray">#808080</color>
     <color name="board_black">#2A2A2A</color>
 </resources>

@@ -62,7 +62,7 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         Note linkedNote = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
 
         // Set appropriate data
-        iconView.setImageResource(linkedNote.iconId);
+        iconView.setImageResource(linkedNote.icon.getIconId());
         titleView.setText(conn.name);
         idView.setText("#" + linkedNote.id + " " + linkedNote.title);
 

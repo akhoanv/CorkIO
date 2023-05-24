@@ -1,13 +1,14 @@
 package com.cork.io;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,13 +24,13 @@ import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.NoteEditFragment;
 import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
 
-import io.objectbox.Box;
-
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+
+import io.objectbox.Box;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
@@ -131,11 +132,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void addButtonOnClick(View view) {
-        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> {
-            String title = "Title " + (new Random().nextInt(61) + 20);
-            String content = "Content " + (new Random().nextInt(61) + 20);
-            return mainBoard.addToDatabase(title, content, R.drawable.icon);
-        });
+        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> mainBoard.addToDatabase());
 
         dbAddFuture.handle((newNote, throwable) -> {
             if (throwable != null) {

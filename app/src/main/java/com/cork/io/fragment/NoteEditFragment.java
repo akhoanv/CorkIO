@@ -18,7 +18,7 @@ import com.cork.io.R;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.utils.NoteCallback;
+import com.cork.io.utils.NoteEditCallback;
 
 /**
  * Fragment for editing note
@@ -31,7 +31,7 @@ public class NoteEditFragment extends DialogFragment {
 
     private View view;
     private Note note;
-    private NoteCallback callback;
+    private NoteEditCallback callback;
     private boolean doDelete = false;
 
     // Elements
@@ -93,7 +93,7 @@ public class NoteEditFragment extends DialogFragment {
             setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
     }
 
-    public void setCallback(NoteCallback callback) {
+    public void setEditCallback(NoteEditCallback callback) {
         this.callback = callback;
     }
 
