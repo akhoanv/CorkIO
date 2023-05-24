@@ -60,7 +60,7 @@ public class NoteEditSummaryFragment extends Fragment {
         contentElement.setText(note.content);
 
         if (note.customIconPath.isEmpty()) {
-            iconElement.setImageResource(note.icon.getIconId());
+            iconElement.setImageResource(note.type.getIcon().getId());
         } else {
             try {
                 InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
@@ -99,6 +99,14 @@ public class NoteEditSummaryFragment extends Fragment {
             startActivityForResult(chooserIntent, IntentRequestCode.IMAGE_PICKER.ordinal());
         });
 
+        iconElement.setOnLongClickListener(view -> {
+            iconElement.setImageResource(note.type.getIcon().getId());
+            note.customIconPath = "";
+            noteManager.updateNote(note);
+
+            return true;
+        });
+
         return view;
     }
 
@@ -132,6 +140,8 @@ public class NoteEditSummaryFragment extends Fragment {
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);
         contentElement.setOnFocusChangeListener(null);
+        iconElement.setOnClickListener(null);
+        iconElement.setOnLongClickListener(null);
 
         super.onDestroy();
     }

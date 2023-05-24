@@ -1,15 +1,11 @@
 package com.cork.io.dao;
 
-import com.cork.io.dao.converter.IconConverter;
 import com.cork.io.dao.converter.IdArrayConverter;
 import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
-import com.cork.io.struct.NoteIcon;
 import com.cork.io.struct.NoteType;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import io.objectbox.annotation.Convert;
@@ -35,9 +31,6 @@ public class Note {
     @Convert(converter = NoteTypeConverter.class, dbType = String.class)
     public NoteType type;
 
-    @Convert(converter = IconConverter.class, dbType = String.class)
-    public NoteIcon icon;
-
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public Set<Long> connection;
 
@@ -47,7 +40,6 @@ public class Note {
         this.boardId = boardId;
         this.type = type;
         this.title = type.getInitialTitle();
-        this.icon = type.getInitialIcon();
         this.content = "";
         this.customIconPath = "";
 

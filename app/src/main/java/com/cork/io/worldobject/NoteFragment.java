@@ -87,7 +87,7 @@ public class NoteFragment extends RelativeLayout {
         }
 
         if (note.customIconPath.isEmpty()) {
-            iconView.setImageResource(note.icon.getIconId());
+            iconView.setImageResource(note.type.getIcon().getId());
         } else {
             try {
                 InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
@@ -216,7 +216,7 @@ public class NoteFragment extends RelativeLayout {
                             }
 
                             if (note.customIconPath.isEmpty()) {
-                                iconView.setImageResource(note.icon.getIconId());
+                                iconView.setImageResource(note.type.getIcon().getId());
                             } else {
                                 try {
                                     InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));

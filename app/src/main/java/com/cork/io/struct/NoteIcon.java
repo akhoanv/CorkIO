@@ -11,7 +11,7 @@ public enum NoteIcon {
         this.iconId = iconId;
     }
 
-    public int getIconId() {
+    public int getId() {
         return iconId;
     }
 

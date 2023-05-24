@@ -15,7 +15,7 @@ public enum NoteType {
         return initialTitle;
     }
 
-    public NoteIcon getInitialIcon() {
+    public NoteIcon getIcon() {
         return initialIcon;
     }
 
