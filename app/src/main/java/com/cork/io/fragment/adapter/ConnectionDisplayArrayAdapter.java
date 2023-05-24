@@ -1,7 +1,6 @@
 package com.cork.io.fragment.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +61,7 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         Note linkedNote = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
 
         // Set appropriate data
-        iconView.setImageResource(linkedNote.iconId);
+        iconView.setImageResource(linkedNote.type.getIcon().getId());
         titleView.setText(conn.name);
         idView.setText("#" + linkedNote.id + " " + linkedNote.title);
 

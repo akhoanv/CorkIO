@@ -1,6 +1,9 @@
 package com.cork.io.worldobject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,15 +20,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
 import com.cork.io.dao.Board;
+import com.cork.io.dao.Connection;
 import com.cork.io.dao.Note;
 import com.cork.io.data.BoardManager;
+import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxBoardManager;
+import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.fragment.NoteEditFragment;
-import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * Note object on {@link BoardFragment}
@@ -36,6 +45,7 @@ public class NoteFragment extends RelativeLayout {
     // Database manager
     private NoteManager noteManager;
     private BoardManager boardManager;
+    private ConnectionManager connectionManager;
 
     // Stats variable
     private TouchAction action;
@@ -59,6 +69,7 @@ public class NoteFragment extends RelativeLayout {
 
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
+        connectionManager = ObjectBoxConnectionManager.get();
         setOnTouchListener(touchListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,8 +86,16 @@ public class NoteFragment extends RelativeLayout {
             titleView.setText(note.title);
         }
 
-        if (note.iconId != 0) {
-            iconView.setImageResource(note.iconId);
+        if (note.customIconPath.isEmpty()) {
+            iconView.setImageResource(note.type.getIcon().getId());
+        } else {
+            try {
+                InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
+                Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
+                iconView.setImageBitmap(importedImg);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         setX(isNew ? 0 : note.positionX);
@@ -121,15 +140,21 @@ public class NoteFragment extends RelativeLayout {
      * Remove self from UI and database
      */
     public void remove() {
+        // Remove all connection from other nodes
+        for (Long connId : note.connection) {
+            Connection conn = connectionManager.findConnectionById(connId);
+
+            // Remove connection from linked note
+            Note n = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
+            n.connection.remove(connId);
+            noteManager.updateNote(n);
+
+            // Remove connection object
+            connectionManager.removeConnection(connId);
+        }
+
         boolean isRemoved = noteManager.removeNote(note.id);
         if (isRemoved) {
-            // Remove all connection from other nodes
-            for (Long relId : note.connection) {
-                Note n = noteManager.findNoteById(relId);
-                n.connection.remove(note.id);
-                noteManager.updateNote(n);
-            }
-
             // Remove UI
             ((ViewGroup)getParent()).removeView(this);
         } else {
@@ -177,7 +202,7 @@ public class NoteFragment extends RelativeLayout {
 
                         // Show edit fragment
                         NoteEditFragment fragment = new NoteEditFragment(note);
-                        fragment.setCallback((doDelete) -> {
+                        fragment.setEditCallback((doDelete) -> {
                             if (doDelete) {
                                 remove();
                                 return;
@@ -190,8 +215,16 @@ public class NoteFragment extends RelativeLayout {
                                 titleView.setText(note.title);
                             }
 
-                            if (note.iconId != 0) {
-                                iconView.setImageResource(note.iconId);
+                            if (note.customIconPath.isEmpty()) {
+                                iconView.setImageResource(note.type.getIcon().getId());
+                            } else {
+                                try {
+                                    InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
+                                    Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
+                                    iconView.setImageBitmap(importedImg);
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                             ((ViewGroup) getParent()).invalidate();

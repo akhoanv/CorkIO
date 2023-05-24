@@ -62,7 +62,7 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         TextView idView = view.findViewById(R.id.note_edit_connection_id);
 
         // Set appropriate data
-        iconView.setImageResource(noteManager.findNoteById(noteList.get(position)).iconId);
+        iconView.setImageResource(noteManager.findNoteById(noteList.get(position)).type.getIcon().getId());
         titleView.setText(noteManager.findNoteById(noteList.get(position)).title);
         idView.setText("ID: " + noteList.get(position));
 

@@ -25,6 +25,7 @@ import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.objectbox.ObjectBox;
+import com.cork.io.struct.NoteType;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
@@ -138,8 +139,8 @@ public class BoardFragment extends RelativeLayout {
     /**
      * Attempting to add a new {@link Note} entry into the database
      */
-    public Note addToDatabase(String title, String content, int imageResource) {
-        Note note = new Note(board.id, title, content, imageResource, board.panPositionX, board.panPositionY);
+    public Note addToDatabase() {
+        Note note = new Note(board.id, NoteType.GENERIC, board.panPositionX, board.panPositionY);
         noteManager.addNote(note);
         board.notes.add(note.id);
         boardManager.updateBoard(board);
