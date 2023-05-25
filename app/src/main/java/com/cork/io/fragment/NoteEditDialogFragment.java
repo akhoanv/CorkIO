@@ -26,7 +26,7 @@ import com.cork.io.utils.NoteEditCallback;
  *
  * @author knguyen
  */
-public class NoteEditFragment extends DialogFragment {
+public class NoteEditDialogFragment extends DialogFragment {
     // Database manager
     private NoteManager noteManager;
 
@@ -40,7 +40,7 @@ public class NoteEditFragment extends DialogFragment {
     private LinearLayout summaryTabBtn;
     private LinearLayout connectionTabBtn;
 
-    public NoteEditFragment(Note note) {
+    public NoteEditDialogFragment(Note note) {
         this.note = note;
     }
 

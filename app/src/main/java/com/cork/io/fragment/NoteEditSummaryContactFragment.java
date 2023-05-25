@@ -85,7 +85,8 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         firstNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 note.firstName = firstNameElement.getText().toString();
-                note.title = note.firstName + " " + note.lastName;
+                String fullName = (note.firstName + " " + note.lastName).trim();
+                note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
                 noteManager.updateNote(note);
             }
         });
@@ -93,7 +94,8 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         lastNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 note.lastName = lastNameElement.getText().toString();
-                note.title = note.firstName + " " + note.lastName;
+                String fullName = (note.firstName + " " + note.lastName).trim();
+                note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
                 noteManager.updateNote(note);
             }
         });
@@ -168,10 +170,13 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         // Update content
         note.firstName = firstNameElement.getText().toString();
         note.lastName = lastNameElement.getText().toString();
-        note.title = note.firstName + " " + note.lastName;
         note.emailAddress = emailElement.getText().toString();
         note.phoneNumber = phoneElement.getText().toString();
         note.content = commentElement.getText().toString();
+
+        String fullName = (note.firstName + " " + note.lastName).trim();
+        note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
+
         noteManager.updateNote(note);
 
         // Set these listener to null, avoid mem leak

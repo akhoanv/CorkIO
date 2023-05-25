@@ -28,7 +28,7 @@ import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.fragment.NoteEditFragment;
+import com.cork.io.fragment.NoteEditDialogFragment;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 
@@ -201,7 +201,7 @@ public class NoteFragment extends RelativeLayout {
                         }
 
                         // Show edit fragment
-                        NoteEditFragment fragment = new NoteEditFragment(note);
+                        NoteEditDialogFragment fragment = new NoteEditDialogFragment(note);
                         fragment.setEditCallback((doDelete) -> {
                             if (doDelete) {
                                 remove();
