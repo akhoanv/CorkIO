@@ -24,7 +24,7 @@ import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.fragment.NoteEditFragment;
+import com.cork.io.fragment.SelectNoteTypeDialogFragment;
 import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
 
@@ -123,24 +123,32 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void deleteAllNotes() {
-        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
-        boardBox.removeAll();
-
-        ObjectBoxConnectionManager.get().removeAllConnection();
-
-        noteManager.removeAllNotes();
+        ObjectBox.get().removeAllObjects();
     }
 
     public void addButtonOnClick(View view) {
-        CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> mainBoard.addToDatabase());
 
-        dbAddFuture.handle((newNote, throwable) -> {
-            if (throwable != null) {
-                Log.d(this.getLocalClassName(), "Failed to add new note.");
-            }
+        // Close any dialog fragment
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
 
-            return newNote;
-        }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote, true)));
+        // Show note type select dialog fragment
+        SelectNoteTypeDialogFragment fragment = new SelectNoteTypeDialogFragment(type -> {
+            CompletableFuture<Note> dbAddFuture = CompletableFuture.supplyAsync(() -> mainBoard.addToDatabase(type));
+
+            dbAddFuture.handle((newNote, throwable) -> {
+                if (throwable != null) {
+                    Log.d(this.getLocalClassName(), "Failed to add new note.");
+                }
+
+                return newNote;
+            }).thenAccept(newNote -> runOnUiThread(() -> mainBoard.renderNote(newNote, true)));
+        });
+        ft.addToBackStack(null);
+        fragment.show(ft, "dialog");
     }
 
     @SuppressLint("NewApi")

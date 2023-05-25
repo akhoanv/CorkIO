@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/icon"
+                android:src="@drawable/generic_note"
                 android:foreground="@drawable/note_icon_background"
                 android:layout_margin="15dp"/>
         </LinearLayout>

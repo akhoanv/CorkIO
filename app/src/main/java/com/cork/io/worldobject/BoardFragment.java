@@ -139,8 +139,8 @@ public class BoardFragment extends RelativeLayout {
     /**
      * Attempting to add a new {@link Note} entry into the database
      */
-    public Note addToDatabase() {
-        Note note = new Note(board.id, NoteType.GENERIC, board.panPositionX, board.panPositionY);
+    public Note addToDatabase(NoteType type) {
+        Note note = new Note(board.id, type, board.panPositionX, board.panPositionY);
         noteManager.addNote(note);
         board.notes.add(note.id);
         boardManager.updateBoard(board);

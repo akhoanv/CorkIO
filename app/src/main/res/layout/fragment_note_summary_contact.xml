@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_edit_content_container"
+    android:layout_width="290dp"
+    android:layout_height="500dp"
+    android:orientation="vertical"
+    android:background="@drawable/note_edit_inner_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/note_edit_icon"
+            android:scaleType="fitXY"
+            android:src="@drawable/contact_note"
+            android:layout_margin="10dp"
+            android:foreground="@drawable/note_icon_background"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="left"
+        android:layout_marginStart="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/note_edit_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/paper_white"
+                android:text="Note #"
+                android:textSize="12sp"
+                android:gravity="center_horizontal"
+                android:textStyle="bold"
+                android:layout_marginTop="1dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="3dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:background="@drawable/note_id_background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="First name:"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/gochi_hand"
+                    android:textColor="@color/board_black"/>
+
+                <EditText
+                    android:id="@+id/note_edit_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a first name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/board_black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last name:"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/gochi_hand"
+                    android:textColor="@color/board_black"/>
+
+                <EditText
+                    android:id="@+id/note_edit_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a last name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/board_black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Phone #:"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/gochi_hand"
+                    android:textColor="@color/board_black"/>
+
+                <EditText
+                    android:id="@+id/note_edit_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add a phone number"
+                    android:imeOptions="actionDone"
+                    android:inputType="phone"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/board_black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email:"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/gochi_hand"
+                    android:textColor="@color/board_black"/>
+
+                <EditText
+                    android:id="@+id/note_edit_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Add an email"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/board_black"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Additional notes:"
+                android:textSize="18sp"
+                android:fontFamily="@font/gochi_hand"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/board_black"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <EditText
+            android:id="@+id/note_edit_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text|textMultiLine"
+            android:gravity="top"
+            android:hint="Add your note here"
+            android:background="#00000000"
+            android:paddingBottom="20dp"
+            android:textColor="@color/board_black"
+            android:textSize="18sp"
+            android:imeOptions="actionDone"/>
+    </ScrollView>
+</LinearLayout>
