@@ -182,15 +182,19 @@ public class NoteEditSummaryLocationFragment  extends Fragment implements INoteE
         });
 
         findOnMapBtn.setOnClickListener(view1 -> {
+            hideKeyboard();
+
             String query = "";
-            if (data.address != null && !data.address.trim().isEmpty()) {
-                query = (data.address + " " + data.city + " "
-                        + data.state + " " + data.zip + data.country).trim().replace(" ", "+");
-            } if (note.title != null && !note.title.trim().equals(note.type.getInitialTitle())) {
-                query = note.title.trim().replace(" ", "+");;
-            } else if (data.longitude != null && data.latitude != null &&
-                    !data.longitude.isEmpty() && !data.latitude.isEmpty()) {
-                query = data.longitude + "," + data.latitude;
+            if (addressElement.getText() != null && !addressElement.getText().toString().trim().isEmpty()) {
+                query = (addressElement.getText().toString().trim() + " " + cityElement.getText().toString().trim() + " "
+                        + stateElement.getText().toString().trim() + " " + zipElement.getText().toString().trim()
+                        + countryElement.getText().toString().trim()).trim().replace(" ", "+");
+            } else if (titleElement.getText() != null && !titleElement.getText().toString().trim().equals(note.type.getInitialTitle())) {
+                query = titleElement.getText().toString().trim().replace(" ", "+");;
+            } else if (longElement.getText() != null && latElement.getText() != null &&
+                    !longElement.getText().toString().trim().isEmpty() &&
+                    !latElement.getText().toString().trim().isEmpty()) {
+                query = longElement.getText().toString().trim() + "," + latElement.getText().toString().trim();
             }
 
             if (!query.isEmpty()) {

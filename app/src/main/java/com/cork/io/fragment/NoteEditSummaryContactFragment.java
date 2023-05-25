@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +48,9 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
     private EditText phoneElement;
     private EditText commentElement;
     private ImageView iconElement;
+    private LinearLayout callBtn;
+    private LinearLayout smsBtn;
+    private LinearLayout emailBtn;
 
     public NoteEditSummaryContactFragment(Note note) {
         this.note = note;
@@ -66,6 +71,10 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         phoneElement = view.findViewById(R.id.note_edit_phone_number);
         commentElement = view.findViewById(R.id.note_edit_content);
         iconElement = view.findViewById(R.id.note_edit_icon);
+
+        callBtn = view.findViewById(R.id.note_edit_call_btn);
+        smsBtn = view.findViewById(R.id.note_edit_sms_btn);
+        emailBtn = view.findViewById(R.id.note_edit_email_btn);
 
         ContactNoteData data = dataManager.findById(note.dataId);
 
@@ -143,6 +152,51 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
             }
         });
 
+        callBtn.setOnClickListener(view1 -> {
+            hideKeyboard();
+
+            if (phoneElement.getText() == null || phoneElement.getText().toString().isEmpty()){
+                return;
+            }
+
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+
+            intent.setData(Uri.parse("tel:" + phoneElement.getText().toString()));
+            getContext().startActivity(intent);
+        });
+
+        smsBtn.setOnClickListener(view1 -> {
+            hideKeyboard();
+
+            if (phoneElement.getText() == null || phoneElement.getText().toString().isEmpty()){
+                return;
+            }
+
+            Intent intent = new Intent( Intent.ACTION_VIEW, Uri.parse( "sms:" + phoneElement.getText().toString()));
+            intent.putExtra( "sms_body", "");
+            startActivity(intent);
+        });
+
+        emailBtn.setOnClickListener(view1 -> {
+            hideKeyboard();
+
+            if (emailElement.getText() == null || emailElement.getText().toString().isEmpty()){
+                return;
+            }
+
+            Intent intent = new Intent(Intent.ACTION_SEND);
+
+            intent.setType("text/plain");
+            intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{emailElement.getText().toString()});
+            intent.setType("message/rfc822");
+
+            try {
+                startActivity(Intent.createChooser(intent, "Send email using..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(getActivity(), "No email clients found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         iconElement.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -205,6 +259,9 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         commentElement.setOnFocusChangeListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);
+        callBtn.setOnClickListener(null);
+        smsBtn.setOnClickListener(null);
+        emailBtn.setOnClickListener(null);
 
         super.onDestroy();
     }
