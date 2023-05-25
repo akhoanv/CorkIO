@@ -3,6 +3,8 @@ package com.cork.io.dao;
 import com.cork.io.dao.converter.IdArrayConverter;
 import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
+import com.cork.io.data.ObjectBoxNoteContactDataManager;
+import com.cork.io.data.ObjectBoxNoteGenericDataManager;
 import com.cork.io.struct.NoteType;
 
 import java.util.LinkedHashSet;
@@ -21,12 +23,12 @@ public class Note {
     public long id;
 
     public long boardId;
-    public String title;
-    public String content;
     public float positionX; // absolute X from 0
     public float positionY; // absolute Y from 0
 
     public String customIconPath;
+    public long dataId;
+    public String title;
 
     @Convert(converter = NoteTypeConverter.class, dbType = String.class)
     public NoteType type;
@@ -34,24 +36,29 @@ public class Note {
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public Set<Long> connection;
 
-    // Contact note
-    public String firstName;
-    public String lastName;
-    public String phoneNumber;
-    public String emailAddress;
-
     public Note(){}
 
     public Note(long boardId, NoteType type, float positionX, float positionY) {
         this.boardId = boardId;
         this.type = type;
-        this.title = type.getInitialTitle();
-        this.content = "";
         this.customIconPath = "";
+        this.title = type.getInitialTitle();
 
         this.positionX = positionX;
         this.positionY = positionY;
         this.connection = new LinkedHashSet<>();
+
+        // Create new data record
+        switch (type) {
+            case GENERIC:
+                BaseNoteData baseNoteData = ObjectBoxNoteGenericDataManager.get().add(new BaseNoteData());
+                this.dataId = baseNoteData.id;
+                break;
+            case CONTACT:
+                ContactNoteData contactNoteData = ObjectBoxNoteContactDataManager.get().add(new ContactNoteData());
+                this.dataId = contactNoteData.id;
+                break;
+        }
     }
 
     public Set<Long> getLinkedNotes() {

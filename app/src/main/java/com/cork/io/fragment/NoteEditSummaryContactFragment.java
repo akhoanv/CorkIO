@@ -1,5 +1,6 @@
 package com.cork.io.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,13 +13,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cork.io.R;
+import com.cork.io.dao.ContactNoteData;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteContactDataManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.utils.IntentRequestCode;
 
@@ -30,6 +37,7 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
 
     // Database manager
     private NoteManager noteManager;
+    private ObjectBoxNoteContactDataManager dataManager;
 
     private View view;
     private Note note;
@@ -50,6 +58,7 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         noteManager = ObjectBoxNoteManager.get();
+        dataManager = ObjectBoxNoteContactDataManager.get();
         view = inflater.inflate(R.layout.fragment_note_summary_contact, container, false);
 
         // Find elements
@@ -61,13 +70,15 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         commentElement = view.findViewById(R.id.note_edit_content);
         iconElement = view.findViewById(R.id.note_edit_icon);
 
+        ContactNoteData data = dataManager.findById(note.dataId);
+
         // Assign appropriate data
-        firstNameElement.setText(note.firstName);
-        lastNameElement.setText(note.lastName);
-        emailElement.setText(note.emailAddress);
-        phoneElement.setText(note.phoneNumber);
+        firstNameElement.setText(data.firstName);
+        lastNameElement.setText(data.lastName);
+        emailElement.setText(data.emailAddress);
+        phoneElement.setText(data.phoneNumber);
         idElement.setText("Note #" + note.id);
-        commentElement.setText(note.content);
+        commentElement.setText(data.content);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
@@ -84,54 +95,51 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         // Set onChangeListener to update the database
         firstNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.firstName = firstNameElement.getText().toString();
-                String fullName = (note.firstName + " " + note.lastName).trim();
+                data.firstName = firstNameElement.getText().toString();
+                String fullName = (data.firstName + " " + data.lastName).trim();
                 note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
+
                 noteManager.updateNote(note);
+                dataManager.update(data);
             }
         });
 
         lastNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.lastName = lastNameElement.getText().toString();
-                String fullName = (note.firstName + " " + note.lastName).trim();
+                data.lastName = lastNameElement.getText().toString();
+                String fullName = (data.firstName + " " + data.lastName).trim();
                 note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
+
                 noteManager.updateNote(note);
+                dataManager.update(data);
             }
         });
 
         emailElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.emailAddress = emailElement.getText().toString();
-                noteManager.updateNote(note);
+                data.emailAddress = emailElement.getText().toString();
+                dataManager.update(data);
             }
         });
 
         phoneElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.phoneNumber= phoneElement.getText().toString();
-                noteManager.updateNote(note);
+                data.phoneNumber= phoneElement.getText().toString();
+                dataManager.update(data);
             }
         });
 
         commentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.content = commentElement.getText().toString();
-                noteManager.updateNote(note);
+                data.content = commentElement.getText().toString();
+                dataManager.update(data);
             }
         });
 
         iconElement.setOnClickListener(view -> {
-            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            getIntent.setType("image/*");
-
-            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickIntent.setType("image/*");
-
-            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-            startActivityForResult(chooserIntent, IntentRequestCode.IMAGE_PICKER.ordinal());
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, IntentRequestCode.IMAGE_PICKER.ordinal());
         });
 
         iconElement.setOnLongClickListener(view -> {
@@ -167,17 +175,20 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
 
     @Override
     public void onDestroy() {
-        // Update content
-        note.firstName = firstNameElement.getText().toString();
-        note.lastName = lastNameElement.getText().toString();
-        note.emailAddress = emailElement.getText().toString();
-        note.phoneNumber = phoneElement.getText().toString();
-        note.content = commentElement.getText().toString();
+        ContactNoteData data = dataManager.findById(note.dataId);
 
-        String fullName = (note.firstName + " " + note.lastName).trim();
+        // Update content
+        data.firstName = firstNameElement.getText().toString();
+        data.lastName = lastNameElement.getText().toString();
+        data.emailAddress = emailElement.getText().toString();
+        data.phoneNumber = phoneElement.getText().toString();
+        data.content = commentElement.getText().toString();
+
+        String fullName = (data.firstName + " " + data.lastName).trim();
         note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
 
         noteManager.updateNote(note);
+        dataManager.update(data);
 
         // Set these listener to null, avoid mem leak
         firstNameElement.setOnFocusChangeListener(null);

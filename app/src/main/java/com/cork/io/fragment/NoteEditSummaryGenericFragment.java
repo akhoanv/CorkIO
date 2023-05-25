@@ -17,8 +17,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cork.io.R;
+import com.cork.io.dao.BaseNoteData;
+import com.cork.io.dao.ContactNoteData;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
+import com.cork.io.data.ObjectBoxNoteGenericDataManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.utils.IntentRequestCode;
 
@@ -29,6 +32,7 @@ import java.io.InputStream;
 public class NoteEditSummaryGenericFragment extends Fragment implements INoteEditSummaryFragment{
     // Database manager
     private NoteManager noteManager;
+    private ObjectBoxNoteGenericDataManager dataManager;
 
     private View view;
     private Note note;
@@ -46,6 +50,8 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         noteManager = ObjectBoxNoteManager.get();
+        dataManager = ObjectBoxNoteGenericDataManager.get();
+
         view = inflater.inflate(R.layout.fragment_note_summary_generic, container, false);
 
         // Find elements
@@ -54,10 +60,12 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
         contentElement = view.findViewById(R.id.note_edit_content);
         iconElement = view.findViewById(R.id.note_edit_icon);
 
+        BaseNoteData data = dataManager.findById(note.dataId);
+
         // Assign appropriate data
         titleElement.setText(note.title);
         idElement.setText("Note #" + note.id);
-        contentElement.setText(note.content);
+        contentElement.setText(data.content);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
@@ -74,29 +82,23 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
         // Set onChangeListener to update the database
         titleElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.title = titleElement.getText().toString();
+                String enteredTitle = titleElement.getText().toString().trim();
+                note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
                 noteManager.updateNote(note);
             }
         });
 
         contentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                note.content = contentElement.getText().toString();
-                noteManager.updateNote(note);
+                data.content = contentElement.getText().toString();
+                dataManager.update(data);
             }
         });
 
         iconElement.setOnClickListener(view -> {
-            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            getIntent.setType("image/*");
-
-            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickIntent.setType("image/*");
-
-            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
-            startActivityForResult(chooserIntent, IntentRequestCode.IMAGE_PICKER.ordinal());
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, IntentRequestCode.IMAGE_PICKER.ordinal());
         });
 
         iconElement.setOnLongClickListener(view -> {
@@ -132,10 +134,15 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
 
     @Override
     public void onDestroy() {
+        BaseNoteData data = dataManager.findById(note.dataId);
+
         // Update content
-        note.title = titleElement.getText().toString();
-        note.content = contentElement.getText().toString();
+        String enteredTitle = titleElement.getText().toString().trim();
+        note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
+        data.content = contentElement.getText().toString();
+
         noteManager.updateNote(note);
+        dataManager.update(data);
 
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);

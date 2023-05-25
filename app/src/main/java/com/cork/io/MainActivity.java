@@ -123,12 +123,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void deleteAllNotes() {
-        Box<Board> boardBox = ObjectBox.get().boxFor(Board.class);
-        boardBox.removeAll();
-
-        ObjectBoxConnectionManager.get().removeAllConnection();
-
-        noteManager.removeAllNotes();
+        ObjectBox.get().removeAllObjects();
     }
 
     public void addButtonOnClick(View view) {
