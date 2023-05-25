@@ -1,7 +1,5 @@
 package com.cork.io.dao;
 
-import com.cork.io.struct.NoteType;
-
 import io.objectbox.annotation.Entity;
 
 @Entity

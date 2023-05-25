@@ -1,6 +1,6 @@
 package com.cork.io.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,14 +9,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -95,44 +92,54 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         // Set onChangeListener to update the database
         firstNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.firstName = firstNameElement.getText().toString();
+                data.firstName = firstNameElement.getText().toString().trim();
                 String fullName = (data.firstName + " " + data.lastName).trim();
                 note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
 
                 noteManager.updateNote(note);
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
         lastNameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.lastName = lastNameElement.getText().toString();
+                data.lastName = lastNameElement.getText().toString().trim();
                 String fullName = (data.firstName + " " + data.lastName).trim();
                 note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
 
                 noteManager.updateNote(note);
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
         emailElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.emailAddress = emailElement.getText().toString();
+                data.emailAddress = emailElement.getText().toString().trim();
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
         phoneElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.phoneNumber= phoneElement.getText().toString();
+                data.phoneNumber= phoneElement.getText().toString().trim();
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
         commentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.content = commentElement.getText().toString();
+                data.content = commentElement.getText().toString().trim();
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
@@ -178,11 +185,11 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         ContactNoteData data = dataManager.findById(note.dataId);
 
         // Update content
-        data.firstName = firstNameElement.getText().toString();
-        data.lastName = lastNameElement.getText().toString();
-        data.emailAddress = emailElement.getText().toString();
-        data.phoneNumber = phoneElement.getText().toString();
-        data.content = commentElement.getText().toString();
+        data.firstName = firstNameElement.getText().toString().trim();
+        data.lastName = lastNameElement.getText().toString().trim();
+        data.emailAddress = emailElement.getText().toString().trim();
+        data.phoneNumber = phoneElement.getText().toString().trim();
+        data.content = commentElement.getText().toString().trim();
 
         String fullName = (data.firstName + " " + data.lastName).trim();
         note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
@@ -200,5 +207,10 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         iconElement.setOnLongClickListener(null);
 
         super.onDestroy();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

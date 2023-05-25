@@ -1,5 +1,6 @@
 package com.cork.io.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -85,13 +87,17 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
                 String enteredTitle = titleElement.getText().toString().trim();
                 note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
                 noteManager.updateNote(note);
+
+                hideKeyboard();
             }
         });
 
         contentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.content = contentElement.getText().toString();
+                data.content = contentElement.getText().toString().trim();
                 dataManager.update(data);
+
+                hideKeyboard();
             }
         });
 
@@ -139,7 +145,7 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
         // Update content
         String enteredTitle = titleElement.getText().toString().trim();
         note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
-        data.content = contentElement.getText().toString();
+        data.content = contentElement.getText().toString().trim();
 
         noteManager.updateNote(note);
         dataManager.update(data);
@@ -151,5 +157,10 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
         iconElement.setOnLongClickListener(null);
 
         super.onDestroy();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

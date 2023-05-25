@@ -1,12 +1,15 @@
 package com.cork.io.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +41,7 @@ public class NoteEditConnectionAddFragment extends Fragment {
     private ImageView pinkBox;
     private ImageView redBox;
     private ImageView yellowBox;
+    private EditText nameBox;
 
     public NoteEditConnectionAddFragment(Note sourceNote, Note linkedNote) {
         this.sourceNote = sourceNote;
@@ -52,7 +56,7 @@ public class NoteEditConnectionAddFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_note_select_add, container, false);
 
         // Find element
-        EditText nameBox = view.findViewById(R.id.note_edit_connection_name_box);
+        nameBox = view.findViewById(R.id.note_edit_connection_name_box);
 
         blueBox = view.findViewById(R.id.note_edit_color_blue);
         greenBox = view.findViewById(R.id.note_edit_color_green);
@@ -106,6 +110,12 @@ public class NoteEditConnectionAddFragment extends Fragment {
             colorCheckmark.setY(yellowBox.getY());
         });
 
+        nameBox.setOnFocusChangeListener((view1, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
+        });
+
         view.findViewById(R.id.note_edit_connection_confirm_btn).setOnClickListener(view1 -> {
             Connection newConn = new Connection(nameBox.getText().toString(), selectedColor, sourceNote.boardId, sourceNote.id, linkedNote.id);
             newConn = connectionManager.addConnection(newConn);
@@ -135,5 +145,10 @@ public class NoteEditConnectionAddFragment extends Fragment {
         yellowBox.setOnClickListener(null);
 
         super.onDestroy();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

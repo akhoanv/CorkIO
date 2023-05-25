@@ -5,6 +5,7 @@ import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteContactDataManager;
 import com.cork.io.data.ObjectBoxNoteGenericDataManager;
+import com.cork.io.data.ObjectBoxNoteLocationDataManager;
 import com.cork.io.struct.NoteType;
 
 import java.util.LinkedHashSet;
@@ -57,6 +58,10 @@ public class Note {
             case CONTACT:
                 ContactNoteData contactNoteData = ObjectBoxNoteContactDataManager.get().add(new ContactNoteData());
                 this.dataId = contactNoteData.id;
+                break;
+            case LOCATION:
+                LocationNoteData locationNoteData = ObjectBoxNoteLocationDataManager.get().add(new LocationNoteData());
+                this.dataId = locationNoteData.id;
                 break;
         }
     }

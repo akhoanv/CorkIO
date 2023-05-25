@@ -4,7 +4,8 @@ import com.cork.io.R;
 
 public enum NoteIcon {
     GENERIC(R.drawable.generic_note),
-    CONTACT(R.drawable.contact_note);
+    CONTACT(R.drawable.contact_note),
+    LOCATION(R.drawable.location_note);
 
     private int iconId;
 

@@ -3,10 +3,12 @@ package com.cork.io.struct;
 import com.cork.io.fragment.INoteEditSummaryFragment;
 import com.cork.io.fragment.NoteEditSummaryContactFragment;
 import com.cork.io.fragment.NoteEditSummaryGenericFragment;
+import com.cork.io.fragment.NoteEditSummaryLocationFragment;
 
 public enum NoteType {
     GENERIC("Untitled generic note", NoteIcon.GENERIC, NoteEditSummaryGenericFragment.class),
-    CONTACT("Untitled contact note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class);
+    CONTACT("Untitled contact note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class),
+    LOCATION("Untitled Location note", NoteIcon.LOCATION, NoteEditSummaryLocationFragment.class);
 
     private String initialTitle;
     private NoteIcon initialIcon;
