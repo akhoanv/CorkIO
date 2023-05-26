@@ -2,6 +2,9 @@ package com.cork.io.fragment;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,11 @@ import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteEventDataManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.utils.IntentRequestCode;
 
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -37,6 +44,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
     private Calendar storedDateTime = Calendar.getInstance();
 
     private TextView idElement;
+    private ImageView iconElement;
     private EditText titleElement;
     private CalendarView calendarElement;
     private ImageView timeIcon;
@@ -61,6 +69,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         timeElement = view.findViewById(R.id.note_edit_time);
         timeIcon = view.findViewById(R.id.note_edit_time_icon);
         reminderBtn = view.findViewById(R.id.note_edit_reminder_btn);
+        iconElement = view.findViewById(R.id.note_edit_icon);
 
         EventNoteData data = dataManager.findById(note.dataId);
         storedDateTime.setTimeInMillis(data.datetime);
@@ -71,6 +80,18 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         titleElement.setText(note.title);
         calendarElement.setDate(data.datetime);
         timeElement.setText(timeFormat.format(storedDateTime.getTime()));
+
+        if (note.customIconPath.isEmpty()) {
+            iconElement.setImageResource(note.type.getIcon().getId());
+        } else {
+            try {
+                InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
+                Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
+                iconElement.setImageBitmap(importedImg);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Set onChangeListener to update the database
         calendarElement.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -100,7 +121,41 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
             startActivity(intent);
         });
 
+        iconElement.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(intent, IntentRequestCode.IMAGE_PICKER.ordinal());
+        });
+
+        iconElement.setOnLongClickListener(view -> {
+            iconElement.setImageResource(note.type.getIcon().getId());
+            note.customIconPath = "";
+            noteManager.updateNote(note);
+
+            return true;
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null){
+            return;
+        }
+
+        if (requestCode == IntentRequestCode.IMAGE_PICKER.ordinal()) {
+            try {
+                InputStream inputStream = getContext().getContentResolver().openInputStream(data.getData());
+                Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
+                iconElement.setImageBitmap(importedImg);
+
+                note.customIconPath = data.getData().toString();
+                noteManager.updateNote(note);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -109,6 +164,8 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         calendarElement.setOnDateChangeListener(null);
         timeElement.setOnClickListener(null);
         timeIcon.setOnClickListener(null);
+        iconElement.setOnClickListener(null);
+        iconElement.setOnLongClickListener(null);
 
         super.onDestroy();
     }
