@@ -87,11 +87,12 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/position_black"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginRight="5dp"/>
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
 
                 <EditText
                     android:id="@+id/note_edit_address"
@@ -101,7 +102,8 @@
                     android:inputType="textMultiLine"
                     android:textColor="@color/board_black"
                     android:textSize="18sp"
-                    android:hint="Add an address"/>
+                    android:hint="Add an address"
+                    android:background="#00000000"/>
             </ScrollView>
         </LinearLayout>
 
