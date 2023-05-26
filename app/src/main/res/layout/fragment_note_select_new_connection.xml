@@ -16,7 +16,7 @@
             android:id="@+id/note_edit_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Select note"
+            android:text="Select Note"
             android:gravity="center"
             android:textSize="30sp"
             android:textColor="@color/board_black"

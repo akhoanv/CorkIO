@@ -32,7 +32,7 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class NoteEditSummaryLocationFragment  extends Fragment implements INoteEditSummaryFragment {
+public class NoteEditSummaryLocationFragment extends Fragment implements INoteEditSummaryFragment {
 
     // Database manager
     private NoteManager noteManager;

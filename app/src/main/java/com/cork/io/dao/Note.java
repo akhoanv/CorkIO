@@ -4,6 +4,7 @@ import com.cork.io.dao.converter.IdArrayConverter;
 import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteContactDataManager;
+import com.cork.io.data.ObjectBoxNoteEventDataManager;
 import com.cork.io.data.ObjectBoxNoteGenericDataManager;
 import com.cork.io.data.ObjectBoxNoteLocationDataManager;
 import com.cork.io.struct.NoteType;
@@ -62,6 +63,10 @@ public class Note {
             case LOCATION:
                 LocationNoteData locationNoteData = ObjectBoxNoteLocationDataManager.get().add(new LocationNoteData());
                 this.dataId = locationNoteData.id;
+                break;
+            case EVENT:
+                EventNoteData eventNoteData = ObjectBoxNoteEventDataManager.get().add(new EventNoteData());
+                this.dataId = eventNoteData.id;
                 break;
         }
     }
