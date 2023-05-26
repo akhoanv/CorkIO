@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,12 +45,6 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
     private TextView idElement;
     private EditText titleElement;
     private EditText addressElement;
-    private EditText cityElement;
-    private EditText stateElement;
-    private EditText zipElement;
-    private EditText countryElement;
-    private EditText longElement;
-    private EditText latElement;
     private ImageView iconElement;
     private LinearLayout findOnMapBtn;
 
@@ -67,12 +63,6 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         idElement = view.findViewById(R.id.note_edit_id);
         titleElement = view.findViewById(R.id.note_edit_title);
         addressElement = view.findViewById(R.id.note_edit_address);
-        cityElement = view.findViewById(R.id.note_edit_city);
-        stateElement = view.findViewById(R.id.note_edit_state);
-        zipElement = view.findViewById(R.id.note_edit_zip);
-        countryElement = view.findViewById(R.id.note_edit_country);
-        longElement = view.findViewById(R.id.note_edit_long);
-        latElement = view.findViewById(R.id.note_edit_lat);
         iconElement = view.findViewById(R.id.note_edit_icon);
         findOnMapBtn = view.findViewById(R.id.note_edit_find_map_btn);
 
@@ -82,12 +72,6 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         idElement.setText("Note #" + note.getDisplayId());
         titleElement.setText(note.title);
         addressElement.setText(data.address);
-        cityElement.setText(data.city);
-        stateElement.setText(data.state);
-        zipElement.setText(data.zip);
-        countryElement.setText(data.country);
-        longElement.setText(data.longitude);
-        latElement.setText(data.latitude);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
@@ -120,80 +104,17 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
             }
         });
 
-        cityElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.city = cityElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        stateElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.state = stateElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        zipElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.zip = zipElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        countryElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.country = countryElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        latElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.latitude = latElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        longElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.longitude = longElement.getText().toString().trim();
-
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
+        addressElement.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        addressElement.setRawInputType(InputType.TYPE_CLASS_TEXT);
 
         findOnMapBtn.setOnClickListener(view1 -> {
             hideKeyboard();
 
             String query = "";
             if (addressElement.getText() != null && !addressElement.getText().toString().trim().isEmpty()) {
-                query = (addressElement.getText().toString().trim() + " " + cityElement.getText().toString().trim() + " "
-                        + stateElement.getText().toString().trim() + " " + zipElement.getText().toString().trim()
-                        + countryElement.getText().toString().trim()).trim().replace(" ", "+");
+                query = addressElement.getText().toString().trim().replace(" ", "+");
             } else if (titleElement.getText() != null && !titleElement.getText().toString().trim().equals(note.type.getInitialTitle())) {
                 query = titleElement.getText().toString().trim().replace(" ", "+");;
-            } else if (longElement.getText() != null && latElement.getText() != null &&
-                    !longElement.getText().toString().trim().isEmpty() &&
-                    !latElement.getText().toString().trim().isEmpty()) {
-                query = longElement.getText().toString().trim() + "," + latElement.getText().toString().trim();
             }
 
             if (!query.isEmpty()) {
@@ -246,12 +167,6 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
 
         // Update content
         data.address = addressElement.getText().toString().trim();
-        data.city = cityElement.getText().toString().trim();
-        data.state= stateElement.getText().toString().trim();
-        data.zip = zipElement.getText().toString().trim();
-        data.country = countryElement.getText().toString().trim();
-        data.latitude = latElement.getText().toString().trim();
-        data.longitude = longElement.getText().toString().trim();
 
         String enteredTitle = titleElement.getText().toString().trim();
         note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
@@ -263,12 +178,6 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);
         addressElement.setOnFocusChangeListener(null);
-        cityElement.setOnFocusChangeListener(null);
-        stateElement.setOnFocusChangeListener(null);
-        zipElement.setOnFocusChangeListener(null);
-        countryElement.setOnFocusChangeListener(null);
-        latElement.setOnFocusChangeListener(null);
-        longElement.setOnFocusChangeListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);
 

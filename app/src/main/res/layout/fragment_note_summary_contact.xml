@@ -65,96 +65,100 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="First name:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"/>
+                <ImageView android:layout_height="match_parent"
+                    android:layout_width="25dp"
+                    android:src="@drawable/name_black"
+                    android:layout_marginRight="10dp"/>
 
                 <EditText
-                    android:id="@+id/note_edit_first_name"
+                    android:id="@+id/note_edit_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="#00000000"
                     android:imeOptions="actionDone"
                     android:inputType="textPersonName"
                     android:lines="1"
                     android:maxLines="1"
                     android:textColor="@color/board_black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:hint="Add a name"
+                    android:paddingTop="3dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Last name:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"/>
-
-                <EditText
-                    android:id="@+id/note_edit_last_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:textColor="@color/board_black"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Phone #:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"/>
+                <ImageView android:layout_height="match_parent"
+                    android:layout_width="25dp"
+                    android:src="@drawable/phone_black"
+                    android:layout_marginRight="10dp"/>
 
                 <EditText
                     android:id="@+id/note_edit_phone_number"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="#00000000"
                     android:imeOptions="actionDone"
                     android:inputType="phone"
                     android:lines="1"
                     android:maxLines="1"
                     android:textColor="@color/board_black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:hint="Add a phone number"
+                    android:paddingTop="3dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"/>
+                <ImageView android:layout_height="match_parent"
+                    android:layout_width="25dp"
+                    android:src="@drawable/email_black"
+                    android:layout_marginRight="10dp"/>
 
                 <EditText
                     android:id="@+id/note_edit_email"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="#00000000"
                     android:imeOptions="actionDone"
                     android:inputType="textEmailAddress"
                     android:lines="1"
                     android:maxLines="1"
                     android:textColor="@color/board_black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:hint="Add an email"
+                    android:paddingTop="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
+
+                <ImageView android:layout_height="match_parent"
+                    android:layout_width="25dp"
+                    android:src="@drawable/birthday_black"
+                    android:layout_marginRight="10dp"/>
+
+                <EditText
+                    android:id="@+id/note_edit_bday"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="#00000000"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:textColor="@color/board_black"
+                    android:textSize="15sp"
+                    android:focusable="false"
+                    android:hint="Add birthday"
+                    android:paddingTop="3dp"/>
             </LinearLayout>
 
             <TextView
@@ -171,7 +175,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
@@ -208,7 +212,7 @@
             <ImageView
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                android:src="@drawable/call"
+                android:src="@drawable/call_white"
                 android:layout_marginRight="3dp"/>
 
             <TextView
@@ -233,7 +237,7 @@
             <ImageView
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                android:src="@drawable/textsms"
+                android:src="@drawable/textsms_white"
                 android:layout_marginRight="3dp"/>
 
             <TextView
@@ -258,7 +262,7 @@
             <ImageView
                 android:layout_width="17dp"
                 android:layout_height="17dp"
-                android:src="@drawable/email"
+                android:src="@drawable/email_white"
                 android:layout_marginRight="3dp"/>
 
             <TextView

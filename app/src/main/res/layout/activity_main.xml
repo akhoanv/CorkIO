@@ -38,7 +38,7 @@
         android:elevation="40dp"
         android:orientation="horizontal"
         android:weightSum="1.0"
-        android:src="@drawable/add"
+        android:src="@drawable/add_black"
         app:layout_constraintEnd_toEndOf="@id/vert_1"
         app:layout_constraintStart_toStartOf="@id/vert_1"
         app:layout_constraintBottom_toBottomOf="@id/horz_2"
@@ -64,7 +64,7 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/position"/>
+                android:src="@drawable/position_white"/>
 
             <TextView
                 android:id="@+id/xy_position"
@@ -88,7 +88,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/zoom_out"
+                    android:src="@drawable/zoom_out_black"
                     android:layout_marginLeft="5dp"/>
 
                 <SeekBar
@@ -102,7 +102,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/zoom_in"
+                    android:src="@drawable/zoom_in_black"
                     android:layout_marginRight="5dp"/>
         </LinearLayout>
     </LinearLayout>

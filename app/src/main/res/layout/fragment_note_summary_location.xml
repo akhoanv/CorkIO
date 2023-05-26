@@ -70,252 +70,64 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         android:gravity="left"
-        android:layout_marginStart="17dp">
+        android:layout_marginStart="17dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="20dp">
+            android:layout_height="320dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
 
-            <LinearLayout
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/position_black"
+                android:layout_marginTop="10dp"/>
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Address:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="3dp"
-                    android:textColor="@color/board_black"/>
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/note_edit_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:maxLines="1"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/board_black"
-                    android:textSize="15sp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="City:"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"
-                    android:layout_marginLeft="3dp"/>
+                    android:hint="Add an address"/>
+            </ScrollView>
+        </LinearLayout>
 
-                <EditText
-                    android:id="@+id/note_edit_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:textColor="@color/board_black"
-                    android:textSize="15sp" />
-            </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/note_edit_find_map_btn"
+            android:background="@drawable/button_paper_background"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp">
+            <ImageView
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:src="@drawable/position_white"
+                android:layout_marginRight="3dp"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="State:"
-                        android:textSize="18sp"
-                        android:textColor="@color/board_black"
-                        android:textStyle="bold"
-                        android:layout_weight="0.6"
-                        android:layout_marginLeft="3dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="ZIP code:"
-                        android:textSize="18sp"
-                        android:textColor="@color/board_black"
-                        android:textStyle="bold"
-                        android:layout_weight="0.4"
-                        android:layout_marginLeft="3dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <EditText
-                        android:id="@+id/note_edit_state"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:textColor="@color/board_black"
-                        android:textSize="15sp"
-                        android:layout_weight="0.6"/>
-
-                    <EditText
-                        android:id="@+id/note_edit_zip"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionDone"
-                        android:inputType="number"
-                        android:digits="0123456789"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:textColor="@color/board_black"
-                        android:textSize="15sp"
-                        android:layout_weight="0.4"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Country:"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/board_black"
-                    android:layout_marginLeft="3dp"/>
-
-                <EditText
-                    android:id="@+id/note_edit_country"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:textColor="@color/board_black"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Longitude:"
-                        android:textSize="18sp"
-                        android:textColor="@color/board_black"
-                        android:textStyle="bold"
-                        android:layout_weight="0.5"
-                        android:layout_marginLeft="3dp"/>
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Latitude:"
-                        android:textSize="18sp"
-                        android:textColor="@color/board_black"
-                        android:textStyle="bold"
-                        android:layout_weight="0.5"
-                        android:layout_marginLeft="3dp"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="1.0">
-
-                    <EditText
-                        android:id="@+id/note_edit_long"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789.-"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberDecimal"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:textColor="@color/board_black"
-                        android:textSize="15sp"
-                        android:layout_weight="0.5"/>
-
-                    <EditText
-                        android:id="@+id/note_edit_lat"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789.-"
-                        android:imeOptions="actionDone"
-                        android:inputType="numberDecimal"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:textColor="@color/board_black"
-                        android:textSize="15sp"
-                        android:layout_weight="0.5"/>
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/note_edit_find_map_btn"
-                android:background="@drawable/button_paper_background"
-                android:layout_marginTop="15dp"
+                android:text="Find On Map"
                 android:layout_gravity="center"
-                android:padding="5dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="17dp"
-                    android:layout_height="17dp"
-                    android:src="@drawable/position"
-                    android:layout_marginRight="3dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Find On Map"
-                    android:layout_gravity="center"
-                    android:textColor="@color/paper_white"
-                    android:textSize="13sp"/>
-            </LinearLayout>
+                android:textColor="@color/paper_white"
+                android:textSize="13sp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

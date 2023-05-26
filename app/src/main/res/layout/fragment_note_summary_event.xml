@@ -100,7 +100,7 @@
                     android:id="@+id/note_edit_time_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/clock"
+                    android:src="@drawable/clock_black"
                     android:layout_marginLeft="23dp"
                     android:layout_gravity="center"/>
 
@@ -139,7 +139,7 @@
                         <ImageView
                             android:layout_width="17dp"
                             android:layout_height="17dp"
-                            android:src="@drawable/alarm"
+                            android:src="@drawable/alarm_white"
                             android:layout_marginRight="3dp"
                             android:layout_gravity="center"/>
 

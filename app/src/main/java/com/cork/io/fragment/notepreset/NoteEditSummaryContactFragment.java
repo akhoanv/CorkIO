@@ -1,5 +1,7 @@
 package com.cork.io.fragment.notepreset;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.cork.io.R;
 import com.cork.io.dao.ContactNoteData;
+import com.cork.io.dao.EventNoteData;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteContactDataManager;
@@ -31,6 +35,8 @@ import com.cork.io.utils.IntentRequestCode;
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class NoteEditSummaryContactFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
@@ -41,8 +47,8 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
     private Note note;
 
     private TextView idElement;
-    private EditText firstNameElement;
-    private EditText lastNameElement;
+    private EditText nameElement;
+    private EditText bdayElement;
     private EditText emailElement;
     private EditText phoneElement;
     private EditText commentElement;
@@ -50,6 +56,8 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
     private LinearLayout callBtn;
     private LinearLayout smsBtn;
     private LinearLayout emailBtn;
+
+    private Calendar storedDateTime = Calendar.getInstance();
 
     public NoteEditSummaryContactFragment(Note note) {
         this.note = note;
@@ -64,10 +72,10 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
 
         // Find elements
         idElement = view.findViewById(R.id.note_edit_id);
-        firstNameElement = view.findViewById(R.id.note_edit_first_name);
-        lastNameElement = view.findViewById(R.id.note_edit_last_name);
+        nameElement = view.findViewById(R.id.note_edit_name);
         emailElement = view.findViewById(R.id.note_edit_email);
         phoneElement = view.findViewById(R.id.note_edit_phone_number);
+        bdayElement = view.findViewById(R.id.note_edit_bday);
         commentElement = view.findViewById(R.id.note_edit_content);
         iconElement = view.findViewById(R.id.note_edit_icon);
 
@@ -76,12 +84,14 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         emailBtn = view.findViewById(R.id.note_edit_email_btn);
 
         ContactNoteData data = dataManager.findById(note.dataId);
+        storedDateTime.setTimeInMillis(data.bday);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
         // Assign appropriate data
-        firstNameElement.setText(data.firstName);
-        lastNameElement.setText(data.lastName);
+        nameElement.setText(data.name);
         emailElement.setText(data.emailAddress);
         phoneElement.setText(data.phoneNumber);
+        bdayElement.setText(data.bday == 0L ? "" : dateFormat.format(storedDateTime.getTime()));
         idElement.setText("Note #" + note.getDisplayId());
         commentElement.setText(data.content);
 
@@ -98,24 +108,11 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         }
 
         // Set onChangeListener to update the database
-        firstNameElement.setOnFocusChangeListener((view, hasFocus) -> {
+        nameElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
-                data.firstName = firstNameElement.getText().toString().trim();
-                String fullName = (data.firstName + " " + data.lastName).trim();
-                note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
-
-                noteManager.updateNote(note);
-                dataManager.update(data);
-
-                hideKeyboard();
-            }
-        });
-
-        lastNameElement.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus) {
-                data.lastName = lastNameElement.getText().toString().trim();
-                String fullName = (data.firstName + " " + data.lastName).trim();
-                note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
+                data.name = nameElement.getText().toString().trim();
+                note.title = nameElement.getText().toString().trim().isEmpty()
+                        ? note.type.getInitialTitle() : nameElement.getText().toString().trim();
 
                 noteManager.updateNote(note);
                 dataManager.update(data);
@@ -196,6 +193,8 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
             }
         });
 
+        bdayElement.setOnClickListener(view -> showDatePicker(data));
+
         iconElement.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -238,21 +237,19 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         ContactNoteData data = dataManager.findById(note.dataId);
 
         // Update content
-        data.firstName = firstNameElement.getText().toString().trim();
-        data.lastName = lastNameElement.getText().toString().trim();
+        data.name = nameElement.getText().toString().trim();
         data.emailAddress = emailElement.getText().toString().trim();
         data.phoneNumber = phoneElement.getText().toString().trim();
         data.content = commentElement.getText().toString().trim();
 
-        String fullName = (data.firstName + " " + data.lastName).trim();
-        note.title = fullName.isEmpty() ? note.type.getInitialTitle() : fullName;
+        note.title = nameElement.getText().toString().trim().isEmpty()
+                ? note.type.getInitialTitle() : nameElement.getText().toString().trim();
 
         noteManager.updateNote(note);
         dataManager.update(data);
 
         // Set these listener to null, avoid mem leak
-        firstNameElement.setOnFocusChangeListener(null);
-        lastNameElement.setOnFocusChangeListener(null);
+        nameElement.setOnFocusChangeListener(null);
         emailElement.setOnFocusChangeListener(null);
         phoneElement.setOnFocusChangeListener(null);
         commentElement.setOnFocusChangeListener(null);
@@ -261,6 +258,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         callBtn.setOnClickListener(null);
         smsBtn.setOnClickListener(null);
         emailBtn.setOnClickListener(null);
+        bdayElement.setOnClickListener(null);
 
         super.onDestroy();
     }
@@ -268,5 +266,22 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void showDatePicker(ContactNoteData data) {
+        DatePickerDialog mDatePicker;
+        mDatePicker = new DatePickerDialog(getContext(), (datePicker, year, month, dayOfMonth) -> {
+            bdayElement.setText(String.format("%04d", year) + "/" + String.format("%02d", month)
+                    + "/" + String.format("%02d", dayOfMonth));
+
+            storedDateTime.set(Calendar.YEAR, year);
+            storedDateTime.set(Calendar.MONTH, month);
+            storedDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            data.bday = storedDateTime.getTimeInMillis();
+            dataManager.update(data);
+        }, storedDateTime.get(Calendar.YEAR), storedDateTime.get(Calendar.MONTH), storedDateTime.get(Calendar.DAY_OF_MONTH));
+        mDatePicker.setTitle("Select Date");
+        mDatePicker.show();
     }
 }

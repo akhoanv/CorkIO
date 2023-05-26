@@ -123,7 +123,7 @@
                 <ImageView
                     android:layout_width="17dp"
                     android:layout_height="17dp"
-                    android:src="@drawable/sort"
+                    android:src="@drawable/sort_white"
                     android:layout_marginRight="3dp"/>
 
                 <TextView
