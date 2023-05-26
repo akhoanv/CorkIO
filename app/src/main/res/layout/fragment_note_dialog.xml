@@ -24,13 +24,12 @@
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:text="Summary"
                     android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:rotation="270"
-                    android:fontFamily="@font/gochi_hand"/>
+                    android:textSize="17sp"
+                    android:rotation="270"/>
             </LinearLayout>
 
             <LinearLayout
@@ -45,9 +44,8 @@
                     android:layout_height="wrap_content"
                     android:text="Connections"
                     android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:rotation="270"
-                    android:fontFamily="@font/gochi_hand"/>
+                    android:textSize="17sp"
+                    android:rotation="270"/>
             </LinearLayout>
         </LinearLayout>
 

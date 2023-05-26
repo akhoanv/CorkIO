@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.dialog;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +19,7 @@ import com.cork.io.R;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.fragment.connection.NoteEditConnectionFragment;
 import com.cork.io.utils.NoteEditCallback;
 
 /**

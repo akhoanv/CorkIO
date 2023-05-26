@@ -11,17 +11,19 @@ import com.cork.io.R;
  * @author knguyen
  */
 public enum ElementColor {
-    BLUE(R.color.blue),
-    GREEN(R.color.green),
-    ORANGE(R.color.orange),
-    PINK(R.color.light_pink),
-    RED(R.color.red),
-    YELLOW(R.color.yellow);
+    BLUE(R.color.blue, R.drawable.note_checklist_item_blue),
+    GREEN(R.color.green, R.drawable.note_checklist_item_green),
+    ORANGE(R.color.orange, R.drawable.note_checklist_item_orange),
+    PINK(R.color.light_pink, R.drawable.note_checklist_item_pink),
+    RED(R.color.red, R.drawable.note_checklist_item_red),
+    YELLOW(R.color.yellow, R.drawable.note_checklist_item_yellow);
 
     private int colorId;
+    private int backgroundId;
 
-    ElementColor(int colorId) {
+    ElementColor(int colorId, int backgroundId) {
         this.colorId = colorId;
+        this.backgroundId = backgroundId;
     }
 
     public Paint getPaint(Context context) {
@@ -35,6 +37,10 @@ public enum ElementColor {
 
     public int getId() {
         return colorId;
+    }
+
+    public int getBackgroundId() {
+        return backgroundId;
     }
 
     public static ElementColor getTypeFromString(String color) {

@@ -19,18 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.cork.io.dao.Board;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
-import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.fragment.SelectNoteTypeDialogFragment;
+import com.cork.io.fragment.dialog.SelectNoteTypeDialogFragment;
 import com.cork.io.worldobject.BoardFragment;
 import com.cork.io.objectbox.ObjectBox;
 
 import java.util.concurrent.CompletableFuture;
-
-import io.objectbox.Box;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
@@ -142,6 +138,7 @@ public class MainActivity extends FragmentActivity {
             dbAddFuture.handle((newNote, throwable) -> {
                 if (throwable != null) {
                     Log.d(this.getLocalClassName(), "Failed to add new note.");
+                    throwable.printStackTrace();
                 }
 
                 return newNote;

@@ -1,12 +1,18 @@
 package com.cork.io.struct;
 
-import com.cork.io.fragment.INoteEditSummaryFragment;
-import com.cork.io.fragment.NoteEditSummaryContactFragment;
-import com.cork.io.fragment.NoteEditSummaryGenericFragment;
+import com.cork.io.fragment.notepreset.INoteEditSummaryFragment;
+import com.cork.io.fragment.notepreset.NoteEditSummaryChecklistFragment;
+import com.cork.io.fragment.notepreset.NoteEditSummaryContactFragment;
+import com.cork.io.fragment.notepreset.NoteEditSummaryEventFragment;
+import com.cork.io.fragment.notepreset.NoteEditSummaryGenericFragment;
+import com.cork.io.fragment.notepreset.NoteEditSummaryLocationFragment;
 
 public enum NoteType {
-    GENERIC("Untitled generic note", NoteIcon.GENERIC, NoteEditSummaryGenericFragment.class),
-    CONTACT("Untitled contact note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class);
+    GENERIC("Untitled Generic Note", NoteIcon.GENERIC, NoteEditSummaryGenericFragment.class),
+    CONTACT("Untitled Contact Note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class),
+    LOCATION("Untitled Location Note", NoteIcon.LOCATION, NoteEditSummaryLocationFragment.class),
+    EVENT("Untitled Event Note", NoteIcon.EVENT, NoteEditSummaryEventFragment.class),
+    CHECKLIST("Untitled Checklist Note", NoteIcon.CHECKLIST, NoteEditSummaryChecklistFragment.class);
 
     private String initialTitle;
     private NoteIcon initialIcon;

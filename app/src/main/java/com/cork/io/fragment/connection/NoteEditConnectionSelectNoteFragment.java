@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.connection;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

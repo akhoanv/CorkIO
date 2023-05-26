@@ -28,7 +28,7 @@ import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.fragment.NoteEditDialogFragment;
+import com.cork.io.fragment.dialog.NoteEditDialogFragment;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
 

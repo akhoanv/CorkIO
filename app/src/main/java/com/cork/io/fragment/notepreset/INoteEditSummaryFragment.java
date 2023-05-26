@@ -1,3 +1,3 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.notepreset;
 
 public interface INoteEditSummaryFragment {}

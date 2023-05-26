@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.dialog;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,9 +45,5 @@ public class SelectNoteTypeDialogFragment extends DialogFragment {
         ));
 
         return view;
-    }
-
-    public void onTypeSelect(NoteType type) {
-        callback.run(type);
     }
 }
