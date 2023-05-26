@@ -5,6 +5,7 @@ import android.util.Log;
 import com.cork.io.dao.converter.IdArrayConverter;
 import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
+import com.cork.io.data.ObjectBoxNoteChecklistDataManager;
 import com.cork.io.data.ObjectBoxNoteContactDataManager;
 import com.cork.io.data.ObjectBoxNoteEventDataManager;
 import com.cork.io.data.ObjectBoxNoteGenericDataManager;
@@ -70,6 +71,10 @@ public class Note {
             case EVENT:
                 EventNoteData eventNoteData = ObjectBoxNoteEventDataManager.get().add(new EventNoteData());
                 this.dataId = eventNoteData.id;
+                break;
+            case CHECKLIST:
+                ChecklistNoteData checklistNoteData = ObjectBoxNoteChecklistDataManager.get().add(new ChecklistNoteData());
+                this.dataId = checklistNoteData.id;
                 break;
         }
     }

@@ -19,7 +19,7 @@ import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.fragment.NoteEditConnectionAddFragment;
+import com.cork.io.fragment.connection.NoteEditConnectionAddFragment;
 import com.cork.io.utils.NumberUtil;
 
 import java.util.List;

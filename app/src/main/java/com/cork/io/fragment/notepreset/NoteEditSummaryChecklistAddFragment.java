@@ -1,8 +1,7 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.notepreset;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +16,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.cork.io.R;
+import com.cork.io.dao.ChecklistNoteData;
 import com.cork.io.dao.Connection;
 import com.cork.io.dao.Note;
 import com.cork.io.data.ConnectionManager;
 import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
+import com.cork.io.data.ObjectBoxNoteChecklistDataManager;
 import com.cork.io.data.ObjectBoxNoteManager;
+import com.cork.io.struct.ChecklistItem;
 import com.cork.io.struct.ElementColor;
 
-public class NoteEditConnectionAddFragment extends Fragment {
+public class NoteEditSummaryChecklistAddFragment extends Fragment {
     private NoteManager noteManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteChecklistDataManager dataManager;
 
     private View view;
-    private Note sourceNote;
-    private Note linkedNote;
+    private Note note;
+    private ChecklistNoteData data;
 
     private ElementColor selectedColor = ElementColor.BLUE;
 
@@ -42,18 +44,20 @@ public class NoteEditConnectionAddFragment extends Fragment {
     private ImageView redBox;
     private ImageView yellowBox;
     private EditText nameBox;
+    private TextView confirmBtn;
 
-    public NoteEditConnectionAddFragment(Note sourceNote, Note linkedNote) {
-        this.sourceNote = sourceNote;
-        this.linkedNote = linkedNote;
+    public NoteEditSummaryChecklistAddFragment(Note note) {
+        this.noteManager = ObjectBoxNoteManager.get();
+        this.dataManager = ObjectBoxNoteChecklistDataManager.get();
+
+        this.note = note;
+        this.data = dataManager.findById(note.dataId);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        noteManager = ObjectBoxNoteManager.get();
-        connectionManager = ObjectBoxConnectionManager.get();
-        view = inflater.inflate(R.layout.fragment_note_select_add, container, false);
+        view = inflater.inflate(R.layout.fragment_note_edit_properties, container, false);
 
         // Find element
         nameBox = view.findViewById(R.id.note_edit_connection_name_box);
@@ -64,6 +68,7 @@ public class NoteEditConnectionAddFragment extends Fragment {
         pinkBox = view.findViewById(R.id.note_edit_color_pink);
         redBox = view.findViewById(R.id.note_edit_color_red);
         yellowBox = view.findViewById(R.id.note_edit_color_yellow);
+        confirmBtn = view.findViewById(R.id.note_edit_connection_confirm_btn);
 
         ImageView colorCheckmark = view.findViewById(R.id.note_edit_color_selection);
 
@@ -116,18 +121,18 @@ public class NoteEditConnectionAddFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.note_edit_connection_confirm_btn).setOnClickListener(view1 -> {
-            Connection newConn = new Connection(nameBox.getText().toString(), selectedColor, sourceNote.boardId, sourceNote.id, linkedNote.id);
-            newConn = connectionManager.addConnection(newConn);
+        confirmBtn.setOnClickListener(view1 -> {
+            if (nameBox.getText() == null || nameBox.getText().toString().trim().isEmpty()) {
+                return;
+            }
 
-            sourceNote.connection.add(newConn.id);
-            noteManager.updateNote(sourceNote);
+            data.lastOrder++;
+            data.list.add(new ChecklistItem(data.lastOrder, nameBox.getText().toString().trim(), selectedColor, false));
 
-            linkedNote.connection.add(newConn.id);
-            noteManager.updateNote(linkedNote);
+            dataManager.update(data);
 
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(sourceNote));
+            ft.replace(R.id.note_edit_content_container, new NoteEditSummaryChecklistFragment(note));
             ft.commit();
         });
 
@@ -143,6 +148,7 @@ public class NoteEditConnectionAddFragment extends Fragment {
         pinkBox.setOnClickListener(null);
         redBox.setOnClickListener(null);
         yellowBox.setOnClickListener(null);
+        confirmBtn.setOnClickListener(null);
 
         super.onDestroy();
     }

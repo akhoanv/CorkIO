@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.dialog;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

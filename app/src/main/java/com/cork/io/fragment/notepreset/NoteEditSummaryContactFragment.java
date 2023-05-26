@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.notepreset;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +32,7 @@ import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class NoteEditSummaryContactFragment  extends Fragment implements INoteEditSummaryFragment {
-
+public class NoteEditSummaryContactFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
     private NoteManager noteManager;
     private ObjectBoxNoteContactDataManager dataManager;

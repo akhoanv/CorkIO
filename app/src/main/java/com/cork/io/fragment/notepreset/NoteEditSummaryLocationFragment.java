@@ -1,4 +1,4 @@
-package com.cork.io.fragment;
+package com.cork.io.fragment.notepreset;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.cork.io.R;
-import com.cork.io.dao.ContactNoteData;
 import com.cork.io.dao.LocationNoteData;
 import com.cork.io.dao.Note;
 import com.cork.io.data.NoteManager;
