@@ -76,7 +76,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         // Assign appropriate data
-        idElement.setText("Note #" + note.id);
+        idElement.setText("Note #" + note.getDisplayId());
         titleElement.setText(note.title);
         calendarElement.setDate(data.datetime);
         timeElement.setText(timeFormat.format(storedDateTime.getTime()));

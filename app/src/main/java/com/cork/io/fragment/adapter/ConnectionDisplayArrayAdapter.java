@@ -63,7 +63,7 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         // Set appropriate data
         iconView.setImageResource(linkedNote.type.getIcon().getId());
         titleView.setText(conn.name);
-        idView.setText("#" + linkedNote.id + " " + linkedNote.title);
+        idView.setText("#" + linkedNote.getDisplayId() + " " + linkedNote.title);
 
         // Set remove button
         unlinkButton.setOnClickListener(view1 -> {

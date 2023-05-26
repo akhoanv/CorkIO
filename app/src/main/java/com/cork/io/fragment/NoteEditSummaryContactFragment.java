@@ -83,7 +83,7 @@ public class NoteEditSummaryContactFragment  extends Fragment implements INoteEd
         lastNameElement.setText(data.lastName);
         emailElement.setText(data.emailAddress);
         phoneElement.setText(data.phoneNumber);
-        idElement.setText("Note #" + note.id);
+        idElement.setText("Note #" + note.getDisplayId());
         commentElement.setText(data.content);
 
         if (note.customIconPath.isEmpty()) {

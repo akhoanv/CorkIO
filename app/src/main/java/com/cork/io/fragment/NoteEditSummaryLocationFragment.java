@@ -80,7 +80,7 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         LocationNoteData data = dataManager.findById(note.dataId);
 
         // Assign appropriate data
-        idElement.setText("Note #" + note.id);
+        idElement.setText("Note #" + note.getDisplayId());
         titleElement.setText(note.title);
         addressElement.setText(data.address);
         cityElement.setText(data.city);

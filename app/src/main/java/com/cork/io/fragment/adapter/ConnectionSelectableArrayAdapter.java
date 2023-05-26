@@ -20,6 +20,7 @@ import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.fragment.NoteEditConnectionAddFragment;
+import com.cork.io.utils.NumberUtil;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         // Set appropriate data
         iconView.setImageResource(noteManager.findNoteById(noteList.get(position)).type.getIcon().getId());
         titleView.setText(noteManager.findNoteById(noteList.get(position)).title);
-        idView.setText("ID: " + noteList.get(position));
+        idView.setText("#" + NumberUtil.convertToDisplayId(noteList.get(position)));
 
         // Set onClickAction
         view.setOnClickListener(view1 -> {

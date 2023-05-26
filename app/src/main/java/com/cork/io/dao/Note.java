@@ -1,5 +1,7 @@
 package com.cork.io.dao;
 
+import android.util.Log;
+
 import com.cork.io.dao.converter.IdArrayConverter;
 import com.cork.io.dao.converter.NoteTypeConverter;
 import com.cork.io.data.ObjectBoxConnectionManager;
@@ -8,6 +10,7 @@ import com.cork.io.data.ObjectBoxNoteEventDataManager;
 import com.cork.io.data.ObjectBoxNoteGenericDataManager;
 import com.cork.io.data.ObjectBoxNoteLocationDataManager;
 import com.cork.io.struct.NoteType;
+import com.cork.io.utils.NumberUtil;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -90,5 +93,9 @@ public class Note {
         }
 
         return -1;
+    }
+
+    public String getDisplayId() {
+        return NumberUtil.convertToDisplayId(id);
     }
 }

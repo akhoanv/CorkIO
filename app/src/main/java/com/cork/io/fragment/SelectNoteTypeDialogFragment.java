@@ -46,8 +46,4 @@ public class SelectNoteTypeDialogFragment extends DialogFragment {
 
         return view;
     }
-
-    public void onTypeSelect(NoteType type) {
-        callback.run(type);
-    }
 }
