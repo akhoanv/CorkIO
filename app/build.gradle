@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.cork.io'
+    namespace 'com.risky.evidencevault'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.cork.io"
+        applicationId "com.risky.evidencevault"
         minSdk 28
         targetSdk 32
         versionCode 1
