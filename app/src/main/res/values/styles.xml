@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CalenderViewMonth" parent="Theme.CorkIO">
+        <item name="colorAccent">@color/board_black</item>
+        <item name="android:textColorPrimary">@color/board_black</item>
+    </style>
+
+    <style name="CalenderViewWeekDay" parent="Theme.CorkIO">
+        <item name="android:textColor">@color/board_black</item>
+    </style>
+
+    <style name="CustomCalendarDay" parent="Theme.CorkIO">
+        <item name="android:textColor">@color/calendar_color</item>
+    </style>
+</resources>

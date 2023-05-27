@@ -29,7 +29,8 @@
                     android:text="Summary"
                     android:textStyle="bold"
                     android:textSize="17sp"
-                    android:rotation="270"/>
+                    android:rotation="270"
+                    android:textColor="@color/board_black"/>
             </LinearLayout>
 
             <LinearLayout
@@ -45,7 +46,8 @@
                     android:text="Connections"
                     android:textStyle="bold"
                     android:textSize="17sp"
-                    android:rotation="270"/>
+                    android:rotation="270"
+                    android:textColor="@color/board_black"/>
             </LinearLayout>
         </LinearLayout>
 
