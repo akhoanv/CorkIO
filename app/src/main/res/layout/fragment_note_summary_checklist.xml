@@ -49,6 +49,7 @@
                 android:lines="1"
                 android:inputType="text"
                 android:textColor="@color/board_black"
+                android:textColorHint="@color/text_gray"
                 android:textSize="18sp"
                 android:layout_marginEnd="10dp"
                 android:imeOptions="actionDone"/>

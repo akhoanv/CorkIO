@@ -31,6 +31,7 @@ import com.cork.io.data.ObjectBoxNoteManager;
 import com.cork.io.fragment.dialog.NoteEditDialogFragment;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+import com.cork.io.utils.DeviceProperties;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
@@ -71,6 +72,7 @@ public class NoteFragment extends RelativeLayout {
         boardManager = ObjectBoxBoardManager.get();
         connectionManager = ObjectBoxConnectionManager.get();
         setOnTouchListener(touchListener);
+        setOnLongClickListener(longClickListener);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.small_view_note, this, true);
@@ -98,8 +100,8 @@ public class NoteFragment extends RelativeLayout {
             }
         }
 
-        setX(isNew ? 0 : note.positionX);
-        setY(isNew ? 0 : note.positionY);
+        setX(isNew ? (DeviceProperties.getScreenWidth() / 3) : note.positionX);
+        setY(isNew ? (DeviceProperties.getScreenHeight() / 3) : note.positionY);
 
         scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
     }
@@ -171,6 +173,16 @@ public class NoteFragment extends RelativeLayout {
         return note;
     }
 
+    private OnLongClickListener longClickListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            action = TouchAction.DRAG;
+            findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background_hold);
+
+            return true;
+        }
+    };
+
     private OnTouchListener touchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -188,9 +200,9 @@ public class NoteFragment extends RelativeLayout {
 
                     // Set action for later stages
                     action = TouchAction.CLICK;
-                    holdHandler.postDelayed(holdRunnable, 200);
                     mousePosition.setXY(newX, newY);
-                    break;
+
+                    return false;
                 case MotionEvent.ACTION_UP:
                     if (action == TouchAction.CLICK) {
                         // Close any dialog fragment

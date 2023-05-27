@@ -1,17 +1,11 @@
 package com.cork.io.worldobject;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.cork.io.MainActivity;
@@ -24,15 +18,13 @@ import com.cork.io.data.NoteManager;
 import com.cork.io.data.ObjectBoxBoardManager;
 import com.cork.io.data.ObjectBoxConnectionManager;
 import com.cork.io.data.ObjectBoxNoteManager;
-import com.cork.io.objectbox.ObjectBox;
 import com.cork.io.struct.NoteType;
 import com.cork.io.struct.Point2D;
 import com.cork.io.struct.TouchAction;
+import com.cork.io.utils.DeviceProperties;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.objectbox.Box;
 
 /**
  * Pannable/Zoomable board for main app
@@ -140,7 +132,9 @@ public class BoardFragment extends RelativeLayout {
      * Attempting to add a new {@link Note} entry into the database
      */
     public Note addToDatabase(NoteType type) {
-        Note note = new Note(board.id, type, board.panPositionX, board.panPositionY);
+        Note note = new Note(board.id, type,
+                -board.panPositionX + (DeviceProperties.getScreenWidth() / 3),
+                -board.panPositionY  + (DeviceProperties.getScreenHeight() / 3));
         noteManager.addNote(note);
         board.notes.add(note.id);
         boardManager.updateBoard(board);
@@ -183,21 +177,21 @@ public class BoardFragment extends RelativeLayout {
             float newX = motionEvent.getX();
             float newY = motionEvent.getY();
 
-            switch (motionEvent.getAction()) {
+            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     // Store initial mouse position
                     mousePosition.setXY(newX, newY);
 
                     action = TouchAction.DRAG;
                     break;
-                case MotionEvent.ACTION_POINTER_2_DOWN:
+                case MotionEvent.ACTION_POINTER_DOWN:
                     // Store initial dist between 2 fingers
                     originalDist = getPinchDistance(motionEvent);
 
                     action = TouchAction.ZOOM;
                     break;
                 case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_POINTER_2_UP:
+                case MotionEvent.ACTION_POINTER_UP:
                     if (action == TouchAction.ZOOM) {
                         board.scaleFactor = scale;
                     } else if (action == TouchAction.DRAG) {
