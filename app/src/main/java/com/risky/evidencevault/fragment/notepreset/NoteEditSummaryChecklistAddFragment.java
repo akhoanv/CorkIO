@@ -18,14 +18,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.ChecklistNoteData;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteChecklistDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.struct.ChecklistItem;
 import com.risky.evidencevault.struct.ElementColor;
 
 public class NoteEditSummaryChecklistAddFragment extends Fragment {
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private ObjectBoxNoteChecklistDataManager dataManager;
 
     private View view;

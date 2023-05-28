@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.adapter.ConnectionSelectableArrayAdapter;
 
@@ -22,7 +21,7 @@ import java.util.Set;
 
 public class NoteEditConnectionSelectNoteFragment extends Fragment {
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
 
     private View view;
     private Note note;
@@ -43,7 +42,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
         connectionGrid = view.findViewById(R.id.note_edit_connection_grid);
 
         // Add connections to list
-        List<Note> noteList = noteManager.getAllNotes();
+        List<Note> noteList = noteManager.getAll();
         Set<Long> currentLink = note.getLinkedNotes();
         List<Long> availableList = new ArrayList<>();
         for (Note n : noteList) {

@@ -22,9 +22,6 @@ import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.BoardManager;
-import com.risky.evidencevault.data.ConnectionManager;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
@@ -44,9 +41,9 @@ import java.io.InputStream;
  */
 public class NoteFragment extends RelativeLayout {
     // Database manager
-    private NoteManager noteManager;
-    private BoardManager boardManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxBoardManager boardManager;
+    private ObjectBoxConnectionManager connectionManager;
 
     // Stats variable
     private TouchAction action;
@@ -103,14 +100,14 @@ public class NoteFragment extends RelativeLayout {
         setX(isNew ? (DeviceProperties.getScreenWidth() / 3) : note.positionX);
         setY(isNew ? (DeviceProperties.getScreenHeight() / 3) : note.positionY);
 
-        scale(boardManager.findBoardById(note.boardId).scaleFactor * 100, false);
+        scale(boardManager.findById(note.boardId).scaleFactor * 100, false);
     }
 
     /**
      * Force {@link Note} object associated with this object ot fetch updated data from database
      */
     public void fetchNote() {
-        this.note = noteManager.findNoteById(note.id);
+        this.note = noteManager.findById(note.id);
     }
 
     /**
@@ -144,18 +141,18 @@ public class NoteFragment extends RelativeLayout {
     public void remove() {
         // Remove all connection from other nodes
         for (Long connId : note.connection) {
-            Connection conn = connectionManager.findConnectionById(connId);
+            Connection conn = connectionManager.findById(connId);
 
             // Remove connection from linked note
-            Note n = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
+            Note n = noteManager.findById(conn.getLinkedNoteId(note.id));
             n.connection.remove(connId);
-            noteManager.updateNote(n);
+            noteManager.update(n);
 
             // Remove connection object
-            connectionManager.removeConnection(connId);
+            connectionManager.remove(connId);
         }
 
-        boolean isRemoved = noteManager.removeNote(note.id);
+        boolean isRemoved = noteManager.remove(note.id);
         if (isRemoved) {
             // Remove UI
             ((ViewGroup)getParent()).removeView(this);
@@ -193,10 +190,10 @@ public class NoteFragment extends RelativeLayout {
                 case MotionEvent.ACTION_DOWN:
                     // Bring to front of other notes, UI and database
                     bringToFront();
-                    Board board = boardManager.findBoardById(note.boardId);
+                    Board board = boardManager.findById(note.boardId);
                     board.notes.remove(note.id);
                     board.notes.add(note.id);
-                    boardManager.updateBoard(board);
+                    boardManager.update(board);
 
                     // Set action for later stages
                     action = TouchAction.CLICK;
@@ -221,7 +218,7 @@ public class NoteFragment extends RelativeLayout {
                             }
 
                             // Update current note object and data on screen
-                            note = noteManager.findNoteById(note.id);
+                            note = noteManager.findById(note.id);
 
                             if (note.title != null) {
                                 titleView.setText(note.title);
@@ -245,11 +242,11 @@ public class NoteFragment extends RelativeLayout {
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {
                         action = TouchAction.NONE;
-                        note.positionX = getX() - boardManager.findBoardById(note.boardId).panPositionX;
-                        note.positionY = getY() - boardManager.findBoardById(note.boardId).panPositionY;
+                        note.positionX = getX() - boardManager.findById(note.boardId).panPositionX;
+                        note.positionY = getY() - boardManager.findById(note.boardId).panPositionY;
                     }
 
-                    boolean isUpdated = noteManager.updateNote(note);
+                    boolean isUpdated = noteManager.update(note);
                     if (isUpdated) {
                         holdHandler.removeCallbacks(holdRunnable);
                         findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);

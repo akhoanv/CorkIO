@@ -20,7 +20,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.dialog.SelectNoteTypeDialogFragment;
 import com.risky.evidencevault.utils.DeviceProperties;
@@ -31,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private int currentApiVersion;
 
     private SeekBar zoomBar;

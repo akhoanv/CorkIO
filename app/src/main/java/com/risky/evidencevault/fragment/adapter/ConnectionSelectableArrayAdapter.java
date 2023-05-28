@@ -15,8 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.ConnectionManager;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.connection.NoteEditConnectionAddFragment;
@@ -26,8 +24,8 @@ import java.util.List;
 
 public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
     // Database manager
-    private NoteManager noteManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxConnectionManager connectionManager;
 
     // Adapter properties
     private List<Long> noteList;
@@ -63,13 +61,13 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         TextView idView = view.findViewById(R.id.note_edit_connection_id);
 
         // Set appropriate data
-        iconView.setImageResource(noteManager.findNoteById(noteList.get(position)).type.getIcon().getId());
-        titleView.setText(noteManager.findNoteById(noteList.get(position)).title);
+        iconView.setImageResource(noteManager.findById(noteList.get(position)).type.getIcon().getId());
+        titleView.setText(noteManager.findById(noteList.get(position)).title);
         idView.setText("#" + NumberUtil.convertToDisplayId(noteList.get(position)));
 
         // Set onClickAction
         view.setOnClickListener(view1 -> {
-            Note linkedNote = noteManager.findNoteById(noteList.get(position));
+            Note linkedNote = noteManager.findById(noteList.get(position));
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionAddFragment(note, linkedNote));

@@ -6,7 +6,7 @@ import com.risky.evidencevault.objectbox.ObjectBox;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ObjectBoxBoardManager implements BoardManager {
+public class ObjectBoxBoardManager implements BaseObjectManager<Board> {
     private static ObjectBoxBoardManager manager;
 
     public static ObjectBoxBoardManager get() {
@@ -17,86 +17,86 @@ public class ObjectBoxBoardManager implements BoardManager {
         return manager;
     }
     @Override
-    public Board addBoard(Board board) {
+    public Board add(Board board) {
         long id = ObjectBox.get().boxFor(Board.class).put(board);
-        return findBoardById(id);
+        return findById(id);
     }
 
     @Override
-    public boolean addBoards(List<Board> boards) {
+    public boolean addMany(List<Board> boards) {
         ObjectBox.get().boxFor(Board.class).put(boards);
         return true;
     }
 
     @Override
-    public Board findBoardById(long id) {
+    public Board findById(long id) {
         return ObjectBox.get().boxFor(Board.class).get(id);
     }
 
     @Override
-    public List<Board> findBoardsById(List<Long> ids) {
+    public List<Board> findManyById(List<Long> ids) {
         return ObjectBox.get().boxFor(Board.class).get(ids);
     }
 
     @Override
-    public boolean removeBoard(long id) {
+    public boolean remove(long id) {
         return ObjectBox.get().boxFor(Board.class).remove(id);
     }
 
     @Override
-    public boolean removeAllBoards() {
+    public boolean removeAll() {
         ObjectBox.get().boxFor(Board.class).removeAll();
         return true;
     }
 
     @Override
-    public boolean updateBoard(Board board) {
+    public boolean update(Board board) {
         ObjectBox.get().boxFor(Board.class).put(board);
         return true;
     }
 
     @Override
-    public List<Board> getAllBoards() {
+    public List<Board> getAll() {
         return ObjectBox.get().boxFor(Board.class).getAll();
     }
 
     @Override
-    public CompletableFuture<Board> addBoardAsync(Board board) {
-        return CompletableFuture.supplyAsync(() -> addBoard(board));
+    public CompletableFuture<Board> addAsync(Board board) {
+        return CompletableFuture.supplyAsync(() -> add(board));
     }
 
     @Override
-    public CompletableFuture<Boolean> addBoardsAsync(List<Board> boards) {
-        return CompletableFuture.supplyAsync(() -> addBoards(boards));
+    public CompletableFuture<Boolean> addManyAsync(List<Board> boards) {
+        return CompletableFuture.supplyAsync(() -> addMany(boards));
     }
 
     @Override
-    public CompletableFuture<Board> findBoardByIdAsync(long id) {
-        return CompletableFuture.supplyAsync(() -> findBoardById(id));
+    public CompletableFuture<Board> findByIdAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> findById(id));
     }
 
     @Override
-    public CompletableFuture<List<Board>> findBoardsByIdAsync(List<Long> ids) {
-        return CompletableFuture.supplyAsync(() -> findBoardsById(ids));
+    public CompletableFuture<List<Board>> findManyByIdAsync(List<Long> ids) {
+        return CompletableFuture.supplyAsync(() -> findManyById(ids));
     }
 
     @Override
-    public CompletableFuture<Boolean> removeBoardAsync(long id) {
-        return CompletableFuture.supplyAsync(() -> removeBoard(id));
+    public CompletableFuture<Boolean> removeAsync(long id) {
+        return CompletableFuture.supplyAsync(() -> remove(id));
     }
 
     @Override
-    public CompletableFuture<Boolean> removeAllBoardsAsync() {
-        return CompletableFuture.supplyAsync(() -> removeAllBoards());
+    public CompletableFuture<Boolean> removeAllAsync() {
+        return CompletableFuture.supplyAsync(() -> removeAll());
     }
 
     @Override
-    public CompletableFuture<Boolean> updateBoardAsync(Board board) {
-        return CompletableFuture.supplyAsync(() -> updateBoard(board));
+    public CompletableFuture<Boolean> updateAsync(Board board) {
+        return CompletableFuture.supplyAsync(() -> update(board));
     }
 
     @Override
-    public CompletableFuture<List<Board>> getAllBoardsAsync() {
-        return CompletableFuture.supplyAsync(() -> getAllBoards());
+    public CompletableFuture<List<Board>> getAllAsync() {
+        return CompletableFuture.supplyAsync(() -> getAll());
     }
 }

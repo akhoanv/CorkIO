@@ -14,8 +14,6 @@ import androidx.annotation.Nullable;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.ConnectionManager;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 
@@ -23,8 +21,8 @@ import java.util.List;
 
 public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
     // Database manager
-    private NoteManager noteManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxConnectionManager connectionManager;
 
     // Adapter properties
     private List<Long> connectionList;
@@ -57,8 +55,8 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         ImageView unlinkButton = view.findViewById(R.id.note_edit_connection_unlink);
 
         // Find Connection
-        Connection conn = connectionManager.findConnectionById(connectionList.get(position));
-        Note linkedNote = noteManager.findNoteById(conn.getLinkedNoteId(note.id));
+        Connection conn = connectionManager.findById(connectionList.get(position));
+        Note linkedNote = noteManager.findById(conn.getLinkedNoteId(note.id));
 
         // Set appropriate data
         iconView.setImageResource(linkedNote.type.getIcon().getId());
@@ -76,8 +74,8 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
             remove(conn.id);
 
             // Update database
-            noteManager.updateNote(note);
-            noteManager.updateNote(linkedNote);
+            noteManager.update(note);
+            noteManager.update(linkedNote);
         });
 
         return view;

@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.ChecklistNoteData;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteChecklistDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.struct.ChecklistItem;
@@ -37,7 +36,7 @@ import java.util.List;
 
 public class NoteEditSummaryChecklistFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private ObjectBoxNoteChecklistDataManager dataManager;
 
     private View view;
@@ -114,7 +113,7 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
         iconElement.setOnLongClickListener(view -> {
             iconElement.setImageResource(note.type.getIcon().getId());
             note.customIconPath = "";
-            noteManager.updateNote(note);
+            noteManager.update(note);
 
             return true;
         });
@@ -138,7 +137,7 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
                 iconElement.setImageBitmap(importedImg);
 
                 note.customIconPath = data.getData().toString();
-                noteManager.updateNote(note);
+                noteManager.update(note);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

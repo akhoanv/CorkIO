@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.LocationNoteData;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteLocationDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.utils.IntentRequestCode;
@@ -36,7 +35,7 @@ import java.io.InputStream;
 public class NoteEditSummaryLocationFragment extends Fragment implements INoteEditSummaryFragment {
 
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private ObjectBoxNoteLocationDataManager dataManager;
 
     private View view;
@@ -89,7 +88,7 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         titleElement.setOnFocusChangeListener((view, hasFocus) -> {
             String enteredTitle = titleElement.getText().toString().trim();
             note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
-            noteManager.updateNote(note);
+            noteManager.update(note);
 
             hideKeyboard();
         });
@@ -133,7 +132,7 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         iconElement.setOnLongClickListener(view -> {
             iconElement.setImageResource(note.type.getIcon().getId());
             note.customIconPath = "";
-            noteManager.updateNote(note);
+            noteManager.update(note);
 
             return true;
         });
@@ -154,7 +153,7 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
                 iconElement.setImageBitmap(importedImg);
 
                 note.customIconPath = data.getData().toString();
-                noteManager.updateNote(note);
+                noteManager.update(note);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -170,9 +169,9 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
 
         String enteredTitle = titleElement.getText().toString().trim();
         note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
-        noteManager.updateNote(note);
+        noteManager.update(note);
 
-        noteManager.updateNote(note);
+        noteManager.update(note);
         dataManager.update(data);
 
         // Set these listener to null, avoid mem leak
