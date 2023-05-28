@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.ContactNoteData;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteContactDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.utils.IntentRequestCode;
@@ -37,7 +36,7 @@ import java.util.Calendar;
 
 public class NoteEditSummaryContactFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private ObjectBoxNoteContactDataManager dataManager;
 
     private View view;
@@ -111,7 +110,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
                 note.title = nameElement.getText().toString().trim().isEmpty()
                         ? note.type.getInitialTitle() : nameElement.getText().toString().trim();
 
-                noteManager.updateNote(note);
+                noteManager.update(note);
                 dataManager.update(data);
 
                 hideKeyboard();
@@ -201,7 +200,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         iconElement.setOnLongClickListener(view -> {
             iconElement.setImageResource(note.type.getIcon().getId());
             note.customIconPath = "";
-            noteManager.updateNote(note);
+            noteManager.update(note);
 
             return true;
         });
@@ -222,7 +221,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
                 iconElement.setImageBitmap(importedImg);
 
                 note.customIconPath = data.getData().toString();
-                noteManager.updateNote(note);
+                noteManager.update(note);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -242,7 +241,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
         note.title = nameElement.getText().toString().trim().isEmpty()
                 ? note.type.getInitialTitle() : nameElement.getText().toString().trim();
 
-        noteManager.updateNote(note);
+        noteManager.update(note);
         dataManager.update(data);
 
         // Set these listener to null, avoid mem leak

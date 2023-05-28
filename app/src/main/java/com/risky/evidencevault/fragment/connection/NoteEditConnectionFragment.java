@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.adapter.ConnectionDisplayArrayAdapter;
 
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class NoteEditConnectionFragment extends Fragment {
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
 
     private View view;
     private Note note;

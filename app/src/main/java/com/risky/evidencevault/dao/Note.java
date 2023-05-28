@@ -80,7 +80,7 @@ public class Note {
     public Set<Long> getLinkedNotes() {
         Set<Long> result = new LinkedHashSet<>();
         for (Long connId : connection) {
-            Connection conn = ObjectBoxConnectionManager.get().findConnectionById(connId);
+            Connection conn = ObjectBoxConnectionManager.get().findById(connId);
 
             result.add(conn.getLinkedNoteId(this.id));
         }
@@ -90,7 +90,7 @@ public class Note {
 
     public long getConnectionIdFromLinkedNote(long linkedNoteId) {
         for (Long connId : connection) {
-            if (ObjectBoxConnectionManager.get().findConnectionById(connId).getLinkedNoteId(id) == linkedNoteId) {
+            if (ObjectBoxConnectionManager.get().findById(connId).getLinkedNoteId(id) == linkedNoteId) {
                 return connId;
             }
         }
