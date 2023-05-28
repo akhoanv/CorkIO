@@ -12,9 +12,6 @@ import com.risky.evidencevault.MainActivity;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.BoardManager;
-import com.risky.evidencevault.data.ConnectionManager;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
@@ -33,9 +30,9 @@ import java.util.List;
  */
 public class BoardFragment extends RelativeLayout {
     // Database manager
-    private NoteManager noteManager;
-    private BoardManager boardManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxBoardManager boardManager;
+    private ObjectBoxConnectionManager connectionManager;
 
     // Stats variable
     private Context context;
@@ -61,17 +58,17 @@ public class BoardFragment extends RelativeLayout {
         setBackgroundColor(context.getColor(R.color.board_black));
         setOnTouchListener(touchListener);
 
-        if (boardManager.getAllBoards().size() == 0) {
-            board = boardManager.addBoard(new Board());
+        if (boardManager.getAll().size() == 0) {
+            board = boardManager.add(new Board());
 
             // Change UI display stat
             ((MainActivity) context).setCoordDisplay(0, 0);
             ((MainActivity) context).updateZoom(10);
         } else {
-            board = boardManager.getAllBoards().get(boardIndex);
+            board = boardManager.getAll().get(boardIndex);
             // Render all child
             for (Long id : board.notes) {
-                renderNote(noteManager.findNoteById(id), false);
+                renderNote(noteManager.findById(id), false);
             }
 
             onScreenPosition.setXY(board.panPositionX, board.panPositionY);
@@ -106,7 +103,7 @@ public class BoardFragment extends RelativeLayout {
                     continue;
                 }
 
-                Paint paint = connectionManager.findConnectionById(
+                Paint paint = connectionManager.findById(
                         n.getConnectionIdFromLinkedNote(linkedObject.getNote().id)).color.getPaint(context);
 
                 Rect startNoteBound = new Rect();
@@ -135,9 +132,9 @@ public class BoardFragment extends RelativeLayout {
         Note note = new Note(board.id, type,
                 -board.panPositionX + (DeviceProperties.getScreenWidth() / 3),
                 -board.panPositionY  + (DeviceProperties.getScreenHeight() / 3));
-        noteManager.addNote(note);
+        noteManager.add(note);
         board.notes.add(note.id);
-        boardManager.updateBoard(board);
+        boardManager.update(board);
         return note;
     }
 
@@ -201,7 +198,7 @@ public class BoardFragment extends RelativeLayout {
 
                     action = TouchAction.NONE;
 
-                    boardManager.updateBoard(board);
+                    boardManager.update(board);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (action == TouchAction.ZOOM) {

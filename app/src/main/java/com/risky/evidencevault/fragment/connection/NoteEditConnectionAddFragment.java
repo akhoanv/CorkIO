@@ -18,15 +18,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.ConnectionManager;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.struct.ElementColor;
 
 public class NoteEditConnectionAddFragment extends Fragment {
-    private NoteManager noteManager;
-    private ConnectionManager connectionManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxConnectionManager connectionManager;
 
     private View view;
     private Note sourceNote;
@@ -119,13 +117,13 @@ public class NoteEditConnectionAddFragment extends Fragment {
 
         confirmBtn.setOnClickListener(view1 -> {
             Connection newConn = new Connection(nameBox.getText().toString(), selectedColor, sourceNote.boardId, sourceNote.id, linkedNote.id);
-            newConn = connectionManager.addConnection(newConn);
+            newConn = connectionManager.add(newConn);
 
             sourceNote.connection.add(newConn.id);
-            noteManager.updateNote(sourceNote);
+            noteManager.update(sourceNote);
 
             linkedNote.connection.add(newConn.id);
-            noteManager.updateNote(linkedNote);
+            noteManager.update(linkedNote);
 
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(sourceNote));

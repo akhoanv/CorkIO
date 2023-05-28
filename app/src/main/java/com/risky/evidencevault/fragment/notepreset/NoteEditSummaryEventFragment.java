@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.EventNoteData;
 import com.risky.evidencevault.dao.Note;
-import com.risky.evidencevault.data.NoteManager;
 import com.risky.evidencevault.data.ObjectBoxNoteEventDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.utils.IntentRequestCode;
@@ -35,7 +34,7 @@ import java.util.Calendar;
 
 public class NoteEditSummaryEventFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
-    private NoteManager noteManager;
+    private ObjectBoxNoteManager noteManager;
     private ObjectBoxNoteEventDataManager dataManager;
 
     private View view;
@@ -129,7 +128,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         iconElement.setOnLongClickListener(view -> {
             iconElement.setImageResource(note.type.getIcon().getId());
             note.customIconPath = "";
-            noteManager.updateNote(note);
+            noteManager.update(note);
 
             return true;
         });
@@ -150,7 +149,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
                 iconElement.setImageBitmap(importedImg);
 
                 note.customIconPath = data.getData().toString();
-                noteManager.updateNote(note);
+                noteManager.update(note);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
