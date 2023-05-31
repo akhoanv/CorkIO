@@ -7,6 +7,7 @@ import com.risky.evidencevault.data.ObjectBoxNoteChecklistDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteContactDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteEventDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteGenericDataManager;
+import com.risky.evidencevault.data.ObjectBoxNoteImageDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteLocationDataManager;
 import com.risky.evidencevault.struct.NoteType;
 import com.risky.evidencevault.utils.NumberUtil;
@@ -73,6 +74,10 @@ public class Note {
             case CHECKLIST:
                 ChecklistNoteData checklistNoteData = ObjectBoxNoteChecklistDataManager.get().add(new ChecklistNoteData());
                 this.dataId = checklistNoteData.id;
+                break;
+            case IMAGE:
+                ImageNoteData imageNoteData = ObjectBoxNoteImageDataManager.get().add(new ImageNoteData());
+                this.dataId = imageNoteData.id;
                 break;
         }
     }

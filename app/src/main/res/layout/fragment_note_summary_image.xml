@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/note_edit_content_container"
+    android:layout_width="290dp"
+    android:layout_height="500dp"
+    android:orientation="vertical"
+    android:background="@drawable/note_edit_inner_background"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/note_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Add a title"
+            android:background="#00000000"
+            android:maxLines="1"
+            android:lines="1"
+            android:inputType="text"
+            android:textColor="@color/board_black"
+            android:textColorHint="@color/text_gray"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:imeOptions="actionDone"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:id="@+id/note_edit_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/paper_white"
+            android:text="Note #"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:background="@drawable/note_id_background"/>
+    </LinearLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/note_edit_photos_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/note_edit_photos_tab"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:tabBackground="@drawable/tab_selector"
+        app:tabGravity="center"
+        app:tabIndicatorHeight="0dp"
+        android:background="@color/paper_white"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1.0">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.75"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/note_edit_image_checkmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_paper_background"
+                android:padding="5dp"
+                android:layout_marginRight="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/note_edit_image_checkmark_img"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:src="@drawable/checkbox_empty_white"
+                    android:layout_marginRight="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Icon"
+                    android:layout_gravity="center"
+                    android:textColor="@color/paper_white"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/note_edit_image_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_paper_background"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:src="@drawable/trash_white"
+                    android:layout_marginRight="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:layout_gravity="center"
+                    android:textColor="@color/paper_white"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/note_edit_image_add_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/add_white"
+                android:padding="8dp"
+                android:background="@drawable/button_round_black"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -33,5 +33,7 @@
         android:layout_height="400dp"
         android:paddingStart="10dp"
         android:paddingEnd="20dp"
-        android:numColumns="1"/>
+        android:numColumns="1"
+        android:scrollbars="vertical"
+        android:theme="@style/ListScrollColor"/>
 </LinearLayout>
