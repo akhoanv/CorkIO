@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +85,13 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
                 InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
                 Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
                 iconElement.setImageBitmap(importedImg);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                e.getStackTrace();
+                iconElement.setImageResource(note.type.getIcon().getId());
+
+                // Not being able to get it means we gotta reset it
+                note.customIconPath = "";
+                noteManager.update(note);
             }
         }
 

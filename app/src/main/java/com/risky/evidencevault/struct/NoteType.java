@@ -5,6 +5,7 @@ import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryChecklistFragm
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryContactFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryEventFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryGenericFragment;
+import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryImageFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryLocationFragment;
 
 public enum NoteType {
@@ -12,7 +13,8 @@ public enum NoteType {
     CONTACT("Untitled Contact Note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class),
     LOCATION("Untitled Location Note", NoteIcon.LOCATION, NoteEditSummaryLocationFragment.class),
     EVENT("Untitled Event Note", NoteIcon.EVENT, NoteEditSummaryEventFragment.class),
-    CHECKLIST("Untitled Checklist Note", NoteIcon.CHECKLIST, NoteEditSummaryChecklistFragment.class);
+    CHECKLIST("Untitled Checklist Note", NoteIcon.CHECKLIST, NoteEditSummaryChecklistFragment.class),
+    IMAGE("Untitled Image Note", NoteIcon.IMAGE, NoteEditSummaryImageFragment.class);
 
     private String initialTitle;
     private NoteIcon initialIcon;

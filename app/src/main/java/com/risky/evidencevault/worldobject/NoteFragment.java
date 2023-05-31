@@ -92,8 +92,13 @@ public class NoteFragment extends RelativeLayout {
                 InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
                 Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
                 iconView.setImageBitmap(importedImg);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                e.getStackTrace();
+                iconView.setImageResource(note.type.getIcon().getId());
+
+                // Not being able to get it means we gotta reset it
+                note.customIconPath = "";
+                noteManager.update(note);
             }
         }
 
@@ -231,8 +236,9 @@ public class NoteFragment extends RelativeLayout {
                                     InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
                                     Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
                                     iconView.setImageBitmap(importedImg);
-                                } catch (FileNotFoundException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
+                                    iconView.setImageResource(note.type.getIcon().getId());
                                 }
                             }
 
