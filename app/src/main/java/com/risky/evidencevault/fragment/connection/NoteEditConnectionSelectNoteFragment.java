@@ -1,9 +1,13 @@
 package com.risky.evidencevault.fragment.connection;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import androidx.annotation.NonNull;
@@ -11,9 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.risky.evidencevault.R;
+import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.adapter.ConnectionSelectableArrayAdapter;
+import com.risky.evidencevault.utils.CloneList;
+import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +32,10 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
 
     private View view;
     private Note note;
+    private ConnectionSelectableArrayAdapter adapter;
 
     private GridView connectionGrid;
+    private EditText filterBox;
 
     public NoteEditConnectionSelectNoteFragment(Note note) {
         this.note = note;
@@ -40,6 +49,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
 
         // Find element
         connectionGrid = view.findViewById(R.id.note_edit_connection_grid);
+        filterBox = view.findViewById(R.id.note_edit_connection_filter);
 
         // Add connections to list
         List<Note> noteList = noteManager.getAll();
@@ -50,10 +60,43 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
                 availableList.add(n.id);
             }
         }
-        connectionGrid.setAdapter(new ConnectionSelectableArrayAdapter(getContext(),
-                R.layout.fragment_edit_note_connection_add_item, availableList,
-                note, getParentFragment().getChildFragmentManager()));
+        adapter = new ConnectionSelectableArrayAdapter(getContext(),
+                R.layout.fragment_edit_note_connection_add_item, new CloneList<>(availableList),
+                note, getParentFragment().getChildFragmentManager());
+        connectionGrid.setAdapter(adapter);
+
+        // Filter box listener
+        filterBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()) {
+                    adapter.update(new CloneList<>(availableList));
+                    return;
+                }
+
+                adapter.update(filter(new CloneList<>(availableList), editable.toString().trim()));
+            }
+        });
 
         return view;
+    }
+
+    private List<Long> filter(List<Long> availableList, String regex) {
+        String lowerRegex = regex.toLowerCase();
+        List<Long> result = new ArrayList<>();
+        for (Long noteId : availableList) {
+            if (NumberUtil.convertToDisplayId(noteId).toLowerCase().contains(lowerRegex) ||
+                    noteManager.findById(noteId).title.toLowerCase().contains(lowerRegex)) {
+                result.add(noteId);
+            }
+        }
+
+        return result;
     }
 }

@@ -25,13 +25,11 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
     private ObjectBoxConnectionManager connectionManager;
 
     // Adapter properties
-    private List<Long> connectionList;
     private Note note;
 
     public ConnectionDisplayArrayAdapter(@NonNull Context context, int resource, @NonNull List<Long> objects, Note note) {
         super(context, resource, objects);
 
-        this.connectionList = objects;
         this.noteManager = ObjectBoxNoteManager.get();
         this.connectionManager = ObjectBoxConnectionManager.get();
         this.note = note;
@@ -55,7 +53,7 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         ImageView unlinkButton = view.findViewById(R.id.note_edit_connection_unlink);
 
         // Find Connection
-        Connection conn = connectionManager.findById(connectionList.get(position));
+        Connection conn = connectionManager.findById((Long) getItem(position));
         Note linkedNote = noteManager.findById(conn.getLinkedNoteId(note.id));
 
         // Set appropriate data
@@ -70,7 +68,6 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
             linkedNote.connection.remove(conn.id);
 
             // UI update
-            connectionList.remove(conn.id);
             remove(conn.id);
 
             // Update database
@@ -79,5 +76,11 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         });
 
         return view;
+    }
+
+    public void update(List<Long> updatedList) {
+        clear();
+        addAll(updatedList);
+        notifyDataSetChanged();
     }
 }
