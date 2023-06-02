@@ -28,7 +28,6 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
     private ObjectBoxConnectionManager connectionManager;
 
     // Adapter properties
-    private List<Long> noteList;
     private Note note;
     private FragmentManager fragmentManager;
 
@@ -39,7 +38,6 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         this.noteManager = ObjectBoxNoteManager.get();
         this.connectionManager = ObjectBoxConnectionManager.get();
 
-        this.noteList = objects;
         this.note = note;
         this.fragmentManager = fragmentManager;
     }
@@ -61,13 +59,13 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         TextView idView = view.findViewById(R.id.note_edit_connection_id);
 
         // Set appropriate data
-        iconView.setImageResource(noteManager.findById(noteList.get(position)).type.getIcon().getId());
-        titleView.setText(noteManager.findById(noteList.get(position)).title);
-        idView.setText("#" + NumberUtil.convertToDisplayId(noteList.get(position)));
+        iconView.setImageResource(noteManager.findById((Long) getItem(position)).type.getIcon().getId());
+        titleView.setText(noteManager.findById((Long) getItem(position)).title);
+        idView.setText("#" + NumberUtil.convertToDisplayId((Long) getItem(position)));
 
         // Set onClickAction
         view.setOnClickListener(view1 -> {
-            Note linkedNote = noteManager.findById(noteList.get(position));
+            Note linkedNote = noteManager.findById((Long) getItem(position));
 
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionAddFragment(note, linkedNote));
@@ -75,5 +73,11 @@ public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
         });
 
         return view;
+    }
+
+    public void update(List<Long> updatedList) {
+        clear();
+        addAll(updatedList);
+        notifyDataSetChanged();
     }
 }
