@@ -6,105 +6,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/board_black"
-    android:orientation="horizontal"
     tools:context=".MainActivity"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:gravity="bottom">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horz_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.95" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vert_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.87" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vert_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <ImageButton
-        android:id="@+id/addButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/add_button_background"
-        android:elevation="40dp"
-        android:orientation="horizontal"
-        android:weightSum="1.0"
-        android:src="@drawable/add_black"
-        app:layout_constraintEnd_toEndOf="@id/vert_1"
-        app:layout_constraintStart_toStartOf="@id/vert_1"
-        app:layout_constraintBottom_toBottomOf="@id/horz_2"
-        app:layout_constraintTop_toTopOf="@id/horz_2"/>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/boardInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vert_4"
-        app:layout_constraintBottom_toBottomOf="@id/horz_2"
-        app:layout_constraintTop_toTopOf="@id/horz_2"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/main_panel_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
-        <LinearLayout
-            android:id="@+id/boardInfo"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/horz_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="4dp"
-            android:gravity="bottom">
+            app:layout_constraintGuide_percent="0.50" />
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/position_white"/>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vert_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.87" />
 
-            <TextView
-                android:id="@+id/xy_position"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/vert_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <ImageButton
+            android:id="@+id/addButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/add_button_background"
+            android:elevation="40dp"
+            android:orientation="horizontal"
+            android:weightSum="1.0"
+            android:src="@drawable/add_white"
+            app:layout_constraintEnd_toEndOf="@id/vert_1"
+            app:layout_constraintStart_toStartOf="@id/vert_1"
+            app:layout_constraintBottom_toBottomOf="@id/horz_2"
+            app:layout_constraintTop_toTopOf="@id/horz_2"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toRightOf="@id/vert_4"
+            app:layout_constraintBottom_toBottomOf="@id/horz_2"
+            app:layout_constraintTop_toTopOf="@id/horz_2"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="100:100"
-                android:textColor="@color/paper_white"
-                android:textStyle="bold"
-                android:layout_marginLeft="3dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/zoom_background"
-            android:paddingTop="1dp"
-            android:paddingBottom="1dp">
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp"
+                android:gravity="bottom">
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/zoom_out_black"
+                    android:src="@drawable/position_black"/>
+
+                <TextView
+                    android:id="@+id/xy_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100:100"
+                    android:textColor="@color/board_black"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/zoom_background"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/zoom_out_white"
                     android:layout_marginLeft="5dp"/>
 
                 <SeekBar
                     android:id="@+id/zoom_level"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:progressBackgroundTint="@color/board_black"
-                    android:progressTint="@color/board_black"
-                    android:thumbTint="@color/board_black" />
+                    android:progressBackgroundTint="@color/paper_white"
+                    android:progressTint="@color/paper_white"
+                    android:thumbTint="@color/paper_white"/>
 
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/zoom_in_black"
+                    android:src="@drawable/zoom_in_white"
                     android:layout_marginRight="5dp"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

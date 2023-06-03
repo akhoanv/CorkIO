@@ -53,14 +53,6 @@ public class NoteFragment extends RelativeLayout {
 
     // Reactive variable
     private Point2D mousePosition = new Point2D(0 ,0);
-    private Handler holdHandler = new Handler();
-    private Runnable holdRunnable = new Runnable() {
-        @Override
-        public void run() {
-            action = TouchAction.DRAG;
-            findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background_hold);
-        }
-    };
 
     public NoteFragment(Context context, final Note note, final boolean isNew) {
         super(context);
@@ -76,8 +68,6 @@ public class NoteFragment extends RelativeLayout {
 
         iconView = findViewById(R.id.small_view_icon);
         titleView = findViewById(R.id.small_view_title);
-
-        findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
 
         this.note = note;
 
@@ -179,7 +169,7 @@ public class NoteFragment extends RelativeLayout {
         @Override
         public boolean onLongClick(View view) {
             action = TouchAction.DRAG;
-            findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background_hold);
+            togglePinVisibility(false);
 
             return true;
         }
@@ -254,8 +244,7 @@ public class NoteFragment extends RelativeLayout {
 
                     boolean isUpdated = noteManager.update(note);
                     if (isUpdated) {
-                        holdHandler.removeCallbacks(holdRunnable);
-                        findViewById(R.id.note_content).setBackgroundResource(R.drawable.note_background);
+                        togglePinVisibility(true);
                     }
 
                     break;
@@ -264,12 +253,21 @@ public class NoteFragment extends RelativeLayout {
                         move(new Point2D(newX - mousePosition.getX(), newY - mousePosition.getY()));
 
                         ((ViewGroup) getParent()).invalidate();
-                    } else {
-                        holdHandler.removeCallbacks(holdRunnable);
                     }
+
                     break;
             }
             return true;
         }
     };
+
+    private void togglePinVisibility(boolean isVisible) {
+        if (isVisible) {
+            findViewById(R.id.note_pin_shadow).setVisibility(VISIBLE);
+            findViewById(R.id.note_pin).setVisibility(VISIBLE);
+        } else {
+            findViewById(R.id.note_pin_shadow).setVisibility(GONE);
+            findViewById(R.id.note_pin).setVisibility(GONE);
+        }
+    }
 }
