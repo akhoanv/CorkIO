@@ -67,7 +67,8 @@ public class MainActivity extends FragmentActivity {
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
         // Set properties
-        LinearLayout boardInfo = findViewById(R.id.boardInfo);
+        ConstraintLayout boardInfo = findViewById(R.id.boardInfo);
+        boardInfo.setOnTouchListener((view, motionEvent) -> {return true;});
         boardInfo.bringToFront();
 
         zoomBar.setMax(15);
@@ -75,7 +76,6 @@ public class MainActivity extends FragmentActivity {
         zoomBar.setOnTouchListener((view, motionEvent) -> true); // Temporary disable drag
 
         addButton.setOnClickListener(this::addButtonOnClick);
-        addButton.bringToFront();
     }
 
     @Override

@@ -14,4 +14,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="text_gray">#808080</color>
     <color name="board_black">#2A2A2A</color>
+    <color name="shadow">#aa000000</color>
 </resources>

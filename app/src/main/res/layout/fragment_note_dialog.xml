@@ -59,6 +59,14 @@
     </LinearLayout>
 
     <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/pin_shadow"
+        android:rotation="53"
+        android:layout_marginStart="162dp"
+        android:layout_marginTop="2dp"/>
+
+    <ImageView
         android:id="@+id/note_edit_unpin"
         android:layout_width="30dp"
         android:layout_height="30dp"
