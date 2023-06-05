@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/note_edit_content_container"
+    android:layout_width="300dp"
+    android:layout_height="500dp"
+    android:orientation="vertical"
+    android:background="@drawable/note_edit_inner_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="20dp"
+        android:paddingBottom="10dp">
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="2dp"
+            android:background="@color/board_black"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/note_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Tags"
+            android:gravity="bottom"
+            android:textSize="30sp"
+            android:textColor="@color/board_black"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/board_black"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="left"
+        android:layout_marginStart="17dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/note_edit_tag_item_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:alignItems="stretch"
+                app:alignContent="stretch"/>
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

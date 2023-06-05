@@ -1,11 +1,13 @@
 package com.risky.evidencevault.fragment.connection;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -71,6 +73,12 @@ public class NoteEditConnectionFragment extends Fragment {
         });
 
         // Filter box listener
+        filterBox.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
+        });
+
         filterBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -98,6 +106,7 @@ public class NoteEditConnectionFragment extends Fragment {
     public void onDestroy() {
         // Dereference onClickListener to avoid mem leak
         addButton.setOnClickListener(null);
+        filterBox.setOnFocusChangeListener(null);
 
         super.onDestroy();
     }
@@ -117,5 +126,10 @@ public class NoteEditConnectionFragment extends Fragment {
         }
 
         return result;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

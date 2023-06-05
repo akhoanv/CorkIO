@@ -41,6 +41,9 @@ public class Note {
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public Set<Long> connection;
 
+    @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    public Set<Long> tag;
+
     public Note(){}
 
     public Note(long boardId, NoteType type, float positionX, float positionY) {

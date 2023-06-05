@@ -112,10 +112,10 @@ public class BoardFragment extends RelativeLayout {
                 Rect endNoteBound = new Rect();
                 linkedObject.getHitRect(endNoteBound);
 
-                float startX = startNoteBound.left + (210 * scale);
+                float startX = startNoteBound.left + (170 * scale);
                 float startY = startNoteBound.top + (40 * scale);
 
-                float endX = endNoteBound.left + (210 * scale);
+                float endX = endNoteBound.left + (170 * scale);
                 float endY = endNoteBound.top + (40 * scale);
 
                 canvas.drawLine(startX, startY, endX, endY, paint);
