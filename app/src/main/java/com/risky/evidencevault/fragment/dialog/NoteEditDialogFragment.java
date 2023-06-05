@@ -20,6 +20,7 @@ import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.connection.NoteEditConnectionFragment;
+import com.risky.evidencevault.fragment.tag.NoteEditTagFragment;
 import com.risky.evidencevault.utils.NoteEditCallback;
 
 /**
@@ -40,6 +41,7 @@ public class NoteEditDialogFragment extends DialogFragment {
     private ImageView unpinBtn;
     private LinearLayout summaryTabBtn;
     private LinearLayout connectionTabBtn;
+    private LinearLayout tagTabBtn;
 
     public NoteEditDialogFragment(Note note) {
         this.note = note;
@@ -56,6 +58,7 @@ public class NoteEditDialogFragment extends DialogFragment {
         unpinBtn = view.findViewById(R.id.note_edit_unpin);
         summaryTabBtn = view.findViewById(R.id.note_edit_summary_btn);
         connectionTabBtn = view.findViewById(R.id.note_edit_connection_btn);
+        tagTabBtn = view.findViewById(R.id.note_edit_tag_btn);
 
         // Unpin button
         unpinBtn.setOnClickListener(view -> {
@@ -77,6 +80,12 @@ public class NoteEditDialogFragment extends DialogFragment {
         connectionTabBtn.setOnClickListener(view -> {
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditConnectionFragment(note));
+            ft.commit();
+        });
+
+        tagTabBtn.setOnClickListener(view -> {
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.note_edit_content_container, new NoteEditTagFragment(note));
             ft.commit();
         });
 

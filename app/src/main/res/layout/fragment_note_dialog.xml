@@ -19,8 +19,8 @@
             <LinearLayout
                 android:id="@+id/note_edit_summary_btn"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/note_edit_tab_background_cyan"
+                android:layout_height="130dp"
+                android:background="@drawable/note_edit_tab_background_blue"
                 android:gravity="center">
 
                 <TextView
@@ -36,7 +36,7 @@
             <LinearLayout
                 android:id="@+id/note_edit_connection_btn"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="130dp"
                 android:background="@drawable/note_edit_tab_background_yellow"
                 android:gravity="center">
 
@@ -44,6 +44,23 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="Connections"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:rotation="270"
+                    android:textColor="@color/board_black"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/note_edit_tag_btn"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:background="@drawable/note_edit_tab_background_orange"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="Tags"
                     android:textStyle="bold"
                     android:textSize="17sp"
                     android:rotation="270"
