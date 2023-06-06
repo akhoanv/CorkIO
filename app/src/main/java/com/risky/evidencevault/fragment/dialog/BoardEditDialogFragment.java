@@ -8,25 +8,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.risky.evidencevault.MainActivity;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
+import com.risky.evidencevault.dao.Connection;
+import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
+import com.risky.evidencevault.data.ObjectBoxConnectionManager;
+import com.risky.evidencevault.data.ObjectBoxNoteManager;
+import com.risky.evidencevault.data.ObjectBoxTagManager;
 import com.risky.evidencevault.fragment.board.BoardEditSummaryFragment;
 
 public class BoardEditDialogFragment extends DialogFragment {
-    private ObjectBoxBoardManager boardManager;
 
     private View view;
     private Board board;
-
-    // Elements
-    private ImageView unpinBtn;
 
     public BoardEditDialogFragment(Board board) {
         this.board = board;
@@ -35,14 +38,8 @@ public class BoardEditDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        boardManager = ObjectBoxBoardManager.get();
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         view = inflater.inflate(R.layout.fragment_board_dialog, container, false);
-
-        // Find elements
-        unpinBtn = view.findViewById(R.id.note_edit_unpin);
-
-        // TODO: ADD DELETE FUNCTION TO BOARD
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.replace(R.id.board_edit_content_container, new BoardEditSummaryFragment(board));
@@ -66,9 +63,6 @@ public class BoardEditDialogFragment extends DialogFragment {
 
     @Override
     public void onDestroy() {
-        // Set these listener to null, avoid mem leak
-        //unpinBtn.setOnClickListener(null);
-
         View decorView = ((Activity) getContext()).getWindow().getDecorView();
         // Hide both the navigation bar and the status bar.
         // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as

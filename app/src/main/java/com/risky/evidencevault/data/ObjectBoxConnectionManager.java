@@ -17,6 +17,10 @@ public class ObjectBoxConnectionManager implements BaseObjectManager<Connection>
         return manager;
     }
 
+    public boolean contains(long id) {
+        return ObjectBox.get().boxFor(Connection.class).contains(id);
+    }
+
     @Override
     public Connection add(Connection connection) {
         long id = ObjectBox.get().boxFor(Connection.class).put(connection);

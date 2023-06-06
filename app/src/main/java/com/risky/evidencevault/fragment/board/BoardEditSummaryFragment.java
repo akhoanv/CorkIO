@@ -12,23 +12,32 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.evidencevault.MainActivity;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
+import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
+import com.risky.evidencevault.data.ObjectBoxConnectionManager;
+import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.data.ObjectBoxSettingManager;
+import com.risky.evidencevault.data.ObjectBoxTagManager;
 import com.risky.evidencevault.struct.ElementColor;
 import com.risky.evidencevault.utils.NumberUtil;
 
 public class BoardEditSummaryFragment extends Fragment {
     private ObjectBoxBoardManager boardManager;
+    private ObjectBoxNoteManager noteManager;
+    private ObjectBoxConnectionManager connectionManager;
+    private ObjectBoxTagManager tagManager;
     private ObjectBoxSettingManager settingManager;
 
     private View view;
     private Board board;
+    private boolean doDelete = false;
 
     private ImageView colorElement;
     private TextView titleElement;
@@ -36,6 +45,7 @@ public class BoardEditSummaryFragment extends Fragment {
     private LinearLayout changeBtn;
     private TextView noteNumElement;
     private TextView tagNumElement;
+    private LinearLayout deleteBtn;
 
     public BoardEditSummaryFragment(Board board) {
         this.board = board;
@@ -45,6 +55,9 @@ public class BoardEditSummaryFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         boardManager = ObjectBoxBoardManager.get();
+        noteManager = ObjectBoxNoteManager.get();
+        connectionManager = ObjectBoxConnectionManager.get();
+        tagManager = ObjectBoxTagManager.get();
         settingManager = ObjectBoxSettingManager.get();
         view = inflater.inflate(R.layout.fragment_board_summary, container, false);
 
@@ -62,6 +75,9 @@ public class BoardEditSummaryFragment extends Fragment {
         idElement.setText("Board #" + NumberUtil.convertToDisplayId(board.id));
         noteNumElement.setText(board.notes.size() + "");
         tagNumElement.setText(board.tags.size() + "");
+
+        // Find elements
+        deleteBtn = view.findViewById(R.id.board_edit_delete_btn);
 
         // Assign listener
         colorElement.setOnClickListener(view1 -> {
@@ -87,6 +103,30 @@ public class BoardEditSummaryFragment extends Fragment {
             ft.commit();
         });
 
+        deleteBtn.setOnClickListener(view1 -> {
+            for (long noteId : board.notes) {
+                Note currentNote = noteManager.findById(noteId);
+                for (long connId : currentNote.connection) {
+                    if (connectionManager.contains(connId)) {
+                        connectionManager.remove(connId);
+                    }
+                }
+
+                noteManager.remove(currentNote.id);
+            }
+
+            for (long tagId : board.tags) {
+                tagManager.remove(tagId);
+            }
+
+            boardManager.remove(board.id);
+
+            ((MainActivity) getContext()).initializeBoard(
+                    boardManager.getAll().size() == 0 ? -1 : boardManager.getAll().get(0).id);
+            doDelete = true;
+            ((DialogFragment) getParentFragment()).dismiss();
+        });
+
         return view;
     }
 
@@ -96,13 +136,16 @@ public class BoardEditSummaryFragment extends Fragment {
         titleElement.setOnFocusChangeListener(null);
         changeBtn.setOnClickListener(null);
         colorElement.setOnClickListener(null);
+        deleteBtn.setOnClickListener(null);
 
-        String enteredTitle = titleElement.getText().toString().trim();
-        board.name = enteredTitle.isEmpty() ? "Untitled board" : enteredTitle;
-        boardManager.update(board);
+        if (!doDelete) {
+            String enteredTitle = titleElement.getText().toString().trim();
+            board.name = enteredTitle.isEmpty() ? "Untitled board" : enteredTitle;
+            boardManager.update(board);
 
-        ((MainActivity) getContext()).initializeBoard(board.id);
-        settingManager.setLastVisitedBoard(board.id);
+            ((MainActivity) getContext()).initializeBoard(board.id);
+            settingManager.setLastVisitedBoard(board.id);
+        }
 
         super.onDestroy();
     }
