@@ -133,6 +133,10 @@ public class BoardFragment extends RelativeLayout {
         }
     }
 
+    public void fetchBoard() {
+        board = boardManager.findById(board.id);
+    }
+
     public Board getBoard() {
         return board;
     }

@@ -66,6 +66,22 @@
                     android:rotation="270"
                     android:textColor="@color/board_black"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/note_edit_delete_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/note_edit_tab_background_black"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/trash_white"
+                    android:rotation="270"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/board_black"/>
+            </LinearLayout>
         </LinearLayout>
 
         <RelativeLayout

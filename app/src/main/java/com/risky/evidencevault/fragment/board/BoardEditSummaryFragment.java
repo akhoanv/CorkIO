@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,7 +33,9 @@ public class BoardEditSummaryFragment extends Fragment {
     private ImageView colorElement;
     private TextView titleElement;
     private TextView idElement;
-    private TextView changeBtn;
+    private LinearLayout changeBtn;
+    private TextView noteNumElement;
+    private TextView tagNumElement;
 
     public BoardEditSummaryFragment(Board board) {
         this.board = board;
@@ -50,11 +53,15 @@ public class BoardEditSummaryFragment extends Fragment {
         titleElement = view.findViewById(R.id.board_edit_title);
         idElement = view.findViewById(R.id.board_edit_id);
         changeBtn = view.findViewById(R.id.board_edit_change_btn);
+        noteNumElement = view.findViewById(R.id.board_edit_note_num);
+        tagNumElement = view.findViewById(R.id.board_edit_tag_num);
 
         // Assign data
         colorElement.setImageResource(board.color.getRoundId());
         titleElement.setText(board.name);
         idElement.setText("Board #" + NumberUtil.convertToDisplayId(board.id));
+        noteNumElement.setText(board.notes.size() + "");
+        tagNumElement.setText(board.tags.size() + "");
 
         // Assign listener
         colorElement.setOnClickListener(view1 -> {

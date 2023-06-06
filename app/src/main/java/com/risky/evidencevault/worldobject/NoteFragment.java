@@ -147,6 +147,14 @@ public class NoteFragment extends RelativeLayout {
             connectionManager.remove(connId);
         }
 
+        // Remove from board object
+        Board currentBoard = boardManager.findById(note.boardId);
+        currentBoard.notes.remove(note.id);
+        boardManager.update(currentBoard);
+
+        ((BoardFragment) getParent()).fetchBoard();
+
+        // Remove note object
         boolean isRemoved = noteManager.remove(note.id);
         if (isRemoved) {
             // Remove UI
@@ -232,6 +240,7 @@ public class NoteFragment extends RelativeLayout {
                                 }
                             }
 
+                            ((BoardFragment) getParent()).fetchBoard();
                             ((ViewGroup) getParent()).invalidate();
                         });
                         ft.addToBackStack(null);

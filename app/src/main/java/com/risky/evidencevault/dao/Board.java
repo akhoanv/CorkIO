@@ -26,6 +26,9 @@ public class Board {
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
     public Set<Long> notes;
 
+    @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    public Set<Long> tags;
+
     public Board() {
         panPositionX = 0;
         panPositionY = 0;

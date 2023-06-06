@@ -342,9 +342,28 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "13:6976232402205016460",
+      "lastPropertyId": "2:2954934889073059315",
+      "name": "Setting",
+      "properties": [
+        {
+          "id": "1:8644507141363334810",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2954934889073059315",
+          "name": "lastVisitedBoard",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "12:6369633885387826856",
+  "lastEntityId": "13:6976232402205016460",
   "lastIndexId": "1:2686356966555361313",
   "lastRelationId": "1:1073504741574900322",
   "lastSequenceId": "0:0",

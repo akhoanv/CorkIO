@@ -17,8 +17,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.flexbox.FlexboxLayout;
 import com.risky.evidencevault.R;
+import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.dao.Tag;
+import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.data.ObjectBoxTagManager;
 
@@ -30,6 +32,7 @@ public class NoteEditTagFragment extends Fragment {
     // Database manager
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxTagManager tagManager;
+    private ObjectBoxBoardManager boardManager;
 
     private View view;
     private Note note;
@@ -45,6 +48,7 @@ public class NoteEditTagFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         noteManager = ObjectBoxNoteManager.get();
         tagManager = ObjectBoxTagManager.get();
+        boardManager = ObjectBoxBoardManager.get();
         view = inflater.inflate(R.layout.fragment_note_tag, container, false);
 
         // Find elements
@@ -80,8 +84,12 @@ public class NoteEditTagFragment extends Fragment {
                 long currentTagId = list.get(position);
 
                 Tag currentTag = tagManager.findById(currentTagId);
-                if (currentTag.relatedNotes.size() == 0) {
+                if (currentTag.relatedNotes.size() == 1) {
                     tagManager.remove(currentTagId);
+
+                    Board board = boardManager.findById(currentTag.boardId);
+                    board.tags.remove(currentTagId);
+                    boardManager.update(board);
                 } else {
                     currentTag.relatedNotes.remove(note.id);
                     tagManager.update(currentTag);
