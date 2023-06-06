@@ -1,7 +1,5 @@
 package com.risky.evidencevault.data;
 
-import android.util.Log;
-
 import com.risky.evidencevault.dao.Tag;
 import com.risky.evidencevault.objectbox.ObjectBox;
 import com.risky.evidencevault.struct.ElementColor;

@@ -15,6 +15,7 @@ import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
+import com.risky.evidencevault.data.ObjectBoxSettingManager;
 import com.risky.evidencevault.struct.NoteType;
 import com.risky.evidencevault.struct.Point2D;
 import com.risky.evidencevault.struct.TouchAction;
@@ -33,6 +34,7 @@ public class BoardFragment extends RelativeLayout {
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxBoardManager boardManager;
     private ObjectBoxConnectionManager connectionManager;
+    private ObjectBoxSettingManager settingManager;
 
     // Stats variable
     private Context context;
@@ -45,7 +47,7 @@ public class BoardFragment extends RelativeLayout {
     private Point2D mousePosition = new Point2D(0, 0);
     private float originalDist = 0f;
 
-    public BoardFragment(Context context, int boardIndex) {
+    public BoardFragment(Context context, long boardId) {
         super(context);
         this.context = context;
 
@@ -54,6 +56,7 @@ public class BoardFragment extends RelativeLayout {
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
         connectionManager = ObjectBoxConnectionManager.get();
+        settingManager = ObjectBoxSettingManager.get();
 
         setBackgroundColor(context.getColor(R.color.board_black));
         setOnTouchListener(touchListener);
@@ -64,8 +67,11 @@ public class BoardFragment extends RelativeLayout {
             // Change UI display stat
             ((MainActivity) context).setCoordDisplay(0, 0);
             ((MainActivity) context).updateZoom(10);
+
+            // Change setting
+            settingManager.setLastVisitedBoard(board.id);
         } else {
-            board = boardManager.getAll().get(boardIndex);
+            board = boardManager.findById(boardId);
             // Render all child
             for (Long id : board.notes) {
                 renderNote(noteManager.findById(id), false);
@@ -81,6 +87,8 @@ public class BoardFragment extends RelativeLayout {
             ((MainActivity) context).setCoordDisplay((int) -onScreenPosition.getX(), (int) onScreenPosition.getY());
             ((MainActivity) context).updateZoom((int) (scale * 10));
         }
+
+        ((MainActivity) context).setBoardInfo(board);
     }
 
     @Override
@@ -123,6 +131,10 @@ public class BoardFragment extends RelativeLayout {
 
             drawnNote.add(n.id);
         }
+    }
+
+    public Board getBoard() {
+        return board;
     }
 
     /**
