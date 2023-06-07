@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -71,6 +72,13 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
             }
         });
 
+        filterBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                filterBox.clearFocus();
+            }
+            return false;
+        });
+
         filterBox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -96,6 +104,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
     public void onDestroy() {
         // Dereference onClickListener to avoid mem leak
         filterBox.setOnFocusChangeListener(null);
+        filterBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }

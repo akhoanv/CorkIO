@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -118,6 +119,13 @@ public class NoteEditSummaryImageFragment extends Fragment implements INoteEditS
             }
         });
 
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
         photoPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -188,6 +196,7 @@ public class NoteEditSummaryImageFragment extends Fragment implements INoteEditS
 
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
         addBtn.setOnClickListener(null);
 
         super.onDestroy();

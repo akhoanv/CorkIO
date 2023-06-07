@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -111,6 +112,13 @@ public class BoardEditSummaryFragment extends Fragment {
             }
         });
 
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
         changeBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.board_edit_content_container, new BoardEditAllBoardFragment());
@@ -154,6 +162,7 @@ public class BoardEditSummaryFragment extends Fragment {
     public void onDestroy() {
         // De-reference listeners to avoid mem leak
         titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
         changeBtn.setOnClickListener(null);
         colorElement.setOnClickListener(null);
         deleteBtn.setOnClickListener(null);

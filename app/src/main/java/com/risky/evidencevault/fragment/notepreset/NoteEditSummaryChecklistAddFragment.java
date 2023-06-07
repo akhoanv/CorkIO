@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -117,6 +118,13 @@ public class NoteEditSummaryChecklistAddFragment extends Fragment {
             }
         });
 
+        nameBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                nameBox.clearFocus();
+            }
+            return false;
+        });
+
         confirmBtn.setOnClickListener(view1 -> {
             if (nameBox.getText() == null || nameBox.getText().toString().trim().isEmpty()) {
                 return;
@@ -145,6 +153,8 @@ public class NoteEditSummaryChecklistAddFragment extends Fragment {
         redBox.setOnClickListener(null);
         yellowBox.setOnClickListener(null);
         confirmBtn.setOnClickListener(null);
+        nameBox.setOnFocusChangeListener(null);
+        nameBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }

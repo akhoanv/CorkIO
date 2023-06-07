@@ -1,14 +1,19 @@
 package com.risky.evidencevault.fragment.board;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,6 +84,19 @@ public class BoardEditAllBoardFragment extends Fragment {
             }
         });
 
+        filterBox.setOnFocusChangeListener((view1, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
+        });
+
+        filterBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                filterBox.clearFocus();
+            }
+            return false;
+        });
+
         addBtn.setOnClickListener(view1 -> {
             boardManager.add(new Board());
 
@@ -92,6 +110,8 @@ public class BoardEditAllBoardFragment extends Fragment {
     public void onDestroy() {
         // De-reference listeners to avoid mem leak
         addBtn.setOnClickListener(null);
+        filterBox.setOnFocusChangeListener(null);
+        filterBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }
@@ -108,5 +128,10 @@ public class BoardEditAllBoardFragment extends Fragment {
         }
 
         return result;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

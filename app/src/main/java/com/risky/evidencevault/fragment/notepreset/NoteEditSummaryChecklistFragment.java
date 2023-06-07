@@ -1,5 +1,6 @@
 package com.risky.evidencevault.fragment.notepreset;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,9 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,6 +54,8 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
     private LinearLayout addBtn;
     private LinearLayout sortBtn;
     private TextView sortBtnText;
+    private ProgressBar progressBar;
+    private TextView progressText;
 
     public NoteEditSummaryChecklistFragment(Note note) {
         this.note = note;
@@ -70,6 +76,8 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
         addBtn = view.findViewById(R.id.note_edit_new_checklist_item_btn);
         sortBtn = view.findViewById(R.id.note_edit_sort_checklist_btn);
         sortBtnText = view.findViewById(R.id.note_edit_sort_checklist_text);
+        progressBar = view.findViewById(R.id.note_edit_progress_bar);
+        progressText = view.findViewById(R.id.note_edit_progress_text);
 
         ChecklistNoteData data = dataManager.findById(note.dataId);
 
@@ -77,6 +85,8 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
         idElement.setText("Note #" + note.getDisplayId());
         titleElement.setText(note.title);
         sortBtnText.setText(getSortLabel(data.order));
+
+        updateProgressBar(data);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
@@ -95,7 +105,7 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
             }
         }
 
-        // Set onChangeListener to update the database
+        // Set listeners
         addBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.note_edit_content_container, new NoteEditSummaryChecklistAddFragment(note));
@@ -122,6 +132,19 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
             noteManager.update(note);
 
             return true;
+        });
+
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
+        titleElement.setOnFocusChangeListener((view1, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
         });
 
         // Render data
@@ -157,6 +180,8 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
         sortBtn.setOnClickListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);
+        titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
 
         super.onDestroy();
     }
@@ -191,15 +216,17 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
 
                 if (updatedData.list.get(index).getStatus()) {
                     listItem.setPaintFlags(listItem.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    updatedData.completed--;
                 } else {
                     listItem.setPaintFlags(listItem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    updatedData.completed++;
                 }
-
 
                 // Update item && re-sort
                 updatedData.list.get(index).toggleStatus();
                 renderBySorting(updatedData, true);
                 dataManager.update(updatedData);
+                updateProgressBar(updatedData);
             });
 
             listItem.setOnLongClickListener(view -> {
@@ -211,8 +238,8 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
                 renderBySorting(updatedData, true);
 
                 dataManager.update(updatedData);
-
                 listElement.removeView(listItem);
+                updateProgressBar(updatedData);
 
                 return true;
             });
@@ -250,5 +277,27 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
         String result = order.name().replace("_", " ").toLowerCase();
         result = result.substring(0, 1).toUpperCase() + result.substring(1);
         return "Sort: " + result;
+    }
+
+    private void updateProgressBar(ChecklistNoteData data) {
+        int maxProg = data.list.size();
+        int currentProg = data.completed;
+
+        progressBar.setMin(0);
+
+        if (maxProg == 0) {
+            progressBar.setMax(1);
+            progressBar.setProgress(1);
+            progressText.setText("100% Completed");
+        } else {
+            progressBar.setMax(maxProg);
+            progressBar.setProgress(currentProg);
+            progressText.setText(Math.round((currentProg * 100) / maxProg) + "% Completed");
+        }
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

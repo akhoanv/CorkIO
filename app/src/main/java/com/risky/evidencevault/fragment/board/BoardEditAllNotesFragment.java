@@ -1,11 +1,14 @@
 package com.risky.evidencevault.fragment.board;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -74,10 +77,7 @@ public class BoardEditAllNotesFragment extends Fragment {
         progBar.setProgress(numberOfNote);
 
         if (maxNumberOfNote == 0) {
-            percentageElement.setText("No data found");
-            progBar.setVisibility(View.INVISIBLE);
-            filterBar.setVisibility(View.INVISIBLE);
-            percentageSubtextElement.setVisibility(View.INVISIBLE);
+            percentageElement.setText("0%");
         } else {
             percentageElement.setText(Math.round((numberOfNote * 100) / maxNumberOfNote) + "%");
         }
@@ -107,6 +107,19 @@ public class BoardEditAllNotesFragment extends Fragment {
             }
         });
 
+        filterBox.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
+        });
+
+        filterBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                filterBox.clearFocus();
+            }
+            return false;
+        });
+
         backBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.board_edit_content_container, new BoardEditSummaryFragment(board));
@@ -120,6 +133,8 @@ public class BoardEditAllNotesFragment extends Fragment {
     public void onDestroy() {
         // De-reference listener to avoid mem leak
         backBtn.setOnClickListener(null);
+        filterBox.setOnFocusChangeListener(null);
+        filterBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }
@@ -137,5 +152,10 @@ public class BoardEditAllNotesFragment extends Fragment {
         }
 
         return result;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
