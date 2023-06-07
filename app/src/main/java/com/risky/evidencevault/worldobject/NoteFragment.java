@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,16 +21,17 @@ import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
+import com.risky.evidencevault.dao.Tag;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
+import com.risky.evidencevault.data.ObjectBoxTagManager;
 import com.risky.evidencevault.fragment.dialog.NoteEditDialogFragment;
 import com.risky.evidencevault.struct.Point2D;
 import com.risky.evidencevault.struct.TouchAction;
 import com.risky.evidencevault.utils.DeviceProperties;
 
 import java.io.BufferedInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 /**
@@ -44,6 +44,7 @@ public class NoteFragment extends RelativeLayout {
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxBoardManager boardManager;
     private ObjectBoxConnectionManager connectionManager;
+    private ObjectBoxTagManager tagManager;
 
     // Stats variable
     private TouchAction action;
@@ -60,6 +61,7 @@ public class NoteFragment extends RelativeLayout {
         noteManager = ObjectBoxNoteManager.get();
         boardManager = ObjectBoxBoardManager.get();
         connectionManager = ObjectBoxConnectionManager.get();
+        tagManager = ObjectBoxTagManager.get();
         setOnTouchListener(touchListener);
         setOnLongClickListener(longClickListener);
 
@@ -145,6 +147,22 @@ public class NoteFragment extends RelativeLayout {
 
             // Remove connection object
             connectionManager.remove(connId);
+        }
+
+        // Remove all tags
+        for (Long tagId : note.tag) {
+            Tag currentTag = tagManager.findById(tagId);
+
+            if (currentTag.relatedNotes.size() == 1) {
+                tagManager.remove(currentTag.id);
+
+                Board board = boardManager.findById(currentTag.boardId);
+                board.tags.remove(currentTag.id);
+                boardManager.update(board);
+            } else {
+                currentTag.relatedNotes.remove(note.id);
+                tagManager.update(currentTag);
+            }
         }
 
         // Remove from board object
