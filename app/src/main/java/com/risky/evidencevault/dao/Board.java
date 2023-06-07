@@ -4,6 +4,7 @@ import com.risky.evidencevault.dao.converter.ColorConverter;
 import com.risky.evidencevault.dao.converter.IdArrayConverter;
 import com.risky.evidencevault.struct.ElementColor;
 
+import java.util.Calendar;
 import java.util.Set;
 
 import io.objectbox.annotation.Convert;
@@ -20,6 +21,8 @@ public class Board {
     public float scaleFactor;
     public String name;
 
+    public long createdDate;
+
     @Convert(converter = ColorConverter.class, dbType = String.class)
     public ElementColor color;
 
@@ -30,10 +33,11 @@ public class Board {
     public Set<Long> tags;
 
     public Board() {
-        panPositionX = 0;
-        panPositionY = 0;
-        scaleFactor = 1f;
-        name = "Untitled board";
-        color = ElementColor.BLUE;
+        this.panPositionX = 0;
+        this.panPositionY = 0;
+        this.scaleFactor = 1f;
+        this.name = "Untitled board";
+        this.color = ElementColor.BLUE;
+        this.createdDate = Calendar.getInstance().getTimeInMillis();
     }
 }

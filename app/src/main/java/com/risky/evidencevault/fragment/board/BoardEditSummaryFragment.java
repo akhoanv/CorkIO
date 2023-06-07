@@ -28,6 +28,9 @@ import com.risky.evidencevault.data.ObjectBoxTagManager;
 import com.risky.evidencevault.struct.ElementColor;
 import com.risky.evidencevault.utils.NumberUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class BoardEditSummaryFragment extends Fragment {
     private ObjectBoxBoardManager boardManager;
     private ObjectBoxNoteManager noteManager;
@@ -46,6 +49,7 @@ public class BoardEditSummaryFragment extends Fragment {
     private TextView noteNumElement;
     private TextView tagNumElement;
     private LinearLayout deleteBtn;
+    private TextView createdDateElement;
 
     public BoardEditSummaryFragment(Board board) {
         this.board = board;
@@ -68,6 +72,11 @@ public class BoardEditSummaryFragment extends Fragment {
         changeBtn = view.findViewById(R.id.board_edit_change_btn);
         noteNumElement = view.findViewById(R.id.board_edit_note_num);
         tagNumElement = view.findViewById(R.id.board_edit_tag_num);
+        createdDateElement = view.findViewById(R.id.board_edit_created_date);
+
+        Calendar storedDateTime = Calendar.getInstance();
+        storedDateTime.setTimeInMillis(board.createdDate);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
         // Assign data
         colorElement.setImageResource(board.color.getRoundId());
@@ -75,6 +84,7 @@ public class BoardEditSummaryFragment extends Fragment {
         idElement.setText("Board #" + NumberUtil.convertToDisplayId(board.id));
         noteNumElement.setText(board.notes.size() + "");
         tagNumElement.setText(board.tags.size() + "");
+        createdDateElement.setText(dateFormat.format(storedDateTime.getTime()));
 
         // Find elements
         deleteBtn = view.findViewById(R.id.board_edit_delete_btn);
@@ -100,6 +110,12 @@ public class BoardEditSummaryFragment extends Fragment {
         changeBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.board_edit_content_container, new AllBoardFragment());
+            ft.commit();
+        });
+
+        noteNumElement.setOnClickListener(view1 -> {
+            FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.board_edit_content_container, new BoardEditAllNotesFragment(board));
             ft.commit();
         });
 
@@ -137,6 +153,7 @@ public class BoardEditSummaryFragment extends Fragment {
         changeBtn.setOnClickListener(null);
         colorElement.setOnClickListener(null);
         deleteBtn.setOnClickListener(null);
+        noteNumElement.setOnClickListener(null);
 
         if (!doDelete) {
             String enteredTitle = titleElement.getText().toString().trim();

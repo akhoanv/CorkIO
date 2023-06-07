@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="310dp"
-    android:layout_height="510dp"
+    android:layout_height="520dp"
     android:background="@color/paper_white"
     android:orientation="vertical"
     android:clickable="true"
@@ -62,17 +62,27 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="390dp"
+        android:layout_height="400dp"
         android:orientation="vertical"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginRight="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contains:"
+            android:textColor="@color/board_black"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -85,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:text="Notes"
                 android:textColor="@color/board_black"
-                android:textSize="15sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/board_edit_note_num"
@@ -93,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/paper_white"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:layout_marginLeft="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -105,7 +115,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            android:padding="5dp">
+            android:padding="5dp"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -118,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:text="Tags"
                 android:textColor="@color/board_black"
-                android:textSize="15sp"/>
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/board_edit_tag_num"
@@ -126,13 +137,31 @@
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/paper_white"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:layout_marginLeft="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:background="@drawable/button_paper_background"/>
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Created on:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/board_black"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/board_edit_created_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0000/00/00 00:00"
+            android:textColor="@color/board_black"
+            android:textSize="16sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"/>
     </LinearLayout>
 
     <LinearLayout
