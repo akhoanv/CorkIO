@@ -2,7 +2,6 @@ package com.risky.evidencevault.fragment.board;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +27,11 @@ import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.data.ObjectBoxSettingManager;
 import com.risky.evidencevault.data.ObjectBoxTagManager;
-import com.risky.evidencevault.fragment.tag.NoteEditTagAddFragment;
 import com.risky.evidencevault.struct.ElementColor;
 import com.risky.evidencevault.utils.NumberUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 
 public class BoardEditSummaryFragment extends Fragment {
@@ -117,7 +113,7 @@ public class BoardEditSummaryFragment extends Fragment {
 
         changeBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.board_edit_content_container, new AllBoardFragment());
+            ft.replace(R.id.board_edit_content_container, new BoardEditAllBoardFragment());
             ft.commit();
         });
 

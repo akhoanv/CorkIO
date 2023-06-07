@@ -1,6 +1,8 @@
 package com.risky.evidencevault.fragment.board;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +17,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
+import com.risky.evidencevault.dao.Connection;
+import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.fragment.adapter.BoardDisplayArrayAdapter;
-import com.risky.evidencevault.utils.BoardSelectCallback;
+import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class AllBoardFragment extends Fragment {
+public class BoardEditAllBoardFragment extends Fragment {
     private ObjectBoxBoardManager boardManager;
 
     private View view;
@@ -55,13 +60,30 @@ public class AllBoardFragment extends Fragment {
 
         boardList.setAdapter(adapter);
 
+        // Assign listener
+        filterBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()) {
+                    adapter.update(boardManager.getAll());
+                    return;
+                }
+
+                adapter.update(filter(editable.toString().trim()));
+            }
+        });
+
         addBtn.setOnClickListener(view1 -> {
             boardManager.add(new Board());
 
-            adapter.update();
+            filterBox.setText("");
         });
-
-        //TODO: ADD FILTER FUNCTION FOR FILTER BOX
 
         return view;
     }
@@ -72,5 +94,19 @@ public class AllBoardFragment extends Fragment {
         addBtn.setOnClickListener(null);
 
         super.onDestroy();
+    }
+
+    private List<Board> filter(String regex) {
+        String lowerRegex = regex.toLowerCase();
+        List<Board> result = new ArrayList<>();
+        List<Board> updatedList = boardManager.getAll();
+        for (Board board : updatedList) {
+            if (NumberUtil.convertToDisplayId(board.id).toLowerCase().contains(lowerRegex) ||
+                    board.name.toLowerCase().contains(lowerRegex)) {
+                result.add(board);
+            }
+        }
+
+        return result;
     }
 }

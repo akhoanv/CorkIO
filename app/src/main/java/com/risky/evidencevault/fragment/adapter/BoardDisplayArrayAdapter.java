@@ -61,9 +61,9 @@ public class BoardDisplayArrayAdapter extends ArrayAdapter {
         return view;
     }
 
-    public void update() {
+    public void update(List<Board> list) {
         clear();
-        addAll(boardManager.getAll());
+        addAll(list);
         notifyDataSetChanged();
     }
 }

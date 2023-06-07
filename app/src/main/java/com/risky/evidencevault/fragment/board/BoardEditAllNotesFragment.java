@@ -1,9 +1,12 @@
 package com.risky.evidencevault.fragment.board;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -17,12 +20,15 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.risky.evidencevault.R;
 import com.risky.evidencevault.dao.Board;
+import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.adapter.AllNoteDisplayArrayAdapter;
+import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class BoardEditAllNotesFragment extends Fragment {
     private ObjectBoxBoardManager boardManager;
@@ -37,6 +43,7 @@ public class BoardEditAllNotesFragment extends Fragment {
     private LinearLayout filterBar;
     private LinearLayout backBtn;
     private GridView noteGrid;
+    private EditText filterBox;
 
     public BoardEditAllNotesFragment(Board board) {
         this.board = board;
@@ -56,6 +63,7 @@ public class BoardEditAllNotesFragment extends Fragment {
         filterBar = view.findViewById(R.id.board_edit_all_filter_bar);
         backBtn = view.findViewById(R.id.board_edit_all_note_back_btn);
         noteGrid = view.findViewById(R.id.board_edit_all_note_grid);
+        filterBox = view.findViewById(R.id.board_edit_all_note_filter);
 
         // Assign data
         int numberOfNote = board.notes.size();
@@ -79,6 +87,26 @@ public class BoardEditAllNotesFragment extends Fragment {
         noteGrid.setAdapter(adapter);
 
         // Assign listener
+        filterBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().isEmpty()) {
+                    List<Long> updatedList = new ArrayList<>();
+                    updatedList.addAll(board.notes);
+                    adapter.update(updatedList);
+                    return;
+                }
+
+                adapter.update(filter(editable.toString().trim()));
+            }
+        });
+
         backBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.board_edit_content_container, new BoardEditSummaryFragment(board));
@@ -94,5 +122,20 @@ public class BoardEditAllNotesFragment extends Fragment {
         backBtn.setOnClickListener(null);
 
         super.onDestroy();
+    }
+
+    private List<Long> filter(String regex) {
+        String lowerRegex = regex.toLowerCase();
+        List<Long> result = new ArrayList<>();
+        Set<Long> updatedList = board.notes;
+        for (Long noteId : updatedList) {
+            Note currentNode = noteManager.findById(noteId);
+            if (NumberUtil.convertToDisplayId(noteId).toLowerCase().contains(lowerRegex) ||
+                    currentNode.title.toLowerCase().contains(lowerRegex)) {
+                result.add(noteId);
+            }
+        }
+
+        return result;
     }
 }

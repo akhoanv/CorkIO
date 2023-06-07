@@ -104,7 +104,7 @@
             android:layout_marginEnd="5dp"/>
 
         <EditText
-            android:id="@+id/board_edit_all_filter"
+            android:id="@+id/board_edit_all_note_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"

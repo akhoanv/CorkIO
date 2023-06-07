@@ -53,4 +53,10 @@ public class AllNoteDisplayArrayAdapter extends ArrayAdapter {
 
         return view;
     }
+
+    public void update(List<Long> list) {
+        clear();
+        addAll(list);
+        notifyDataSetChanged();
+    }
 }
