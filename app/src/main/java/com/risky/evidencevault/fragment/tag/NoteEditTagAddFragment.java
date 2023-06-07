@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,8 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.evidencevault.R;
+import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.dao.Tag;
+import com.risky.evidencevault.data.ObjectBoxBoardManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.data.ObjectBoxTagManager;
 import com.risky.evidencevault.struct.ElementColor;
@@ -26,6 +29,7 @@ import com.risky.evidencevault.struct.ElementColor;
 public class NoteEditTagAddFragment extends Fragment {
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxTagManager tagManager;
+    private ObjectBoxBoardManager boardManager;
 
     private View view;
     private Note note;
@@ -49,6 +53,7 @@ public class NoteEditTagAddFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         noteManager = ObjectBoxNoteManager.get();
         tagManager = ObjectBoxTagManager.get();
+        boardManager = ObjectBoxBoardManager.get();
         view = inflater.inflate(R.layout.fragment_note_edit_properties, container, false);
 
         // Find element
@@ -113,12 +118,23 @@ public class NoteEditTagAddFragment extends Fragment {
             }
         });
 
+        nameBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                nameBox.clearFocus();
+            }
+            return false;
+        });
+
         confirmBtn.setOnClickListener(view1 -> {
             long existingId = tagManager.findByProperties(note.boardId,
                     nameBox.getText().toString().trim(), selectedColor);
             if (existingId == -1) {
                 Tag newTag = new Tag(note.boardId, nameBox.getText().toString().trim(), selectedColor);
                 newTag = tagManager.add(newTag);
+
+                Board currentBoard = boardManager.findById(note.boardId);
+                currentBoard.tags.add(newTag.id);
+                boardManager.update(currentBoard);
 
                 existingId = newTag.id;
             }
@@ -150,6 +166,8 @@ public class NoteEditTagAddFragment extends Fragment {
         redBox.setOnClickListener(null);
         yellowBox.setOnClickListener(null);
         confirmBtn.setOnClickListener(null);
+        nameBox.setOnFocusChangeListener(null);
+        nameBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }

@@ -1,6 +1,7 @@
 package com.risky.evidencevault.fragment.notepreset;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -97,7 +100,20 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
             }
         }
 
-        // Set onChangeListener to update the database
+        // Set listeners
+        titleElement.setOnFocusChangeListener((view1, hasFocus) -> {
+            if (!hasFocus) {
+                hideKeyboard();
+            }
+        });
+
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
         calendarElement.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
@@ -165,6 +181,8 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
     @Override
     public void onDestroy() {
         // Set these listener to null, avoid mem leak
+        titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
         calendarElement.setOnDateChangeListener(null);
         timeElement.setOnClickListener(null);
         timeIcon.setOnClickListener(null);
@@ -187,5 +205,10 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         }, storedDateTime.get(Calendar.HOUR_OF_DAY), storedDateTime.get(Calendar.MINUTE), true);
         mTimePicker.setTitle("Select Time");
         mTimePicker.show();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

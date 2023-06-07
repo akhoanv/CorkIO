@@ -14,13 +14,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.risky.evidencevault.dao.Board;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
+import com.risky.evidencevault.data.ObjectBoxSettingManager;
+import com.risky.evidencevault.fragment.dialog.BoardEditDialogFragment;
+import com.risky.evidencevault.fragment.dialog.NoteEditDialogFragment;
 import com.risky.evidencevault.fragment.dialog.SelectNoteTypeDialogFragment;
 import com.risky.evidencevault.utils.DeviceProperties;
 import com.risky.evidencevault.worldobject.BoardFragment;
@@ -30,8 +35,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
-    private ObjectBoxNoteManager noteManager;
-    private int currentApiVersion;
+    private ObjectBoxSettingManager settingManager;
 
     private SeekBar zoomBar;
     private TextView coordDisplay;
@@ -46,7 +50,7 @@ public class MainActivity extends FragmentActivity {
         w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         // Inject variables
-        noteManager = ObjectBoxNoteManager.get();
+        settingManager = ObjectBoxSettingManager.get();
 
         setContentView(R.layout.activity_main);
 
@@ -62,20 +66,32 @@ public class MainActivity extends FragmentActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         DeviceProperties.setScreenSize(displayMetrics.widthPixels, displayMetrics.heightPixels);
 
-        mainBoard = new BoardFragment(this, 0);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
+        initializeBoard(settingManager.getLastVisitedBoard());
 
         // Set properties
-        ConstraintLayout boardInfo = findViewById(R.id.boardInfo);
+        ConstraintLayout boardInfo = findViewById(R.id.board_info);
         boardInfo.setOnTouchListener((view, motionEvent) -> {return true;});
-        boardInfo.bringToFront();
 
         zoomBar.setMax(15);
         zoomBar.setMin(7);
         zoomBar.setOnTouchListener((view, motionEvent) -> true); // Temporary disable drag
 
         addButton.setOnClickListener(this::addButtonOnClick);
+
+        LinearLayout boardIndicator = findViewById(R.id.board_indicator);
+        boardIndicator.setOnClickListener(view -> {
+            // Close any dialog fragment
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+
+            // Show edit fragment
+            BoardEditDialogFragment fragment = new BoardEditDialogFragment(mainBoard.getBoard());
+            ft.addToBackStack(null);
+            fragment.show(ft, "dialog");
+        });
     }
 
     @Override
@@ -92,6 +108,27 @@ public class MainActivity extends FragmentActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    public void initializeBoard(long boardId) {
+        if (mainBoard != null) {
+            ((ConstraintLayout) findViewById(R.id.app_view)).removeView(mainBoard);
+        }
+
+        mainBoard = new BoardFragment(this, boardId);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
+
+        ConstraintLayout boardInfo = findViewById(R.id.board_info);
+        boardInfo.bringToFront();
+
+        LinearLayout boardIndicator = findViewById(R.id.board_indicator);
+        boardIndicator.bringToFront();
+    }
+
+    public void setBoardInfo(Board board) {
+        ((ImageView) findViewById(R.id.board_color)).setImageResource(board.color.getRoundId());
+        ((TextView) findViewById(R.id.board_name)).setText(board.name);
     }
 
     /**

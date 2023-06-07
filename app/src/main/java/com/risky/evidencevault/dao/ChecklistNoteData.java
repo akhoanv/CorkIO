@@ -18,10 +18,13 @@ public class ChecklistNoteData  extends BaseNoteData {
     @Convert(converter = ChecklistSortOrderConverter.class, dbType = String.class)
     public ChecklistSortOrder order;
 
+    public int completed;
+
     public Long lastOrder;
 
     public ChecklistNoteData() {
         this.order = ChecklistSortOrder.CHRONOLOGICAL;
         this.lastOrder = 0L;
+        this.completed = 0;
     }
 }

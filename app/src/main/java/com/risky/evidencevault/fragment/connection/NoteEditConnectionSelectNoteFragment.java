@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -17,11 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.risky.evidencevault.R;
-import com.risky.evidencevault.dao.Connection;
 import com.risky.evidencevault.dao.Note;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
 import com.risky.evidencevault.fragment.adapter.ConnectionSelectableArrayAdapter;
-import com.risky.evidencevault.utils.CloneList;
 import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.ArrayList;
@@ -63,7 +61,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
             }
         }
         adapter = new ConnectionSelectableArrayAdapter(getContext(),
-                R.layout.fragment_edit_note_connection_add_item, new CloneList<>(availableList),
+                R.layout.fragment_edit_note_connection_add_item, new ArrayList<>(availableList),
                 note, getParentFragment().getChildFragmentManager());
         connectionGrid.setAdapter(adapter);
 
@@ -72,6 +70,13 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
             if (!hasFocus) {
                 hideKeyboard();
             }
+        });
+
+        filterBox.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                filterBox.clearFocus();
+            }
+            return false;
         });
 
         filterBox.addTextChangedListener(new TextWatcher() {
@@ -84,11 +89,11 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().trim().isEmpty()) {
-                    adapter.update(new CloneList<>(availableList));
+                    adapter.update(new ArrayList<>(availableList));
                     return;
                 }
 
-                adapter.update(filter(new CloneList<>(availableList), editable.toString().trim()));
+                adapter.update(filter(new ArrayList<>(availableList), editable.toString().trim()));
             }
         });
 
@@ -99,6 +104,7 @@ public class NoteEditConnectionSelectNoteFragment extends Fragment {
     public void onDestroy() {
         // Dereference onClickListener to avoid mem leak
         filterBox.setOnFocusChangeListener(null);
+        filterBox.setOnEditorActionListener(null);
 
         super.onDestroy();
     }

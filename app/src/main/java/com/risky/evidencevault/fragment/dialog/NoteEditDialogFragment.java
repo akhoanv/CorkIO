@@ -38,7 +38,7 @@ public class NoteEditDialogFragment extends DialogFragment {
     private boolean doDelete = false;
 
     // Elements
-    private ImageView unpinBtn;
+    private LinearLayout deleteBtn;
     private LinearLayout summaryTabBtn;
     private LinearLayout connectionTabBtn;
     private LinearLayout tagTabBtn;
@@ -55,13 +55,13 @@ public class NoteEditDialogFragment extends DialogFragment {
         view = inflater.inflate(R.layout.fragment_note_dialog, container, false);
 
         // Find elements
-        unpinBtn = view.findViewById(R.id.note_edit_unpin);
+        deleteBtn = view.findViewById(R.id.note_edit_delete_btn);
         summaryTabBtn = view.findViewById(R.id.note_edit_summary_btn);
         connectionTabBtn = view.findViewById(R.id.note_edit_connection_btn);
         tagTabBtn = view.findViewById(R.id.note_edit_tag_btn);
 
         // Unpin button
-        unpinBtn.setOnClickListener(view -> {
+        deleteBtn.setOnClickListener(view -> {
             doDelete = true;
             this.dismiss();
         });
@@ -124,7 +124,7 @@ public class NoteEditDialogFragment extends DialogFragment {
         callback.run(doDelete);
 
         // Set these listener to null, avoid mem leak
-        unpinBtn.setOnClickListener(null);
+        deleteBtn.setOnClickListener(null);
         summaryTabBtn.setOnClickListener(null);
         connectionTabBtn.setOnClickListener(null);
 

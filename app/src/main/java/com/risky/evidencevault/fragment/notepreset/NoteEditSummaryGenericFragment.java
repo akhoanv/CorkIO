@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -96,6 +97,13 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
             }
         });
 
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
         contentElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 data.content = contentElement.getText().toString().trim();
@@ -156,6 +164,7 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
 
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
         contentElement.setOnFocusChangeListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);

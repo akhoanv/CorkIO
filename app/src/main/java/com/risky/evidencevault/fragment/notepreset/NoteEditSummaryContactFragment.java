@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -123,6 +124,13 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
             }
         });
 
+        nameElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                nameElement.clearFocus();
+            }
+            return false;
+        });
+
         emailElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 data.emailAddress = emailElement.getText().toString().trim();
@@ -132,6 +140,13 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
             }
         });
 
+        emailElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                emailElement.clearFocus();
+            }
+            return false;
+        });
+
         phoneElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 data.phoneNumber= phoneElement.getText().toString().trim();
@@ -139,6 +154,13 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
 
                 hideKeyboard();
             }
+        });
+
+        phoneElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                phoneElement.clearFocus();
+            }
+            return false;
         });
 
         commentElement.setOnFocusChangeListener((view, hasFocus) -> {
@@ -252,8 +274,11 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
 
         // Set these listener to null, avoid mem leak
         nameElement.setOnFocusChangeListener(null);
+        nameElement.setOnEditorActionListener(null);
         emailElement.setOnFocusChangeListener(null);
+        emailElement.setOnEditorActionListener(null);
         phoneElement.setOnFocusChangeListener(null);
+        phoneElement.setOnEditorActionListener(null);
         commentElement.setOnFocusChangeListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);

@@ -99,6 +99,13 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
             hideKeyboard();
         });
 
+        titleElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                titleElement.clearFocus();
+            }
+            return false;
+        });
+
         addressElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
                 data.address = addressElement.getText().toString().trim();
@@ -107,6 +114,13 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
 
                 hideKeyboard();
             }
+        });
+
+        addressElement.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addressElement.clearFocus();
+            }
+            return false;
         });
 
         addressElement.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -182,7 +196,9 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
 
         // Set these listener to null, avoid mem leak
         titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
         addressElement.setOnFocusChangeListener(null);
+        addressElement.setOnEditorActionListener(null);
         iconElement.setOnClickListener(null);
         iconElement.setOnLongClickListener(null);
 
