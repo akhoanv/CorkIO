@@ -7,6 +7,7 @@ import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryEventFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryGenericFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryImageFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryLocationFragment;
+import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryWebLinkFragment;
 
 public enum NoteType {
     GENERIC("Untitled Generic Note", NoteIcon.GENERIC, NoteEditSummaryGenericFragment.class),
@@ -14,7 +15,8 @@ public enum NoteType {
     LOCATION("Untitled Location Note", NoteIcon.LOCATION, NoteEditSummaryLocationFragment.class),
     EVENT("Untitled Event Note", NoteIcon.EVENT, NoteEditSummaryEventFragment.class),
     CHECKLIST("Untitled Checklist Note", NoteIcon.CHECKLIST, NoteEditSummaryChecklistFragment.class),
-    IMAGE("Untitled Image Note", NoteIcon.IMAGE, NoteEditSummaryImageFragment.class);
+    IMAGE("Untitled Image Note", NoteIcon.IMAGE, NoteEditSummaryImageFragment.class),
+    WEBLINK("Untitled Link Note Note", NoteIcon.WEBLINK, NoteEditSummaryWebLinkFragment.class);
 
     private String initialTitle;
     private NoteIcon initialIcon;

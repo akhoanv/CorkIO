@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        deleteAllNotes();
+        //deleteAllNotes();
 
         // Find elements
         zoomBar = findViewById(R.id.zoom_level);

@@ -25,4 +25,7 @@
         <item name="android:maxHeight">20dip</item>
     </style>
 
+    <style name="DefaultPickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/board_black</item>
+    </style>
 </resources>

@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,7 +193,7 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
 
     private void showTimePicker(EventNoteData data) {
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(getContext(), (timePicker, selectedHour, selectedMinute) -> {
+        mTimePicker = new TimePickerDialog(getContext(), R.style.DefaultPickerTheme,(timePicker, selectedHour, selectedMinute) -> {
             timeElement.setText(String.format("%02d", selectedHour) + ":" + String.format("%02d", selectedMinute));
 
             storedDateTime.set(Calendar.HOUR_OF_DAY, selectedHour);

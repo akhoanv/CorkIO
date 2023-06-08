@@ -258,7 +258,7 @@
     },
     {
       "id": "10:963096075698626870",
-      "lastPropertyId": "8:7172984587234460947",
+      "lastPropertyId": "9:7230341852083849065",
       "name": "ChecklistNoteData",
       "properties": [
         {
@@ -286,6 +286,11 @@
           "id": "8:7172984587234460947",
           "name": "lastOrder",
           "type": 6
+        },
+        {
+          "id": "9:7230341852083849065",
+          "name": "completed",
+          "type": 5
         }
       ],
       "relations": []

@@ -8,7 +8,8 @@ public enum NoteIcon {
     LOCATION(R.drawable.location_note),
     EVENT(R.drawable.event_note),
     CHECKLIST(R.drawable.checklist_note),
-    IMAGE(R.drawable.image_note);
+    IMAGE(R.drawable.image_note),
+    WEBLINK(R.drawable.url_note);
 
     private int iconId;
 
