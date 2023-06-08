@@ -297,7 +297,7 @@ public class NoteEditSummaryContactFragment extends Fragment implements INoteEdi
 
     private void showDatePicker(ContactNoteData data) {
         DatePickerDialog mDatePicker;
-        mDatePicker = new DatePickerDialog(getContext(), (datePicker, year, month, dayOfMonth) -> {
+        mDatePicker = new DatePickerDialog(getContext(), R.style.DefaultPickerTheme, (datePicker, year, month, dayOfMonth) -> {
             bdayElement.setText(String.format("%04d", year) + "/" + String.format("%02d", month)
                     + "/" + String.format("%02d", dayOfMonth));
 

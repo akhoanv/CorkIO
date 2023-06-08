@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,33 +25,38 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.risky.evidencevault.R;
-import com.risky.evidencevault.dao.LocationNoteData;
 import com.risky.evidencevault.dao.Note;
+import com.risky.evidencevault.dao.WebLinkNoteData;
 import com.risky.evidencevault.data.ObjectBoxNoteLocationDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteManager;
+import com.risky.evidencevault.data.ObjectBoxNoteWebLinkDataManager;
 import com.risky.evidencevault.utils.IntentRequestCode;
 
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class NoteEditSummaryLocationFragment extends Fragment implements INoteEditSummaryFragment {
-
+public class NoteEditSummaryWebLinkFragment extends Fragment implements INoteEditSummaryFragment {
     // Database manager
     private ObjectBoxNoteManager noteManager;
-    private ObjectBoxNoteLocationDataManager dataManager;
+    private ObjectBoxNoteWebLinkDataManager dataManager;
 
     private View view;
     private Note note;
 
     private TextView idElement;
     private EditText titleElement;
-    private EditText addressElement;
     private ImageView iconElement;
-    private LinearLayout findOnMapBtn;
+    private ImageView qrContainer;
+    private EditText webLinkElement;
+    private LinearLayout visitWebBtn;
 
-    public NoteEditSummaryLocationFragment(Note note) {
+    public NoteEditSummaryWebLinkFragment(Note note) {
         this.note = note;
     }
 
@@ -56,38 +64,26 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         noteManager = ObjectBoxNoteManager.get();
-        dataManager = ObjectBoxNoteLocationDataManager.get();
-        view = inflater.inflate(R.layout.fragment_note_summary_location, container, false);
+        dataManager = ObjectBoxNoteWebLinkDataManager.get();
+        view = inflater.inflate(R.layout.fragment_note_summary_web_link, container, false);
 
         // Find elements
-        idElement = view.findViewById(R.id.note_edit_id);
         titleElement = view.findViewById(R.id.note_edit_title);
-        addressElement = view.findViewById(R.id.note_edit_address);
+        idElement = view.findViewById(R.id.note_edit_id);
         iconElement = view.findViewById(R.id.note_edit_icon);
-        findOnMapBtn = view.findViewById(R.id.note_edit_find_map_btn);
+        qrContainer = view.findViewById(R.id.note_edit_qr_container);
+        webLinkElement = view.findViewById(R.id.note_edit_web_link);
+        visitWebBtn = view.findViewById(R.id.note_edit_visit_web_btn);
 
-        LocationNoteData data = dataManager.findById(note.dataId);
+        WebLinkNoteData data = dataManager.findById(note.dataId);
 
         // Assign appropriate data
         idElement.setText("Note #" + note.getDisplayId());
         titleElement.setText(note.title);
-        addressElement.setText(data.address);
+        webLinkElement.setText(data.url);
 
-        if (note.customIconPath.isEmpty()) {
-            iconElement.setImageResource(note.type.getIcon().getId());
-        } else {
-            try {
-                InputStream inputStream = getContext().getContentResolver().openInputStream(Uri.parse(note.customIconPath));
-                Bitmap importedImg = BitmapFactory.decodeStream(new BufferedInputStream(inputStream));
-                iconElement.setImageBitmap(importedImg);
-            } catch (Exception e) {
-                e.getStackTrace();
-                iconElement.setImageResource(note.type.getIcon().getId());
-
-                // Not being able to get it means we gotta reset it
-                note.customIconPath = "";
-                noteManager.update(note);
-            }
+        if (URLUtil.isValidUrl(data.url)) {
+            setQrCode();
         }
 
         // Set listeners
@@ -106,38 +102,34 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
             return false;
         });
 
-        addressElement.setOnFocusChangeListener((view, hasFocus) -> {
+        webLinkElement.setOnFocusChangeListener((view1, hasFocus) -> {
             if (!hasFocus) {
-                data.address = addressElement.getText().toString().trim();
+                data.url = webLinkElement.getText().toString().trim();
                 dataManager.update(data);
 
                 hideKeyboard();
+
+                if (URLUtil.isValidUrl(webLinkElement.getText().toString().trim())) {
+                    setQrCode();
+                } else {
+                    qrContainer.setImageResource(0);
+                }
             }
         });
 
-        addressElement.setOnEditorActionListener((v, actionId, event) -> {
+        webLinkElement.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                addressElement.clearFocus();
+                webLinkElement.clearFocus();
             }
             return false;
         });
 
-        addressElement.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        addressElement.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        visitWebBtn.setOnClickListener(view1 -> {
+            String url = webLinkElement.getText().toString().trim();
 
-        findOnMapBtn.setOnClickListener(view1 -> {
-            hideKeyboard();
-
-            String query = "";
-            if (addressElement.getText() != null && !addressElement.getText().toString().trim().isEmpty()) {
-                query = addressElement.getText().toString().trim().replace(" ", "+");
-            } else if (titleElement.getText() != null && !titleElement.getText().toString().trim().equals(note.type.getInitialTitle())) {
-                query = titleElement.getText().toString().trim().replace(" ", "+");;
-            }
-
-            if (!query.isEmpty()) {
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("geo:0,0?q=" + query));
+            if (!url.isEmpty() && URLUtil.isValidUrl(url)) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
                 startActivity(intent);
             }
         });
@@ -160,6 +152,32 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
     }
 
     @Override
+    public void onDestroy() {
+        WebLinkNoteData data = dataManager.findById(note.dataId);
+
+        // Update content
+        data.url = webLinkElement.getText().toString().trim();
+
+        String enteredTitle = titleElement.getText().toString().trim();
+        note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
+        noteManager.update(note);
+
+        noteManager.update(note);
+        dataManager.update(data);
+
+        // Set these listener to null, avoid mem leak
+        titleElement.setOnFocusChangeListener(null);
+        titleElement.setOnEditorActionListener(null);
+        webLinkElement.setOnFocusChangeListener(null);
+        webLinkElement.setOnEditorActionListener(null);
+        visitWebBtn.setOnClickListener(null);
+        iconElement.setOnClickListener(null);
+        iconElement.setOnLongClickListener(null);
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null){
             return;
@@ -179,29 +197,26 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
         }
     }
 
-    @Override
-    public void onDestroy() {
-        LocationNoteData data = dataManager.findById(note.dataId);
+    private void setQrCode() {
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(
+                    webLinkElement.getText().toString().trim(), BarcodeFormat.QR_CODE, 680, 680);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bmp.setPixel(x, y, bitMatrix.get(x, y) ?
+                            getContext().getColor(R.color.board_black) :
+                            Color.TRANSPARENT);
+                }
+            }
+            qrContainer.setImageBitmap(bmp);
 
-        // Update content
-        data.address = addressElement.getText().toString().trim();
-
-        String enteredTitle = titleElement.getText().toString().trim();
-        note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
-        noteManager.update(note);
-
-        noteManager.update(note);
-        dataManager.update(data);
-
-        // Set these listener to null, avoid mem leak
-        titleElement.setOnFocusChangeListener(null);
-        titleElement.setOnEditorActionListener(null);
-        addressElement.setOnFocusChangeListener(null);
-        addressElement.setOnEditorActionListener(null);
-        iconElement.setOnClickListener(null);
-        iconElement.setOnLongClickListener(null);
-
-        super.onDestroy();
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 
     private void hideKeyboard() {

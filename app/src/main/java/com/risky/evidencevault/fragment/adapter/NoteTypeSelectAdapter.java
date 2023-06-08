@@ -45,7 +45,7 @@ public class NoteTypeSelectAdapter extends ArrayAdapter {
         ImageView iconElement = view.findViewById(R.id.note_type_icon);
 
         // Assign appropriate data
-        nameElement.setText(capitalize(typeList.get(position).name().toLowerCase()) + " Note");
+        nameElement.setText(capitalize(typeList.get(position).name().toLowerCase()));
         iconElement.setImageResource(typeList.get(position).getIcon().getId());
 
         view.setOnClickListener(view1 -> callback.run(typeList.get(position)));
