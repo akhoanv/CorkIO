@@ -5,6 +5,11 @@ import java.util.List;
 
 import io.objectbox.converter.PropertyConverter;
 
+/**
+ * Convert ObjectBox database to {@link List} of {@link String} and vice versa
+ *
+ * @author Khoa Nguyen
+ */
 public class StringArrayConverter implements PropertyConverter<List<String>, String>  {
     @Override
     public List<String> convertToEntityProperty(String databaseValue) {

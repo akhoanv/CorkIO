@@ -11,20 +11,31 @@ import java.util.List;
 import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Uid;
 
+/**
+ * Data for a connection between two {@link Note}
+ *
+ * @author Khoa Nguyen
+ */
 @Entity
+@Uid(4582111094951869455L)
 public class Connection {
     @Id
     public long id;
 
+    @Uid(2569160018098105066L)
     public long boardId;
+
+    @Uid(9159413425637415572L)
     public String name;
 
-
     @Convert(converter = ColorConverter.class, dbType = String.class)
+    @Uid(3566710366085348008L)
     public ElementColor color;
 
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    @Uid(687540208714550064L)
     public ConnectionSet<Long> notes; // Max size 2
 
     public Connection(){}

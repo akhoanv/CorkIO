@@ -5,6 +5,11 @@ import java.util.Set;
 
 import io.objectbox.converter.PropertyConverter;
 
+/**
+ * Converter for ObjectBox database to a {@link Set} of {@link Long} ID number and vice versa
+ *
+ * @author Khoa Nguyen
+ */
 public class IdArrayConverter implements PropertyConverter<Set<Long>, String>  {
     @Override
     public Set<Long> convertToEntityProperty(String databaseValue) {

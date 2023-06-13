@@ -77,7 +77,7 @@ public class BoardFragment extends RelativeLayout {
                 renderNote(noteManager.findById(id), false);
             }
 
-            onScreenPosition.setXY(board.panPositionX, board.panPositionY);
+            onScreenPosition.setXY(board.panPosition.getX(), board.panPosition.getY());
             scale = board.scaleFactor;
 
             // Move screen position
@@ -146,8 +146,8 @@ public class BoardFragment extends RelativeLayout {
      */
     public Note addToDatabase(NoteType type) {
         Note note = new Note(board.id, type,
-                -board.panPositionX + (DeviceProperties.getScreenWidth() / 3),
-                -board.panPositionY  + (DeviceProperties.getScreenHeight() / 3));
+                -board.panPosition.getX() + (DeviceProperties.getScreenWidth() / 3),
+                -board.panPosition.getY()  + (DeviceProperties.getScreenHeight() / 3));
         noteManager.add(note);
         board.notes.add(note.id);
         boardManager.update(board);
@@ -208,8 +208,7 @@ public class BoardFragment extends RelativeLayout {
                     if (action == TouchAction.ZOOM) {
                         board.scaleFactor = scale;
                     } else if (action == TouchAction.DRAG) {
-                        board.panPositionX = onScreenPosition.getX();
-                        board.panPositionY = onScreenPosition.getY();
+                        board.panPosition.setXY(onScreenPosition);
                     }
 
                     action = TouchAction.NONE;
@@ -242,8 +241,7 @@ public class BoardFragment extends RelativeLayout {
 
                         moveChildOnScreen(new Point2D(dx, dy));
                         onScreenPosition.setXY(onScreenPosition.getX() + dx, onScreenPosition.getY() + dy);
-                        board.panPositionX = onScreenPosition.getX();
-                        board.panPositionY = onScreenPosition.getY();
+                        board.panPosition.setXY(onScreenPosition);
 
                         // Update initial mouse position for next move
                         mousePosition.setXY(newX, newY);

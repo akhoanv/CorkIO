@@ -1,5 +1,7 @@
 package com.risky.evidencevault.struct;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represent 2D point
  *
@@ -22,6 +24,11 @@ public class Point2D {
         return y;
     }
 
+    public void setXY(Point2D point) {
+        this.x = point.getX();
+        this.y = point.getY();
+    }
+
     public void setXY(float x, float y) {
         this.x = x;
         this.y = y;
@@ -41,5 +48,11 @@ public class Point2D {
 
     public void moveY(float amount) {
         this.y = this.y + amount;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.x + "," + this.y;
     }
 }

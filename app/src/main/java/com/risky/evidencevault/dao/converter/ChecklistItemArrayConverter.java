@@ -7,6 +7,11 @@ import java.util.List;
 
 import io.objectbox.converter.PropertyConverter;
 
+/**
+ * Converter for ObjectBox database to {@link ChecklistItem} {@link ArrayList} object and vice versa
+ *
+ * @author Khoa Nguyen
+ */
 public class ChecklistItemArrayConverter implements PropertyConverter<List<ChecklistItem>, String> {
     @Override
     public List<ChecklistItem> convertToEntityProperty(String databaseValue) {

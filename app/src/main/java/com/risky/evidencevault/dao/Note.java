@@ -2,6 +2,7 @@ package com.risky.evidencevault.dao;
 
 import com.risky.evidencevault.dao.converter.IdArrayConverter;
 import com.risky.evidencevault.dao.converter.NoteTypeConverter;
+import com.risky.evidencevault.dao.converter.Position2DConverter;
 import com.risky.evidencevault.data.ObjectBoxConnectionManager;
 import com.risky.evidencevault.data.ObjectBoxNoteChecklistDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteContactDataManager;
@@ -11,6 +12,7 @@ import com.risky.evidencevault.data.ObjectBoxNoteImageDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteWebLinkDataManager;
 import com.risky.evidencevault.data.ObjectBoxNoteLocationDataManager;
 import com.risky.evidencevault.struct.NoteType;
+import com.risky.evidencevault.struct.Point2D;
 import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.LinkedHashSet;
@@ -19,30 +21,43 @@ import java.util.Set;
 import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Uid;
 
 /**
  * Note DAO. This is the smallest database object.
  */
 @Entity
+@Uid(6708627763836334107L)
 public class Note {
     @Id
     public long id;
 
+    @Uid(2329310424445038161L)
     public long boardId;
-    public float positionX; // absolute X from 0
-    public float positionY; // absolute Y from 0
 
+    @Convert(converter = Position2DConverter.class, dbType = String.class)
+    @Uid(2305233739250448219L)
+    public Point2D position; // absolute from 0
+
+    @Uid(5961820350283559114L)
     public String customIconPath;
+
+    @Uid(7792151678298590196L)
     public long dataId;
+
+    @Uid(1072002065242505641L)
     public String title;
 
     @Convert(converter = NoteTypeConverter.class, dbType = String.class)
+    @Uid(1242922150514037626L)
     public NoteType type;
 
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    @Uid(2718532524019566224L)
     public Set<Long> connection;
 
     @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    @Uid(913654504793566238L)
     public Set<Long> tag;
 
     public Note(){}
@@ -53,8 +68,7 @@ public class Note {
         this.customIconPath = "";
         this.title = type.getInitialTitle();
 
-        this.positionX = positionX;
-        this.positionY = positionY;
+        this.position = new Point2D(positionX, positionY);
         this.connection = new LinkedHashSet<>();
 
         // Create new data record

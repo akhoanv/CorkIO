@@ -94,8 +94,8 @@ public class NoteFragment extends RelativeLayout {
             }
         }
 
-        setX(isNew ? (DeviceProperties.getScreenWidth() / 3) : note.positionX);
-        setY(isNew ? (DeviceProperties.getScreenHeight() / 3) : note.positionY);
+        setX(isNew ? (DeviceProperties.getScreenWidth() / 3) : note.position.getX());
+        setY(isNew ? (DeviceProperties.getScreenHeight() / 3) : note.position.getY());
 
         scale(boardManager.findById(note.boardId).scaleFactor * 100, false);
     }
@@ -265,8 +265,8 @@ public class NoteFragment extends RelativeLayout {
                         fragment.show(ft, "dialog");
                     } else if (action == TouchAction.DRAG) {
                         action = TouchAction.NONE;
-                        note.positionX = getX() - boardManager.findById(note.boardId).panPositionX;
-                        note.positionY = getY() - boardManager.findById(note.boardId).panPositionY;
+                        note.position.setXY(getX() - boardManager.findById(note.boardId).panPosition.getX(),
+                                getY() - boardManager.findById(note.boardId).panPosition.getY());
                     }
 
                     boolean isUpdated = noteManager.update(note);
