@@ -22,6 +22,12 @@ import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.List;
 
+/**
+ * Adapter for showing available {@link Note} to select from to form a {@link com.risky.evidencevault.dao.Connection}.
+ * On element click will replace note edit screen with edit properties screen
+ *
+ * @author Khoa Nguyen
+ */
 public class ConnectionSelectableArrayAdapter extends ArrayAdapter {
     // Database manager
     private ObjectBoxNoteManager noteManager;

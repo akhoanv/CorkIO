@@ -1,5 +1,10 @@
 package com.risky.evidencevault.struct;
 
+/**
+ * Represent sort order for {@link ChecklistItem}
+ *
+ * @author Khoa Nguyen
+ */
 public enum ChecklistSortOrder {
     CHRONOLOGICAL, BY_COLOR, BY_STATUS;
 

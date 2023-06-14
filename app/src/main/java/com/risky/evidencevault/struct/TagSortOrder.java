@@ -1,5 +1,10 @@
 package com.risky.evidencevault.struct;
 
+/**
+ * Represent sort order for {@link com.risky.evidencevault.dao.Tag}
+ *
+ * @author Khoa Nguyen
+ */
 public enum TagSortOrder {
     CHRONOLOGICAL, BY_COLOR;
 

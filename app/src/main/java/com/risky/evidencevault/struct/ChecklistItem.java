@@ -4,6 +4,11 @@ import androidx.annotation.NonNull;
 
 import java.util.Comparator;
 
+/**
+ * Represent a single item from Checklist note
+ *
+ * @author Khoa Nguyen
+ */
 public class ChecklistItem {
     private long addedOrder;
     private String label;

@@ -3,7 +3,7 @@ package com.risky.evidencevault.struct;
 /**
  * Represent a touch action
  *
- * @author knguyen
+ * @author Khoa Nguyen
  */
 public enum TouchAction {
     NONE, DRAG, ZOOM, CLICK

@@ -19,6 +19,12 @@ import com.risky.evidencevault.data.ObjectBoxNoteManager;
 
 import java.util.List;
 
+/**
+ * Adapter for showing {@link Connection} from one {@link Note} to another, given {@link List} of
+ * IDs of which from the database. Button to remove that connection is included.
+ *
+ * @author Khoa Nguyen
+ */
 public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
     // Database manager
     private ObjectBoxNoteManager noteManager;

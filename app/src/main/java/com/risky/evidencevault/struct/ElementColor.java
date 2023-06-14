@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import com.risky.evidencevault.R;
 
 /**
- * Represent color for connections and tags
+ * Represent common colors for users to choose from
  *
  * @author knguyen
  */

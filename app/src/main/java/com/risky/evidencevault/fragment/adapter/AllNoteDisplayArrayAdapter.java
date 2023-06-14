@@ -19,6 +19,11 @@ import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.List;
 
+/**
+ * Adapter for displaying {@link Note}, given a {@link List} of IDs belong to those in database
+ *
+ * @author Khoa Nguyen
+ */
 public class AllNoteDisplayArrayAdapter extends ArrayAdapter {
     private ObjectBoxNoteManager noteManager;
 

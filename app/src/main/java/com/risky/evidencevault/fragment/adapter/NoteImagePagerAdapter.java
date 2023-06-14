@@ -20,6 +20,11 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Adapter containing carrousel image, provided with {@link List} of URI string
+ *
+ * @author Khoa Nguyen
+ */
 public class NoteImagePagerAdapter extends PagerAdapter {
     private Context context;
     private List<String> imageList;

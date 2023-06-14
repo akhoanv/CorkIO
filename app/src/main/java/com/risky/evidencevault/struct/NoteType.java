@@ -9,6 +9,11 @@ import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryImageFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryLocationFragment;
 import com.risky.evidencevault.fragment.notepreset.NoteEditSummaryWebLinkFragment;
 
+/**
+ * Represent type of note, and containing default data values for each type
+ *
+ * @author Khoa Nguyen
+ */
 public enum NoteType {
     GENERIC("Untitled Generic Note", NoteIcon.GENERIC, NoteEditSummaryGenericFragment.class),
     CONTACT("Untitled Contact Note", NoteIcon.CONTACT, NoteEditSummaryContactFragment.class),

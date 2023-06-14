@@ -5,7 +5,7 @@ import android.app.Application;
 import com.risky.evidencevault.objectbox.ObjectBox;
 
 /**
- * Customize initialization of our application
+ * Starting point for application
  */
 public class EvidenceVaultApplication extends Application {
     @Override

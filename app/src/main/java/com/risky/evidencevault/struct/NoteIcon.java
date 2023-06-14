@@ -2,6 +2,11 @@ package com.risky.evidencevault.struct;
 
 import com.risky.evidencevault.R;
 
+/**
+ * Represent default icon taking from drawable resource for each type of note
+ *
+ * @author Khoa Nguyen
+ */
 public enum NoteIcon {
     GENERIC(R.drawable.generic_note),
     CONTACT(R.drawable.contact_note),

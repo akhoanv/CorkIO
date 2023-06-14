@@ -1,5 +1,10 @@
 package com.risky.evidencevault.utils;
 
+/**
+ * Storing different aspects of the current device, for scaling/adapting purpose
+ *
+ * @author Khoa Nguyen
+ */
 public class DeviceProperties {
     private static int screenWidth = 0;
     private static int screenHeight = 0;

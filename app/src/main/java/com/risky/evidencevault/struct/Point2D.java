@@ -3,7 +3,7 @@ package com.risky.evidencevault.struct;
 import androidx.annotation.NonNull;
 
 /**
- * Represent 2D point
+ * Represent a 2D point, can be treated/used as a vector
  *
  * @author knguyen
  */

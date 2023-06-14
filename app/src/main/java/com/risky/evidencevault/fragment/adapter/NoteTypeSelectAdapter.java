@@ -17,6 +17,11 @@ import com.risky.evidencevault.utils.NewNoteCallback;
 
 import java.util.List;
 
+/**
+ * Adapter for {@link NoteType} for user to select
+ *
+ * @author Khoa Nguyen
+ */
 public class NoteTypeSelectAdapter extends ArrayAdapter {
     private List<NoteType> typeList;
     private NewNoteCallback callback;

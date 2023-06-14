@@ -20,13 +20,19 @@ import com.risky.evidencevault.utils.NumberUtil;
 
 import java.util.List;
 
+/**
+ * Adapter for choosing {@link Board} within Board edit screen, given a {@link List} of Board objects
+ *
+ * @author Khoa Nguyen
+ */
 public class BoardDisplayArrayAdapter extends ArrayAdapter {
     // Database manager
     private ObjectBoxBoardManager boardManager;
 
     private BoardSelectCallback callback;
 
-    public BoardDisplayArrayAdapter(@NonNull Context context, int resource, @NonNull List<Board> objects, BoardSelectCallback callback) {
+    public BoardDisplayArrayAdapter(@NonNull Context context, int resource,
+                                    @NonNull List<Board> objects, BoardSelectCallback callback) {
         super(context, resource, objects);
 
         this.boardManager = ObjectBoxBoardManager.get();
