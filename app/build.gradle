@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.risky.evidencevault'
+    namespace 'com.risky.jotterbox'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.risky.evidencevault"
+        applicationId "com.risky.jotterbox"
         minSdk 28
         targetSdk 32
         versionCode 1
