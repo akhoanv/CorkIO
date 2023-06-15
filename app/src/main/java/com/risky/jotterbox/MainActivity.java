@@ -117,11 +117,11 @@ public class MainActivity extends FragmentActivity {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
-        ConstraintLayout boardInfo = findViewById(R.id.board_info);
-        boardInfo.bringToFront();
-
         LinearLayout boardIndicator = findViewById(R.id.board_indicator);
         boardIndicator.bringToFront();
+
+        ConstraintLayout boardInfo = findViewById(R.id.board_info);
+        boardInfo.bringToFront();
     }
 
     public void setBoardInfo(Board board) {
