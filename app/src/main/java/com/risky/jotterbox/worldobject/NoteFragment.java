@@ -96,8 +96,6 @@ public class NoteFragment extends RelativeLayout {
 
         setX(isNew ? (DeviceProperties.getScreenWidth() / 3) : note.position.getX());
         setY(isNew ? (DeviceProperties.getScreenHeight() / 3) : note.position.getY());
-
-        scale(boardManager.findById(note.boardId).scaleFactor * 100, false);
     }
 
     /**
@@ -115,21 +113,6 @@ public class NoteFragment extends RelativeLayout {
     public void move(final Point2D position) {
         setX(getX() + position.getX());
         setY(getY() + position.getY());
-    }
-
-    /**
-     * Scale this object
-     *
-     * @param dscale percentage
-     */
-    public void scale(final float dscale, final boolean changePosition) {
-        setScaleX((getScaleX() * dscale) / 100);
-        setScaleY((getScaleY() * dscale) / 100);
-
-        if (changePosition) {
-            setX((getX() * dscale) / 100);
-            setY((getY() * dscale) / 100);
-        }
     }
 
     /**

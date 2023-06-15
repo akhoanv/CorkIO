@@ -127,7 +127,7 @@ public class BoardEditSummaryFragment extends Fragment {
 
         noteNumElement.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
-            ft.replace(R.id.board_edit_content_container, new BoardEditAllNotesFragment(board));
+            ft.replace(R.id.board_edit_content_container, new BoardEditAllNoteFragment(board));
             ft.commit();
         });
 
