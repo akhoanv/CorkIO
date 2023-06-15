@@ -25,6 +25,7 @@ import com.risky.jotterbox.dao.Note;
 import com.risky.jotterbox.data.ObjectBoxSettingManager;
 import com.risky.jotterbox.fragment.dialog.BoardEditDialogFragment;
 import com.risky.jotterbox.fragment.dialog.SelectNoteTypeDialogFragment;
+import com.risky.jotterbox.struct.Point2D;
 import com.risky.jotterbox.utils.DeviceProperties;
 import com.risky.jotterbox.worldobject.BoardFragment;
 import com.risky.jotterbox.objectbox.ObjectBox;
@@ -34,9 +35,8 @@ import java.util.concurrent.CompletableFuture;
 public class MainActivity extends FragmentActivity {
     private BoardFragment mainBoard;
     private ObjectBoxSettingManager settingManager;
-
-    private SeekBar zoomBar;
-    private TextView coordDisplay;
+    private TextView xCoordDisplay;
+    private TextView yCoordDisplay;
     private ImageButton addButton;
 
     @Override
@@ -52,11 +52,11 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        //deleteAllNotes();
+        deleteAllNotes();
 
         // Find elements
-        zoomBar = findViewById(R.id.zoom_level);
-        coordDisplay = findViewById(R.id.xy_position);
+        xCoordDisplay = findViewById(R.id.x_position);
+        yCoordDisplay = findViewById(R.id.y_position);
         addButton = findViewById(R.id.addButton);
 
         // Initialization UI
@@ -69,10 +69,6 @@ public class MainActivity extends FragmentActivity {
         // Set properties
         ConstraintLayout boardInfo = findViewById(R.id.board_info);
         boardInfo.setOnTouchListener((view, motionEvent) -> {return true;});
-
-        zoomBar.setMax(15);
-        zoomBar.setMin(7);
-        zoomBar.setOnTouchListener((view, motionEvent) -> true); // Temporary disable drag
 
         addButton.setOnClickListener(this::addButtonOnClick);
 
@@ -117,25 +113,19 @@ public class MainActivity extends FragmentActivity {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
-        LinearLayout boardIndicator = findViewById(R.id.board_indicator);
-        boardIndicator.bringToFront();
-
+        // Keep this layer order for shadow
         ConstraintLayout boardInfo = findViewById(R.id.board_info);
         boardInfo.bringToFront();
+    }
+
+    public void moveBoardTo(Point2D position) {
+        Point2D currentCoord = mainBoard.moveTo(position);
+        setCoordDisplay((int) -currentCoord.getX(), (int) currentCoord.getY());
     }
 
     public void setBoardInfo(Board board) {
         ((ImageView) findViewById(R.id.board_color)).setImageResource(board.color.getRoundId());
         ((TextView) findViewById(R.id.board_name)).setText(board.name);
-    }
-
-    /**
-     * Update Zoom level on UI. Should take values from 7 to 15
-     *
-     * @param level level to update
-     */
-    public void updateZoom (int level) {
-        zoomBar.setProgress(level);
     }
 
     /**
@@ -145,7 +135,8 @@ public class MainActivity extends FragmentActivity {
      * @param y y position
      */
     public void setCoordDisplay(int x, int y) {
-        coordDisplay.setText(x + ":" + y);
+        xCoordDisplay.setText(Integer.toString(x));
+        yCoordDisplay.setText(Integer.toString(y));
     }
 
     public void deleteAllNotes() {
@@ -153,7 +144,6 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void addButtonOnClick(View view) {
-
         // Close any dialog fragment
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");

@@ -39,7 +39,6 @@ public class BoardFragment extends RelativeLayout {
     // Stats variable
     private Context context;
     private Point2D onScreenPosition = new Point2D(0, 0);
-    private float scale = 1f;
     private Board board;
     private TouchAction action;
 
@@ -66,7 +65,6 @@ public class BoardFragment extends RelativeLayout {
 
             // Change UI display stat
             ((MainActivity) context).setCoordDisplay(0, 0);
-            ((MainActivity) context).updateZoom(10);
 
             // Change setting
             settingManager.setLastVisitedBoard(board.id);
@@ -78,14 +76,12 @@ public class BoardFragment extends RelativeLayout {
             }
 
             onScreenPosition.setXY(board.panPosition.getX(), board.panPosition.getY());
-            scale = board.scaleFactor;
 
             // Move screen position
             moveChildOnScreen(onScreenPosition);
 
             // Change UI display stat
             ((MainActivity) context).setCoordDisplay((int) -onScreenPosition.getX(), (int) onScreenPosition.getY());
-            ((MainActivity) context).updateZoom((int) (scale * 10));
         }
 
         ((MainActivity) context).setBoardInfo(board);
@@ -120,11 +116,11 @@ public class BoardFragment extends RelativeLayout {
                 Rect endNoteBound = new Rect();
                 linkedObject.getHitRect(endNoteBound);
 
-                float startX = startNoteBound.left + (170 * scale);
-                float startY = startNoteBound.top + (40 * scale);
+                float startX = startNoteBound.left + 140;
+                float startY = startNoteBound.top + 40;
 
-                float endX = endNoteBound.left + (170 * scale);
-                float endY = endNoteBound.top + (40 * scale);
+                float endX = endNoteBound.left + 140;
+                float endY = endNoteBound.top + 40;
 
                 canvas.drawLine(startX, startY, endX, endY, paint);
             }
@@ -162,25 +158,30 @@ public class BoardFragment extends RelativeLayout {
         addView(noteFragment);
     }
 
-    /**
-     * Move all child elements in one direction
-     *
-     * @param position vector amount to move child elements
-     */
-    private void moveChildOnScreen(final Point2D position) {
-        for (int i=0; i < getChildCount(); i++) {
-            ((NoteFragment) getChildAt(i)).move(position);
-        }
+    public Point2D moveTo(final Point2D position) {
+        // Current position - self = 0
+        // Then minus given position (flipped coord, thus minus)
+        Point2D vector = new Point2D(-onScreenPosition.getX() - position.getX(),
+                                    -onScreenPosition.getY() - position.getY());
+
+        moveChildOnScreen(vector);
+        onScreenPosition.setXY(onScreenPosition.getX() + vector.getX(),
+                                onScreenPosition.getY() + vector.getY());
+
+        board.panPosition.setXY(onScreenPosition);
+        boardManager.update(board);
+
+        return onScreenPosition;
     }
 
     /**
-     * Scale all child elements
+     * Move all child elements in one direction
      *
-     * @param scaling scale factor
+     * @param vector vector amount to move child elements
      */
-    private void scaleChild(final float scaling) {
+    private void moveChildOnScreen(final Point2D vector) {
         for (int i=0; i < getChildCount(); i++) {
-            ((NoteFragment) getChildAt(i)).scale(scaling, true);
+            ((NoteFragment) getChildAt(i)).move(vector);
         }
     }
 
@@ -197,45 +198,15 @@ public class BoardFragment extends RelativeLayout {
 
                     action = TouchAction.DRAG;
                     break;
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    // Store initial dist between 2 fingers
-                    originalDist = getPinchDistance(motionEvent);
-
-                    action = TouchAction.ZOOM;
-                    break;
                 case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_POINTER_UP:
-                    if (action == TouchAction.ZOOM) {
-                        board.scaleFactor = scale;
-                    } else if (action == TouchAction.DRAG) {
-                        board.panPosition.setXY(onScreenPosition);
-                    }
+                    board.panPosition.setXY(onScreenPosition);
 
                     action = TouchAction.NONE;
 
                     boardManager.update(board);
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (action == TouchAction.ZOOM) {
-                        // Calculate % changes from last pinch
-                        float dscale = ((getPinchDistance(motionEvent) * 100) / originalDist);
-                        float scale = (dscale * BoardFragment.this.scale) / 100;
-
-                        if (scale <= 1.5 && scale >= 0.7) {
-                            scaleChild(dscale);
-                            BoardFragment.this.scale = scale;
-                            board.scaleFactor = scale;
-                        }
-
-                        // Update initial scale and dist for next move
-                        originalDist = getPinchDistance(motionEvent);
-
-                        // Update draw
-                        invalidate();
-
-                        // Update screen display
-                        ((MainActivity) context).updateZoom((int) (scale * 10));
-                    } else if (action == TouchAction.DRAG) {
+                    if (action == TouchAction.DRAG) {
                         float dx = newX - mousePosition.getX();
                         float dy = newY - mousePosition.getY();
 

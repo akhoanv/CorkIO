@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class BoardEditAllNotesFragment extends Fragment {
+public class BoardEditAllNoteFragment extends Fragment {
     private ObjectBoxBoardManager boardManager;
     private ObjectBoxNoteManager noteManager;
     private View view;
@@ -47,7 +48,7 @@ public class BoardEditAllNotesFragment extends Fragment {
     private GridView noteGrid;
     private EditText filterBox;
 
-    public BoardEditAllNotesFragment(Board board) {
+    public BoardEditAllNoteFragment(Board board) {
         this.board = board;
     }
 
@@ -82,7 +83,9 @@ public class BoardEditAllNotesFragment extends Fragment {
         }
 
         List<Long> noteList = new ArrayList<>(board.notes);
-        adapter = new AllNoteDisplayArrayAdapter(getContext(), R.layout.fragment_edit_note_connection_add_item, noteList);
+        adapter = new AllNoteDisplayArrayAdapter(getContext(),
+                R.layout.fragment_edit_note_connection_add_item, noteList,
+                ((FragmentActivity) getContext()).getSupportFragmentManager());
         noteGrid.setAdapter(adapter);
 
         // Assign listener
