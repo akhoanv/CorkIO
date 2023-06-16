@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity {
     private ObjectBoxSettingManager settingManager;
     private TextView xCoordDisplay;
     private TextView yCoordDisplay;
-    private ImageButton addButton;
+    private LinearLayout addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        deleteAllNotes();
+        //deleteAllNotes();
 
         // Find elements
         xCoordDisplay = findViewById(R.id.x_position);
@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity {
         initializeBoard(settingManager.getLastVisitedBoard());
 
         // Set properties
-        ConstraintLayout boardInfo = findViewById(R.id.board_info);
+        LinearLayout boardInfo = findViewById(R.id.board_info);
         boardInfo.setOnTouchListener((view, motionEvent) -> {return true;});
 
         addButton.setOnClickListener(this::addButtonOnClick);
@@ -114,7 +114,7 @@ public class MainActivity extends FragmentActivity {
         ((ConstraintLayout) findViewById(R.id.app_view)).addView(mainBoard, lp);
 
         // Keep this layer order for shadow
-        ConstraintLayout boardInfo = findViewById(R.id.board_info);
+        LinearLayout boardInfo = findViewById(R.id.board_info);
         boardInfo.bringToFront();
     }
 

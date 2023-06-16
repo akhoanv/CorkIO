@@ -64,9 +64,10 @@ public class NoteEditSummaryGenericFragment extends Fragment implements INoteEdi
         BaseNoteData data = dataManager.findById(note.dataId);
 
         // Assign appropriate data
-        titleElement.setText(note.title);
         idElement.setText("Note #" + note.getDisplayId());
         contentElement.setText(data.content);
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());

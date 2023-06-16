@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.risky.jotterbox.R;
@@ -63,7 +64,8 @@ public class NoteEditConnectionFragment extends Fragment {
         List<Long> noteList = new ArrayList<>();
         noteList.addAll(note.connection);
         adapter = new ConnectionDisplayArrayAdapter(getContext(),
-                R.layout.fragment_edit_note_connection_item, noteList, note);
+                R.layout.fragment_edit_note_connection_item, noteList, note,
+                ((FragmentActivity) getContext()).getSupportFragmentManager());
         connectionGrid.setAdapter(adapter);
 
         // Map add button

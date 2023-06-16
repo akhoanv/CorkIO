@@ -78,9 +78,10 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
 
         // Assign appropriate data
         idElement.setText("Note #" + note.getDisplayId());
-        titleElement.setText(note.title);
         calendarElement.setDate(data.datetime);
         timeElement.setText(timeFormat.format(storedDateTime.getTime()));
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
@@ -100,8 +101,12 @@ public class NoteEditSummaryEventFragment extends Fragment implements INoteEditS
         }
 
         // Set listeners
-        titleElement.setOnFocusChangeListener((view1, hasFocus) -> {
+        titleElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
+                String enteredTitle = titleElement.getText().toString().trim();
+                note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
+                noteManager.update(note);
+
                 hideKeyboard();
             }
         });

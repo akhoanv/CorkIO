@@ -10,12 +10,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.risky.jotterbox.MainActivity;
 import com.risky.jotterbox.R;
 import com.risky.jotterbox.dao.Connection;
 import com.risky.jotterbox.dao.Note;
 import com.risky.jotterbox.data.ObjectBoxConnectionManager;
 import com.risky.jotterbox.data.ObjectBoxNoteManager;
+import com.risky.jotterbox.struct.Point2D;
+import com.risky.jotterbox.utils.DeviceProperties;
 
 import java.util.List;
 
@@ -30,15 +37,19 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxConnectionManager connectionManager;
 
+    private FragmentManager fragmentManager;
+
     // Adapter properties
     private Note note;
 
-    public ConnectionDisplayArrayAdapter(@NonNull Context context, int resource, @NonNull List<Long> objects, Note note) {
+    public ConnectionDisplayArrayAdapter(@NonNull Context context, int resource,
+                                         @NonNull List<Long> objects, Note note, FragmentManager fragmentManager) {
         super(context, resource, objects);
 
         this.noteManager = ObjectBoxNoteManager.get();
         this.connectionManager = ObjectBoxConnectionManager.get();
         this.note = note;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -67,7 +78,7 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
         titleView.setText(conn.name);
         idView.setText("#" + linkedNote.getDisplayId() + " " + linkedNote.title);
 
-        // Set remove button
+        // Set listener
         unlinkButton.setOnClickListener(view1 -> {
             // Remove this data point
             note.connection.remove(conn.id);
@@ -79,6 +90,22 @@ public class ConnectionDisplayArrayAdapter extends ArrayAdapter {
             // Update database
             noteManager.update(note);
             noteManager.update(linkedNote);
+        });
+
+        view.setOnClickListener(view1 -> {
+            // Move to note, offset 1/3 of screen size
+            Point2D positionToMove = new Point2D(
+                    linkedNote.position.getX() - (DeviceProperties.getScreenWidth() / 3),
+                    linkedNote.position.getY() - (DeviceProperties.getScreenHeight() / 3));
+            ((MainActivity) getContext()).moveBoardTo(positionToMove);
+
+            // Close any dialog fragment
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            Fragment prev = fragmentManager.findFragmentByTag("dialog");
+            if (prev != null) {
+                ((DialogFragment) prev).dismiss();
+                ft.remove(prev);
+            }
         });
 
         return view;

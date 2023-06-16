@@ -82,8 +82,9 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
 
         // Assign appropriate data
         idElement.setText("Note #" + note.getDisplayId());
-        titleElement.setText(note.title);
         sortBtnText.setText(getSortLabel(data.order));
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         updateProgressBar(data);
 
@@ -140,8 +141,12 @@ public class NoteEditSummaryChecklistFragment extends Fragment implements INoteE
             return false;
         });
 
-        titleElement.setOnFocusChangeListener((view1, hasFocus) -> {
+        titleElement.setOnFocusChangeListener((view, hasFocus) -> {
             if (!hasFocus) {
+                String enteredTitle = titleElement.getText().toString().trim();
+                note.title = enteredTitle.isEmpty() ? note.type.getInitialTitle() : enteredTitle;
+                noteManager.update(note);
+
                 hideKeyboard();
             }
         });
