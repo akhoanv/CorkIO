@@ -74,8 +74,9 @@ public class NoteEditSummaryImageFragment extends Fragment implements INoteEditS
         ImageNoteData data = dataManager.findById(note.dataId);
 
         // Assign appropriate data
-        titleElement.setText(note.title);
         idElement.setText("Note #" + note.getDisplayId());
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         List<String> initialDataset = data.list;
         pagerAdapter = new NoteImagePagerAdapter(getContext(), initialDataset);

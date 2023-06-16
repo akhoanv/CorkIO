@@ -32,6 +32,7 @@
             android:background="@drawable/main_panel_background"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:paddingBottom="3dp"
             android:layout_weight="0.75">
 
             <LinearLayout
@@ -44,7 +45,7 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="7dp">
 
                 <ImageView
                     android:id="@+id/board_color"
@@ -150,7 +151,9 @@
             android:background="@drawable/main_panel_background"
             android:layout_weight="0.25"
             android:gravity="center"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            android:paddingLeft="5dp"
+            android:paddingBottom="3dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -164,7 +167,7 @@
                 android:text="Add Note"
                 android:textStyle="bold"
                 android:textColor="@color/board_black"
-                android:textSize="13sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

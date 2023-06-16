@@ -75,8 +75,9 @@ public class NoteEditSummaryWebLinkFragment extends Fragment implements INoteEdi
 
         // Assign appropriate data
         idElement.setText("Note #" + note.getDisplayId());
-        titleElement.setText(note.title);
         webLinkElement.setText(data.url);
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         if (URLUtil.isValidUrl(data.url)) {
             setQrCode();

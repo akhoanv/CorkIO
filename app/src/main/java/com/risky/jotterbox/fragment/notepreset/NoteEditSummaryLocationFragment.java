@@ -69,8 +69,9 @@ public class NoteEditSummaryLocationFragment extends Fragment implements INoteEd
 
         // Assign appropriate data
         idElement.setText("Note #" + note.getDisplayId());
-        titleElement.setText(note.title);
         addressElement.setText(data.address);
+        titleElement.setHint(note.type.getInitialTitle());
+        titleElement.setText(note.title.equals(note.type.getInitialTitle()) ? "" : note.title);
 
         if (note.customIconPath.isEmpty()) {
             iconElement.setImageResource(note.type.getIcon().getId());
