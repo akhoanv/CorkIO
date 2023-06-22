@@ -28,7 +28,7 @@
             android:id="@+id/note_edit_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="All Notes"
+            android:text="All Regions"
             android:gravity="bottom"
             android:textSize="30sp"
             android:textColor="@color/board_black"
@@ -41,50 +41,6 @@
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"/>
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/board_edit_all_note_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:progressBackgroundTint="@color/text_gray"
-            android:progressTint="@color/board_black"
-            android:indeterminate="false"
-            app:indicatorSize="130dp"
-            app:trackThickness="10dp"
-            app:trackColor="@color/text_gray"
-            app:indicatorColor="@color/board_black"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            app:trackCornerRadius="5dp"/>
-
-        <TextView
-            android:id="@+id/board_edit_all_note_percentage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10%"
-            android:textColor="@color/board_black"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="43dp"/>
-
-        <TextView
-            android:id="@+id/board_edit_all_note_percentage_subtext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="out of all Notes"
-            android:textColor="@color/text_gray"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/board_edit_all_note_percentage"/>
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/board_edit_all_filter_bar"
@@ -104,7 +60,7 @@
             android:layout_marginEnd="5dp"/>
 
         <EditText
-            android:id="@+id/board_edit_all_note_filter"
+            android:id="@+id/board_edit_all_region_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00000000"
@@ -121,9 +77,9 @@
     </LinearLayout>
 
     <GridView
-        android:id="@+id/board_edit_all_note_grid"
+        android:id="@+id/board_edit_all_region_grid"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="310dp"
         android:paddingStart="10dp"
         android:paddingEnd="15dp"
         android:numColumns="1"
@@ -131,12 +87,27 @@
         android:theme="@style/ListScrollColor"/>
 
     <LinearLayout
-        android:id="@+id/board_edit_all_note_back_btn"
+        android:id="@+id/board_edit_all_add_btn"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/edit_note_add_connection"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/add_gray"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/board_edit_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="5dp"
-        android:background="@drawable/button_paper_background"
+        android:background="@drawable/background_square_black"
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp">

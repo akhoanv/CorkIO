@@ -57,14 +57,14 @@ public class BoardEditAllNoteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         boardManager = ObjectBoxBoardManager.get();
         noteManager = ObjectBoxNoteManager.get();
-        view = inflater.inflate(R.layout.fragment_board_all_notes, container, false);
+        view = inflater.inflate(R.layout.fragment_board_all_note, container, false);
 
         // Find elements
         progBar = view.findViewById(R.id.board_edit_all_note_bar);
         percentageElement = view.findViewById(R.id.board_edit_all_note_percentage);
         percentageSubtextElement = view.findViewById(R.id.board_edit_all_note_percentage_subtext);
         filterBar = view.findViewById(R.id.board_edit_all_filter_bar);
-        backBtn = view.findViewById(R.id.board_edit_all_note_back_btn);
+        backBtn = view.findViewById(R.id.board_edit_back_btn);
         noteGrid = view.findViewById(R.id.board_edit_all_note_grid);
         filterBox = view.findViewById(R.id.board_edit_all_note_filter);
 

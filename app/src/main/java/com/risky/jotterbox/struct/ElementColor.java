@@ -11,12 +11,12 @@ import com.risky.jotterbox.R;
  * @author knguyen
  */
 public enum ElementColor {
-    BLUE(R.color.blue, R.drawable.note_checklist_item_blue, R.drawable.color_palette_blue),
-    GREEN(R.color.green, R.drawable.note_checklist_item_green, R.drawable.color_palette_green),
-    ORANGE(R.color.orange, R.drawable.note_checklist_item_orange, R.drawable.color_palette_orange),
-    PINK(R.color.light_pink, R.drawable.note_checklist_item_pink, R.drawable.color_palette_pink),
-    RED(R.color.red, R.drawable.note_checklist_item_red, R.drawable.color_palette_red),
-    YELLOW(R.color.yellow, R.drawable.note_checklist_item_yellow, R.drawable.color_palette_yellow);
+    BLUE(R.color.blue, R.drawable.background_capsule_blue, R.drawable.color_palette_blue),
+    GREEN(R.color.green, R.drawable.background_capsule_green, R.drawable.color_palette_green),
+    ORANGE(R.color.orange, R.drawable.background_capsule_orange, R.drawable.color_palette_orange),
+    PINK(R.color.light_pink, R.drawable.background_capsule_pink, R.drawable.color_palette_pink),
+    RED(R.color.red, R.drawable.background_capsule_red, R.drawable.color_palette_red),
+    YELLOW(R.color.yellow, R.drawable.background_capsule_yellow, R.drawable.color_palette_yellow);
 
     private int colorId;
     private int backgroundId;

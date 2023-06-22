@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/note_edit_find_map_btn"
-            android:background="@drawable/button_paper_background"
+            android:background="@drawable/background_square_black"
             android:layout_gravity="center"
             android:padding="5dp"
             android:orientation="horizontal"
