@@ -27,6 +27,7 @@ import com.risky.jotterbox.dao.Tag;
 import com.risky.jotterbox.data.ObjectBoxBoardManager;
 import com.risky.jotterbox.data.ObjectBoxConnectionManager;
 import com.risky.jotterbox.data.ObjectBoxNoteManager;
+import com.risky.jotterbox.data.ObjectBoxRegionManager;
 import com.risky.jotterbox.data.ObjectBoxSettingManager;
 import com.risky.jotterbox.data.ObjectBoxTagManager;
 import com.risky.jotterbox.struct.ElementColor;
@@ -41,6 +42,7 @@ public class BoardEditSummaryFragment extends Fragment {
     private ObjectBoxNoteManager noteManager;
     private ObjectBoxConnectionManager connectionManager;
     private ObjectBoxTagManager tagManager;
+    private ObjectBoxRegionManager regionManager;
     private ObjectBoxSettingManager settingManager;
 
     private View view;
@@ -55,6 +57,8 @@ public class BoardEditSummaryFragment extends Fragment {
     private ConstraintLayout noteBtn;
     private TextView tagNumElement;
     private ConstraintLayout tagBtn;
+    private TextView regionNumElement;
+    private ConstraintLayout regionBtn;
     private LinearLayout deleteBtn;
     private TextView createdDateElement;
 
@@ -69,6 +73,7 @@ public class BoardEditSummaryFragment extends Fragment {
         noteManager = ObjectBoxNoteManager.get();
         connectionManager = ObjectBoxConnectionManager.get();
         tagManager = ObjectBoxTagManager.get();
+        regionManager = ObjectBoxRegionManager.get();
         settingManager = ObjectBoxSettingManager.get();
         view = inflater.inflate(R.layout.fragment_board_summary, container, false);
 
@@ -81,6 +86,8 @@ public class BoardEditSummaryFragment extends Fragment {
         noteBtn = view.findViewById(R.id.board_edit_note_button);
         tagNumElement = view.findViewById(R.id.board_edit_tag_num);
         tagBtn = view.findViewById(R.id.board_edit_tag_button);
+        regionNumElement = view.findViewById(R.id.board_edit_roi_num);
+        regionBtn = view.findViewById(R.id.board_edit_roi_button);
         createdDateElement = view.findViewById(R.id.board_edit_created_date);
 
         Calendar storedDateTime = Calendar.getInstance();
@@ -93,6 +100,7 @@ public class BoardEditSummaryFragment extends Fragment {
         idElement.setText("Board #" + NumberUtil.convertToDisplayId(board.id));
         noteNumElement.setText(Integer.toString(board.notes.size()));
         tagNumElement.setText(Integer.toString(board.tags.size()));
+        regionNumElement.setText(Integer.toString(board.roi.size()));
         createdDateElement.setText(dateFormat.format(storedDateTime.getTime()));
 
         // Find elements
@@ -141,6 +149,12 @@ public class BoardEditSummaryFragment extends Fragment {
             ft.commit();
         });
 
+        regionBtn.setOnClickListener(view1 -> {
+            FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.board_edit_content_container, new BoardEditAllRegionFragment(board));
+            ft.commit();
+        });
+
         deleteBtn.setOnClickListener(view1 -> {
             for (long noteId : board.notes) {
                 Note currentNote = noteManager.findById(noteId);
@@ -155,6 +169,10 @@ public class BoardEditSummaryFragment extends Fragment {
 
             for (long tagId : board.tags) {
                 tagManager.remove(tagId);
+            }
+
+            for (long roiId : board.roi) {
+                regionManager.remove(roiId);
             }
 
             boardManager.remove(board.id);
@@ -179,6 +197,7 @@ public class BoardEditSummaryFragment extends Fragment {
         noteNumElement.setOnClickListener(null);
         noteBtn.setOnClickListener(null);
         tagBtn.setOnClickListener(null);
+        regionBtn.setOnClickListener(null);
 
         if (!doDelete) {
             String enteredTitle = titleElement.getText().toString().trim();

@@ -41,7 +41,7 @@ public class BoardEditAllTagFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_board_all_tag, container, false);
 
         // Find elements
-        backBtn = view.findViewById(R.id.board_edit_all_note_back_btn);
+        backBtn = view.findViewById(R.id.board_edit_back_btn);
         tagBox = view.findViewById(R.id.board_edit_all_tag_box);
 
         // Assign data

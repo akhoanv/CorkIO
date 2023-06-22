@@ -64,7 +64,7 @@ public class BoardEditAllNoteFragment extends Fragment {
         percentageElement = view.findViewById(R.id.board_edit_all_note_percentage);
         percentageSubtextElement = view.findViewById(R.id.board_edit_all_note_percentage_subtext);
         filterBar = view.findViewById(R.id.board_edit_all_filter_bar);
-        backBtn = view.findViewById(R.id.board_edit_all_note_back_btn);
+        backBtn = view.findViewById(R.id.board_edit_back_btn);
         noteGrid = view.findViewById(R.id.board_edit_all_note_grid);
         filterBox = view.findViewById(R.id.board_edit_all_note_filter);
 

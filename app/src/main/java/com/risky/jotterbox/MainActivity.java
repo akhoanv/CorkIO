@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        //deleteAllNotes();
+        deleteAllNotes();
 
         // Find elements
         xCoordDisplay = findViewById(R.id.x_position);

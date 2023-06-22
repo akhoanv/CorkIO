@@ -59,7 +59,7 @@
     },
     {
       "id": "2:3284756564701398499",
-      "lastPropertyId": "10:7824221245197078356",
+      "lastPropertyId": "11:7720730747845537304",
       "name": "Board",
       "properties": [
         {
@@ -101,6 +101,11 @@
         {
           "id": "10:7824221245197078356",
           "name": "panPosition",
+          "type": 9
+        },
+        {
+          "id": "11:7720730747845537304",
+          "name": "roi",
           "type": 9
         }
       ],
@@ -390,14 +395,51 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "15:6678277470061269391",
+      "lastPropertyId": "5:3119192858548437833",
+      "name": "Region",
+      "properties": [
+        {
+          "id": "1:4255783858691534492",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4206174109077308452",
+          "name": "boardId",
+          "type": 6
+        },
+        {
+          "id": "3:8312444971698627798",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:3329375542480949217",
+          "name": "position",
+          "type": 9
+        },
+        {
+          "id": "5:3119192858548437833",
+          "name": "color",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "14:4943673408453480600",
+  "lastEntityId": "15:6678277470061269391",
   "lastIndexId": "1:2686356966555361313",
   "lastRelationId": "1:1073504741574900322",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
+  "newUidPool": [
+    8193831029064671100
+  ],
   "retiredEntityUids": [
     26943237610762567,
     7849043896070910848

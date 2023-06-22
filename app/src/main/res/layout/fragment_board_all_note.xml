@@ -131,7 +131,7 @@
         android:theme="@style/ListScrollColor"/>
 
     <LinearLayout
-        android:id="@+id/board_edit_all_note_back_btn"
+        android:id="@+id/board_edit_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

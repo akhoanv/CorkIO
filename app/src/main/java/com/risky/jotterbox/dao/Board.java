@@ -50,6 +50,10 @@ public class Board {
     @Uid(1385828363769857664L)
     public Set<Long> tags;
 
+    @Convert(converter = IdArrayConverter.class, dbType = String.class)
+    @Uid(7720730747845537304L)
+    public Set<Long> roi;
+
     public Board() {
         this.panPosition = new Point2D(0f, 0f);
         this.scaleFactor = 1f;
