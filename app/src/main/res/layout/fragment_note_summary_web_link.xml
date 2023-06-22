@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/note_edit_visit_web_btn"
-            android:background="@drawable/button_paper_background"
+            android:background="@drawable/background_square_black"
             android:padding="5dp"
             android:orientation="horizontal">
 

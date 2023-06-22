@@ -65,112 +65,264 @@
         android:layout_height="400dp"
         android:orientation="vertical"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="13dp"
         android:layout_marginRight="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_gravity="center_vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/calendar_black"
-                android:layout_marginRight="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Created on"
-                android:textColor="@color/board_black"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/board_edit_created_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0000/00/00 00:00"
-                android:background="@drawable/button_paper_background"
-                android:textColor="@color/paper_white"
-                android:textSize="16sp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_marginLeft="5dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="5dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/note_black"
-                android:layout_marginRight="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Notes"
-                android:textColor="@color/board_black"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/board_edit_note_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/paper_white"
-                android:textSize="16sp"
-                android:layout_marginLeft="5dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:background="@drawable/button_paper_background"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/tag_black"
-                android:layout_marginRight="5dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tags"
-                android:textColor="@color/board_black"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/board_edit_tag_item_box"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/board_edit_roi_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexWrap="wrap"
-                app:alignItems="stretch"
-                app:alignContent="stretch"/>
-        </ScrollView>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_pocket_card"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <ImageView
+                    android:id="@+id/board_edit_created_date_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/calendar_white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/board_edit_created_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Created on"
+                    android:textColor="@color/paper_white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    app:layout_constraintLeft_toRightOf="@id/board_edit_created_date_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/board_edit_created_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:text="0000/00/00 00:00"
+                    android:textColor="@color/paper_white"
+                    android:layout_marginLeft="5dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/background_pocket_base"
+                android:layout_marginTop="-2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/board_edit_note_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/background_pocket_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/board_edit_note_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/note_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/board_edit_note_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Notes"
+                    android:textColor="@color/paper_white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/board_edit_note_icon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/board_edit_note_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/background_square_white"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="0"
+                    android:textColor="@color/board_black"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/background_pocket_base"
+                android:layout_marginTop="-2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/board_edit_tag_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/background_pocket_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/board_edit_tag_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/tag_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/board_edit_tag_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Tags"
+                    android:textColor="@color/paper_white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/board_edit_tag_icon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/board_edit_tag_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/background_square_white"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="0"
+                    android:textColor="@color/board_black"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/background_pocket_base"
+                android:layout_marginTop="-2dp"/>
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="10dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/background_pocket_card"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
+
+                <ImageView
+                    android:id="@+id/board_edit_roi_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/roi_white"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/board_edit_roi_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Regions"
+                    android:textColor="@color/paper_white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    app:layout_constraintLeft_toRightOf="@id/board_edit_roi_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                    android:id="@+id/board_edit_roi_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/board_black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:background="@drawable/background_square_white"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/background_pocket_base"
+                android:layout_marginTop="-2dp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -186,7 +338,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp"
-            android:background="@drawable/button_paper_background"
+            android:background="@drawable/background_square_black"
             android:gravity="center">
 
             <ImageView
@@ -209,7 +361,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="5dp"
-            android:background="@drawable/button_paper_background"
+            android:background="@drawable/background_square_black"
             android:gravity="center"
             android:layout_marginLeft="5dp">
 

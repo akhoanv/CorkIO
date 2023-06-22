@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:id="@+id/note_edit_reminder_btn"
-                        android:background="@drawable/button_paper_background"
+                        android:background="@drawable/background_square_black"
                         android:paddingRight="5dp"
                         android:paddingLeft="5dp"
                         android:paddingTop="3dp"

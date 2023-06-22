@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -51,9 +52,11 @@ public class BoardEditSummaryFragment extends Fragment {
     private TextView idElement;
     private LinearLayout changeBtn;
     private TextView noteNumElement;
+    private ConstraintLayout noteBtn;
+    private TextView tagNumElement;
+    private ConstraintLayout tagBtn;
     private LinearLayout deleteBtn;
     private TextView createdDateElement;
-    private FlexboxLayout tagBox;
 
     public BoardEditSummaryFragment(Board board) {
         this.board = board;
@@ -75,8 +78,10 @@ public class BoardEditSummaryFragment extends Fragment {
         idElement = view.findViewById(R.id.board_edit_id);
         changeBtn = view.findViewById(R.id.board_edit_change_btn);
         noteNumElement = view.findViewById(R.id.board_edit_note_num);
+        noteBtn = view.findViewById(R.id.board_edit_note_button);
+        tagNumElement = view.findViewById(R.id.board_edit_tag_num);
+        tagBtn = view.findViewById(R.id.board_edit_tag_button);
         createdDateElement = view.findViewById(R.id.board_edit_created_date);
-        tagBox = view.findViewById(R.id.board_edit_tag_item_box);
 
         Calendar storedDateTime = Calendar.getInstance();
         storedDateTime.setTimeInMillis(board.createdDate);
@@ -86,10 +91,9 @@ public class BoardEditSummaryFragment extends Fragment {
         colorElement.setImageResource(board.color.getRoundId());
         titleElement.setText(board.name);
         idElement.setText("Board #" + NumberUtil.convertToDisplayId(board.id));
-        noteNumElement.setText(board.notes.size() + "");
+        noteNumElement.setText(Integer.toString(board.notes.size()));
+        tagNumElement.setText(Integer.toString(board.tags.size()));
         createdDateElement.setText(dateFormat.format(storedDateTime.getTime()));
-
-        drawList(board.tags);
 
         // Find elements
         deleteBtn = view.findViewById(R.id.board_edit_delete_btn);
@@ -125,9 +129,15 @@ public class BoardEditSummaryFragment extends Fragment {
             ft.commit();
         });
 
-        noteNumElement.setOnClickListener(view1 -> {
+        noteBtn.setOnClickListener(view1 -> {
             FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
             ft.replace(R.id.board_edit_content_container, new BoardEditAllNoteFragment(board));
+            ft.commit();
+        });
+
+        tagBtn.setOnClickListener(view1 -> {
+            FragmentTransaction ft = getParentFragment().getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.board_edit_content_container, new BoardEditAllTagFragment(board));
             ft.commit();
         });
 
@@ -167,6 +177,8 @@ public class BoardEditSummaryFragment extends Fragment {
         colorElement.setOnClickListener(null);
         deleteBtn.setOnClickListener(null);
         noteNumElement.setOnClickListener(null);
+        noteBtn.setOnClickListener(null);
+        tagBtn.setOnClickListener(null);
 
         if (!doDelete) {
             String enteredTitle = titleElement.getText().toString().trim();
@@ -183,30 +195,5 @@ public class BoardEditSummaryFragment extends Fragment {
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    private void drawList(Set<Long> items) {
-        float scale = getResources().getDisplayMetrics().density;
-
-        int paddingVert = (int) (5*scale + 0.5f);
-        int paddingHorz = (int) (8*scale + 0.5f);
-        int margin = (int) (3*scale + 0.5f);
-
-        for (Long tagId : items) {
-            Tag item = tagManager.findById(tagId);
-
-            TextView listItem = new TextView(getContext());
-            listItem.setText(item.name);
-            listItem.setTextColor(getContext().getColor(R.color.paper_white));
-            listItem.setBackgroundResource(item.color.getBackgroundId());
-            listItem.setPadding(paddingHorz, paddingVert, paddingHorz, paddingVert);
-
-            tagBox.addView(listItem);
-
-            // Add spacing between items
-            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) listItem.getLayoutParams();
-            lp.bottomMargin = margin;
-            lp.rightMargin = margin;
-        }
     }
 }

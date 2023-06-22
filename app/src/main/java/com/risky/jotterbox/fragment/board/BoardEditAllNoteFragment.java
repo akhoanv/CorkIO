@@ -57,7 +57,7 @@ public class BoardEditAllNoteFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         boardManager = ObjectBoxBoardManager.get();
         noteManager = ObjectBoxNoteManager.get();
-        view = inflater.inflate(R.layout.fragment_board_all_notes, container, false);
+        view = inflater.inflate(R.layout.fragment_board_all_note, container, false);
 
         // Find elements
         progBar = view.findViewById(R.id.board_edit_all_note_bar);
