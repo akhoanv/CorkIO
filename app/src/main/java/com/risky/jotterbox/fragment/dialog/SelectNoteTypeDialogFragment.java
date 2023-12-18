@@ -25,6 +25,8 @@ public class SelectNoteTypeDialogFragment extends DialogFragment {
     private GridView typeGrid;
     private NewNoteCallback callback;
 
+    public SelectNoteTypeDialogFragment() {}
+
     public SelectNoteTypeDialogFragment(NewNoteCallback callback) {
         this.callback = callback;
     }
@@ -38,12 +40,16 @@ public class SelectNoteTypeDialogFragment extends DialogFragment {
         // Find elements
         typeGrid = view.findViewById(R.id.note_type_select_grid);
 
-        typeGrid.setAdapter(new NoteTypeSelectAdapter(getContext(), R.layout.fragment_note_type_select_item,
-            Arrays.asList(NoteType.values()), type -> {
+        if (callback != null) {
+            typeGrid.setAdapter(new NoteTypeSelectAdapter(getContext(), R.layout.fragment_note_type_select_item,
+                    Arrays.asList(NoteType.values()), type -> {
                 callback.run(type);
                 SelectNoteTypeDialogFragment.this.dismiss();
             }
-        ));
+            ));
+        } else {
+            SelectNoteTypeDialogFragment.this.dismiss();
+        }
 
         return view;
     }
